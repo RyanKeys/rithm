@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'landing_page',
     'note_identification.apps.NoteIdentificationConfig',
     'django.contrib.admin',
     'django.contrib.auth',
