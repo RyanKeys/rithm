@@ -1,6 +1,7 @@
 asgiref==3.2.3
+autopep8==1.5
 Django==3.0.2
+gunicorn==20.0.4
+pycodestyle==2.5.0
 pytz==2019.3
 sqlparse==0.3.0
-DateTime==4.3
-zope.interface==4.7.1
