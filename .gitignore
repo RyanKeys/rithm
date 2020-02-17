@@ -1,4 +1,9 @@
 .DS_Store
 env/
 .vscode/
-
+*.log
+*.pot
+*.pyc
+__pycache__
+db.sqlite3
+media
