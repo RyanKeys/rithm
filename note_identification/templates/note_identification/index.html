@@ -1,0 +1,46 @@
+{% extends 'base.html'%}
+{% block content %}
+<p id="to_guess"></p>
+<p id="current">Current score 0/0</p>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type='text/javascript'>
+var correct = 0;
+var total = 0;
+var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+var symboles = ['', '#', '♭'];
+var notes = [];
+for (x in symboles) {
+    for (y in letters) {
+        notes.push(letters[y]+symboles[x]);
+    }
+}
+var current_var = notes[Math.floor(Math.random() * notes.length)];
+document.getElementById("to_guess").innerHTML = current_var;
+function is_correct(button_var){
+    console.log(button_var == document.getElementById("to_guess").innerHTML)
+    console.log('Button var = '+button_var+', and the note to guess is = '+document.getElementById("to_guess").innerHTML)
+    if (document.getElementById("to_guess").innerHTML == button_var){
+        correct += 1;
+        total += 1;
+        document.getElementById("current").innerHTML = "Current score " + correct.toString() + '/' + total.toString();
+        current_var = notes[Math.floor(Math.random() * notes.length)];
+        document.getElementById("to_guess").innerHTML = current_var;
+    }
+    else {
+        total += 1
+        document.getElementById("current").innerHTML = "Current score " + correct.toString() + '/' + total.toString();
+    }
+}
+for (n in notes){
+        var btn = document.createElement("BUTTON");
+        btn.innerHTML = notes[n];
+        btn.setAttribute('onclick', 'is_correct("'+notes[n]+'")')
+        // btn.addEventListener("click", is_correct(current_var, ));
+        document.body.appendChild(btn);
+}
+
+</script>
+
+
+{% endblock %}
