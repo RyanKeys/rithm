@@ -10,34 +10,45 @@ var total = 0;
 var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 var symboles = ['', '#', '♭'];
 var notes = [];
+// lets create the different combinations of sharp, flat and regular here
 for (x in symboles) {
     for (y in letters) {
         notes.push(letters[y]+symboles[x]);
     }
 }
+// set a random one as the one we are trying to guess
 var current_var = notes[Math.floor(Math.random() * notes.length)];
+// display it
 document.getElementById("to_guess").innerHTML = current_var;
+// is correct function is used by each of the note buttons
 function is_correct(button_var){
+    // logging to console for debuging purpose
     console.log(button_var == document.getElementById("to_guess").innerHTML)
+    // logging to console for debuging purpose
     console.log('Button var = '+button_var+', and the note to guess is = '+document.getElementById("to_guess").innerHTML)
+    // this function checks if the button is the same as the note that we are looking for
     if (document.getElementById("to_guess").innerHTML == button_var){
+        // if it is, we add to both the total var and the correct var
         correct += 1;
         total += 1;
-        document.getElementById("current").innerHTML = "Current score " + correct.toString() + '/' + total.toString();
+        // Then we get a new random note to figure out then update the display
         current_var = notes[Math.floor(Math.random() * notes.length)];
         document.getElementById("to_guess").innerHTML = current_var;
     }
     else {
+        // if it is not we add to just the total var
         total += 1
-        document.getElementById("current").innerHTML = "Current score " + correct.toString() + '/' + total.toString();
     }
+    // Updates the score display
+    document.getElementById("current").innerHTML = "Current score " + correct.toString() + '/' + total.toString();
 }
+// this create the buttons and gives them eacha an onclick that calls the
+// is_correct function to check if this is the correct button for the note.
 for (n in notes){
-        var btn = document.createElement("BUTTON");
-        btn.innerHTML = notes[n];
-        btn.setAttribute('onclick', 'is_correct("'+notes[n]+'")')
-        // btn.addEventListener("click", is_correct(current_var, ));
-        document.body.appendChild(btn);
+    var btn = document.createElement("BUTTON");
+    btn.innerHTML = notes[n];
+    btn.setAttribute('onclick', 'is_correct("'+notes[n]+'")')
+    document.body.appendChild(btn);
 }
 
 </script>
