@@ -34,6 +34,7 @@ DEBUG = False
 # Application definition
 
 INSTALLED_APPS = [
+    'pitch_identification',
     'landing_page',
     'note_identification.apps.NoteIdentificationConfig',
     'django.contrib.admin',
@@ -45,7 +46,6 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
