@@ -1,46 +1,22 @@
 {% extends 'base.html'%}
 {% block content %}
-<p id="to_guess"></p>
+{% load static %}
+<img id="to_guess" src="{% static 'note_identification/A.png' %}" alt="">
 <p id="current">Current score 0/0</p>
-
-<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-
-    <div class="btn-group mr-2" role="group" aria-label="First group">
-        <button type="button" id='A' class="btn btn-secondary">A</button>
-        <button type="button" id='B' class="btn btn-secondary">B</button>
-        <button type="button" id='C' class="btn btn-secondary">C</button>
-        <button type="button" id='D' class="btn btn-secondary">D</button>
-        <button type="button" id='E' class="btn btn-secondary">E</button>
-        <button type="button" id='F' class="btn btn-secondary">F</button>
-        <button type="button" id='G' class="btn btn-secondary">G</button>
-      </div>
-      <div class="btn-group mr-2" role="group" aria-label="Second group">
-        <button type="button" id='A#' class="btn btn-secondary">A#</button>
-        <button type="button" id='B#' class="btn btn-secondary">B#</button>
-        <button type="button" id='C#' class="btn btn-secondary">C#</button>
-        <button type="button" id='D#' class="btn btn-secondary">D#</button>
-        <button type="button" id='E#' class="btn btn-secondary">E#</button>
-        <button type="button" id='F#' class="btn btn-secondary">F#</button>
-        <button type="button" id='G#' class="btn btn-secondary">G#</button>
-      </div>
-      <div class="btn-group" role="group" aria-label="Third group">
-        <button type="button" id='A♭' class="btn btn-secondary">A♭</button>
-        <button type="button" id='B♭' class="btn btn-secondary">B♭</button>
-        <button type="button" id='C♭' class="btn btn-secondary">C♭</button>
-        <button type="button" id='D♭' class="btn btn-secondary">D♭</button>
-        <button type="button" id='E♭' class="btn btn-secondary">E♭</button>
-        <button type="button" id='F♭' class="btn btn-secondary">F♭</button>
-        <button type="button" id='G♭' class="btn btn-secondary">G♭</button>
-      </div>
-
-  </div>
-
-
-
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type='text/javascript'>
+    function update_da(valid_note){
+        if (valid_note.includes('_sharp')){
+            var this_note = valid_note.charAt(0) + '#'
+        }
+        else{
+            var this_note = valid_note
+        }
+        document.getElementById("to_guess").setAttribute('da', this_note)
+    }
 var correct = 0;
 var total = 0;
+var valid_notes = ['C', 'C_sharp', 'D♭', 'D', 'D_sharp', 'E♭', 'E', 'F', 'F_sharp', 'G♭', 'G', 'G_sharp', 'A♭', 'A', 'A_sharp', 'B♭', 'B']
 var letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 var symboles = ['', '#', '♭'];
 var notes = [];
@@ -51,23 +27,25 @@ for (x in symboles) {
     }
 }
 // set a random one as the one we are trying to guess
-var current_var = notes[Math.floor(Math.random() * notes.length)];
+var current_var = valid_notes[Math.floor(Math.random() * valid_notes.length)];
 // display it
-document.getElementById("to_guess").innerHTML = current_var;
+document.getElementById("to_guess").setAttribute('src', "/static/note_identification/"+current_var+".png");
+update_da(current_var)
 // is correct function is used by each of the note buttons
 function is_correct(button_var){
     // logging to console for debuging purpose
-    console.log(button_var == document.getElementById("to_guess").innerHTML)
+    console.log(button_var == document.getElementById("to_guess").getAttribute("da").toString())
     // logging to console for debuging purpose
-    console.log('Button var = '+button_var+', and the note to guess is = '+document.getElementById("to_guess").innerHTML)
+    console.log('Button var = '+button_var+', and the note to guess is = '+document.getElementById("to_guess").getAttribute("da").toString())
     // this function checks if the button is the same as the note that we are looking for
-    if (document.getElementById("to_guess").innerHTML == button_var){
+    if (document.getElementById("to_guess").getAttribute("da").toString() == button_var){
         // if it is, we add to both the total var and the correct var
         correct += 1;
         total += 1;
         // Then we get a new random note to figure out then update the display
-        current_var = notes[Math.floor(Math.random() * notes.length)];
-        document.getElementById("to_guess").innerHTML = current_var;
+        current_var = valid_notes[Math.floor(Math.random() * valid_notes.length)];
+        document.getElementById("to_guess").setAttribute('src', "/static/note_identification/"+current_var+".png");
+        update_da(current_var)
     }
     else {
         // if it is not we add to just the total var
@@ -76,17 +54,14 @@ function is_correct(button_var){
     // Updates the score display
     document.getElementById("current").innerHTML = "Current score " + correct.toString() + '/' + total.toString();
 }
-// this create the buttons and gives them each an onclick that calls the
+// this create the buttons and gives them eacha an onclick that calls the
 // is_correct function to check if this is the correct button for the note.
 for (n in notes){
-    var btn = document.getElementById(notes[n])
+    var btn = document.createElement("BUTTON");
     btn.innerHTML = notes[n];
     btn.setAttribute('onclick', 'is_correct("'+notes[n]+'")')
-    // btn.setAttribute('class', 'btn btn-light')
-    // document.body.appendChild(btn);
+    document.body.appendChild(btn);
 }
-
-
 
 </script>
 
