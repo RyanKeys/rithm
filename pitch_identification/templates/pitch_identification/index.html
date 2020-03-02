@@ -10,6 +10,8 @@
 <button id="4"></button>
 <button id="5"></button>
 <button id="6"></button>
+<button id="7"></button>
+<button id="8"></button>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type='text/javascript'>
@@ -69,7 +71,7 @@ function generate_buttons(correct_note){
     var display_notes = null
     var display_notes = []
     display_notes.push(correct_note)
-    while (display_notes.length <= 6){
+    while (display_notes.length <= 8){
         var new_note = notes[Math.floor(Math.random() * notes.length)]
         if (new_note in display_notes === false){
             display_notes.push(new_note)
