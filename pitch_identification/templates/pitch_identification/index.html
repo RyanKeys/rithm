@@ -1,118 +1,135 @@
 {% extends 'base.html'%}
 {% block content %}
-<button type="button" id='play_it' class="js_play_sound" data-source='example4(261.6, "sine")'>C4</button>
 
+<button type="button" id='play_it' class="js_play_sound" data-source='play_pitch(261.6, "sine")'>C4</button>
 <p id="current">Current score 0/0</p>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type='text/javascript'>
-
-
-var context=new AudioContext()
-var o=null
-var g=null
+// Begin's audio context and sets som variables we'll use in it.
+var context = new AudioContext()
+var o = null
+var g = null
 var tone = 261.6;
-document.addEventListener('DOMContentLoaded',function(){$(".js_play_sound").on("click",function(e){e.preventDefault()
-var $target=$(e.target)
-eval($target.data("source"))})
+// prevents butttons that play sounds from performing defult function.
+document.addEventListener('DOMContentLoaded', function () {
+	$(".js_play_sound").on("click", function (e) {
+		e.preventDefault()
+		var $target = $(e.target)
+		eval($target.data("source"))
+	})
+	$(".js_stop_sound").on("click", function (e) {
+		e.preventDefault()
+		o.stop()
+	})
+}, false)
 
-$(".js_stop_sound").on("click",function(e){e.preventDefault()
-o.stop()})},false)
-
-function form_change(){
-    var tone = document.getElementsByName("tone1")[0].value;
-    return tone;
+// A funtion that plays a desired pitch
+function play_pitch(frequency, type) {
+	o = context.createOscillator()
+	frequency = notes_frequencies[document.getElementById("play_it").getAttribute("da").toString()]
+	console.log(frequency)
+	g = context.createGain()
+	o.type = type
+	o.connect(g)
+	o.frequency.value = frequency
+	g.connect(context.destination)
+	o.start(0)
+	g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1)
 }
 
-function example1(){o=context.createOscillator()
-o.type="sine"
-o.connect(context.destination)
-o.start()}
-
-function example2(){o=context.createOscillator()
-g=context.createGain()
-o.connect(g)
-g.connect(context.destination)
-o.start(0)}
-
-function example2Stop(decreaseTime){g.gain.exponentialRampToValueAtTime(0.00001,context.currentTime+decreaseTime)}
-
-function example3(type,x){o=context.createOscillator()
-g=context.createGain()
-o.connect(g)
-o.type=type
-g.connect(context.destination)
-o.start(0)
-g.gain.exponentialRampToValueAtTime(0.00001,context.currentTime+x)}
-
-function example4(frequency,type){o=context.createOscillator()
-    frequency = notes_frequencies[document.getElementById("play_it").getAttribute("da").toString()]
-    console.log(frequency)
-g=context.createGain()
-o.type=type
-o.connect(g)
-o.frequency.value=frequency
-g.connect(context.destination)
-o.start(0)
-g.gain.exponentialRampToValueAtTime(0.00001,context.currentTime+1)}
-
-
-
+// begining of the 'Game' part
 var correct = 0;
 var total = 0;
-var letters = ['C',	'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'G#', 'A', 'Bb', 'B'];
-var octive = [0,1,2,3,4,5,6,7,8];
+var letters = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'G#', 'A', 'Bb', 'B'];
+var octive = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 var notes = [];
-// lets create the different combinations of sharp, flat and regular here
+// lets create the different combinations notes and octives
 for (x in octive) {
-    for (y in letters) {
-            notes.push(octive[x].toString()+' '+letters[y]);
-    }
+	for (y in letters) {
+		notes.push(octive[x].toString() + ' ' + letters[y]);
+	}
 }
 var notes_frequencies = {};
-for (z in notes){
-    console.log(notes[z]+ ' '+ (440 * ((2**(1/12))**(z-57))).toString())
-    notes_frequencies[notes[z]] = 440 * ((2**(1/12))**(z-57))
+for (z in notes) {
+    // The math calculates the frequency of the not based on it's position
+    // in the list compared to middle A
+	console.log(notes[z] + ' ' + (440 * ((2 ** (1 / 12)) ** (z - 57))).toString())
+	notes_frequencies[notes[z]] = 440 * ((2 ** (1 / 12)) ** (z - 57))
 }
-// set a random one as the one we are trying to guess
+// function to create and display random buttons
+function generate_buttons(correct_note){
+    var display_notes = null
+    var display_notes = []
+    display_notes.push(correct_note)
+    while (display_notes.length <= 6){
+        var new_note = notes[Math.floor(Math.random() * notes.length)]
+        if (new_note in display_notes === false){
+            display_notes.push(new_note)
+        }
+    }
+    return display_notes
+}
+function create_buttons(ls_of_notes){
+    var ids = 0;
+    while (ls_of_notes.length > 0) {
+        var index = Math.floor(Math.random() * ls_of_notes.length)
+        var this_note = ls_of_notes[index]
+        ls_of_notes.splice(index, 1)
+    	var btn = document.createElement("BUTTON");
+        btn.setAttribute('id', ids.toString())
+    	btn.innerHTML = this_note;
+    	btn.setAttribute('onclick', 'is_correct("' + this_note + '")')
+    	document.body.appendChild(btn);
+        ids ++
+    }
+}
+function update_buttons(ls_of_notes){
+    var ids = 0;
+    while (ls_of_notes.length > 0) {
+        var index = Math.floor(Math.random() * ls_of_notes.length)
+        var this_note = ls_of_notes[index]
+        ls_of_notes.splice(index, 1)
+    	var btn = document.getElementById(ids.toString());
+    	btn.innerHTML = this_note;
+    	btn.setAttribute('onclick', 'is_correct("' + this_note + '")')
+        ids ++
+    }
+}
+// set a random pitch to the guess button
 var current_var = notes[Math.floor(Math.random() * notes.length)];
-// display it
-document.getElementById('play_it').setAttribute('data-source', "example4(0, 'sine')");
+// update display
+document.getElementById('play_it').setAttribute('data-source', "play_pitch(0, 'sine')");
 document.getElementById('play_it').setAttribute('da', current_var);
 document.getElementById('play_it').innerHTML = current_var;
-// is correct function is used by each of the note buttons
-function is_correct(button_var){
-    // logging to console for debuging purpose
-    console.log(button_var == document.getElementById("play_it").getAttribute("da").toString())
-    // logging to console for debuging purpose
-    console.log('Button var = '+button_var+', and the note to guess is = '+document.getElementById("play_it").innerHTML)
-    // this function checks if the button is the same as the note that we are looking for
-    if (document.getElementById("play_it").getAttribute("da").toString() == button_var){
-        // if it is, we add to both the total var and the correct var
-        correct += 1;
-        total += 1;
-        // Then we get a new random note to figure out then update the display
-        current_var = notes[Math.floor(Math.random() * notes.length)];
-        document.getElementById('play_it').setAttribute('data-source', "example4('"+notes_frequencies[current_var]+"', 'sine')");
-        document.getElementById('play_it').setAttribute('da', current_var);
-        document.getElementById('play_it').innerHTML = current_var;
-    }
-    else {
-        // if it is not we add to just the total var
-        total += 1
-    }
-    // Updates the score display
-    document.getElementById("current").innerHTML = "Current score " + correct.toString() + '/' + total.toString();
+// is correct function is used by each of the auto Generated buttons to see if
+// the note is correct
+function is_correct(button_var) {
+	// logging to console for debuging purpose
+	console.log(button_var == document.getElementById("play_it").getAttribute("da").toString())
+	// logging to console for debuging purpose
+	console.log('Button var = ' + button_var + ', and the note to guess is = ' + document.getElementById("play_it").innerHTML)
+	// this part checks if the button is the same as the note that we are looking for
+	if (document.getElementById("play_it").getAttribute("da").toString() == button_var) {
+		// if it is, we add to both the total var and the correct var
+		correct += 1;
+		total += 1;
+		// Then we get a new random note to figure out then update the display
+		current_var = notes[Math.floor(Math.random() * notes.length)];
+		document.getElementById('play_it').setAttribute('data-source', "play_pitch('" + notes_frequencies[current_var] + "', 'sine')");
+		document.getElementById('play_it').setAttribute('da', current_var);
+		document.getElementById('play_it').innerHTML = current_var;
+        update_buttons(generate_buttons(current_var))
+	} else {
+		// if it is not we add to just the total var
+		total += 1
+	}
+	// Updates the score display
+	document.getElementById("current").innerHTML = "Current score " + correct.toString() + '/' + total.toString();
 }
 // this create the buttons and gives them eacha an onclick that calls the
 // is_correct function to check if this is the correct button for the note.
-for (n in notes){
-    var btn = document.createElement("BUTTON");
-    btn.innerHTML = notes[n];
-    btn.setAttribute('onclick', 'is_correct("'+notes[n]+'")')
-    document.body.appendChild(btn);
-}
-
+create_buttons(generate_buttons(current_var))
 </script>
 
 
