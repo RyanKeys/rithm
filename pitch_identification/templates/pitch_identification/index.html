@@ -3,6 +3,13 @@
 
 <button type="button" id='play_it' class="js_play_sound" data-source='play_pitch(261.6, "sine")'>C4</button>
 <p id="current">Current score 0/0</p>
+<button id="0"></button>
+<button id="1"></button>
+<button id="2"></button>
+<button id="3"></button>
+<button id="4"></button>
+<button id="5"></button>
+<button id="6"></button>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type='text/javascript'>
@@ -57,7 +64,7 @@ for (z in notes) {
 	console.log(notes[z] + ' ' + (440 * ((2 ** (1 / 12)) ** (z - 57))).toString())
 	notes_frequencies[notes[z]] = 440 * ((2 ** (1 / 12)) ** (z - 57))
 }
-// function to create and display random buttons
+// function to create list of random buttons that also has the right answer
 function generate_buttons(correct_note){
     var display_notes = null
     var display_notes = []
@@ -70,20 +77,7 @@ function generate_buttons(correct_note){
     }
     return display_notes
 }
-function create_buttons(ls_of_notes){
-    var ids = 0;
-    while (ls_of_notes.length > 0) {
-        var index = Math.floor(Math.random() * ls_of_notes.length)
-        var this_note = ls_of_notes[index]
-        ls_of_notes.splice(index, 1)
-    	var btn = document.createElement("BUTTON");
-        btn.setAttribute('id', ids.toString())
-    	btn.innerHTML = this_note;
-    	btn.setAttribute('onclick', 'is_correct("' + this_note + '")')
-    	document.body.appendChild(btn);
-        ids ++
-    }
-}
+// function that updates ths buttons with id 0-6 into choises
 function update_buttons(ls_of_notes){
     var ids = 0;
     while (ls_of_notes.length > 0) {
@@ -127,10 +121,9 @@ function is_correct(button_var) {
 	// Updates the score display
 	document.getElementById("current").innerHTML = "Current score " + correct.toString() + '/' + total.toString();
 }
-// this create the buttons and gives them eacha an onclick that calls the
+// this update the buttons and gives them each a an onclick that calls the
 // is_correct function to check if this is the correct button for the note.
-create_buttons(generate_buttons(current_var))
+update_buttons(generate_buttons(current_var))
 </script>
-
 
 {% endblock %}
