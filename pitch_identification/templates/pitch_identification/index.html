@@ -1,19 +1,21 @@
 {% extends 'base.html'%}
 {% block content %}
 <div class="container">
-<button type="button" id='play_it' class=" d-flex justify-content-center js_play_sound" data-source='play_pitch(261.6, "sine")' >C4</button>
 <p id="current" class="d-flex justify-content-center">Current score 0/0</p>
+<button type="button" id='play_it' class=" d-flex justify-content-center js_play_sound" data-source='play_pitch(261.6, "sine")' >C4</button>
+
 <div class="d-flex justify-content-center">
-	<button id="0"></button>
-	<button id="1"></button>
-	<button id="2"></button>
-	<button id="3"></button>
-	<button id="4"></button>
-	<button id="5"></button>
-	<button id="6"></button>
-	<button id="7"></button>
-	<button id="8"></button>
+	<button id="0" class='m-2'></button>
+	<button id="1" class='m-2'></button>
+	<button id="2" class='m-2'></button>
+	<button id="3" class='m-2'></button>
+	<button id="4" class='m-2'></button>
+	<button id="5" class='m-2'></button>
+	<button id="6" class='m-2'></button>
+	<button id="7" class='m-2'></button>
+	<button id="8" class='m-2'></button>
 </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type='text/javascript'>
 // Begin's audio context and sets som variables we'll use in it.
