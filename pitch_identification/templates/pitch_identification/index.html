@@ -2,7 +2,7 @@
 {% block content %}
 <div class="container">
 <p id="current" class="d-flex justify-content-center">Current score 0/0</p>
-<button type="button" id='play_it' class=" d-flex justify-content-center js_play_sound" data-source='play_pitch(261.6, "sine")' >C4</button>
+<button type="button" id='play_it' class=" d-flex justify-content-center js_play_sound" data-source='play_pitch(261.6, "sine")' >Play this sound</button>
 
 <div class="d-flex justify-content-center">
 	<button id="0" class='m-2'></button>
@@ -100,7 +100,6 @@ var current_var = notes[Math.floor(Math.random() * notes.length)];
 // update display
 document.getElementById('play_it').setAttribute('data-source', "play_pitch(0, 'sine')");
 document.getElementById('play_it').setAttribute('da', current_var);
-document.getElementById('play_it').innerHTML = current_var;
 // is correct function is used by each of the auto Generated buttons to see if
 // the note is correct
 function is_correct(button_var) {
@@ -117,7 +116,6 @@ function is_correct(button_var) {
 		current_var = notes[Math.floor(Math.random() * notes.length)];
 		document.getElementById('play_it').setAttribute('data-source', "play_pitch('" + notes_frequencies[current_var] + "', 'sine')");
 		document.getElementById('play_it').setAttribute('da', current_var);
-		document.getElementById('play_it').innerHTML = current_var;
         update_buttons(generate_buttons(current_var))
 	} else {
 		// if it is not we add to just the total var
