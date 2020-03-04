@@ -1,10 +1,41 @@
 {% extends 'base.html'%}
 {% block content %}
 {% load static %}
-<div class="d-flex justify-content-center">
-    <img id="to_guess" src="{% static 'note_identification/A.png' %}" alt="">
+<div class="container ">
+    <div class="d-flex justify-content-center">
+<img class="d-flex justify-content-center" id="to_guess" src="{% static 'note_identification/A.png' %}" alt="">
 </div>
-<p id="current" class="d-flex justify-content-center">Current score 0/0</p>
+<p class="d-flex justify-content-center" id="current">Current score 0/0</p>
+<div class="d-flex justify-content-center btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group mr-2" role="group" aria-label="First group">
+        <button type="button" id='A' class="btn btn-secondary">A</button>
+        <button type="button" id='B' class="btn btn-secondary">B</button>
+        <button type="button" id='C' class="btn btn-secondary">C</button>
+        <button type="button" id='D' class="btn btn-secondary">D</button>
+        <button type="button" id='E' class="btn btn-secondary">E</button>
+        <button type="button" id='F' class="btn btn-secondary">F</button>
+        <button type="button" id='G' class="btn btn-secondary">G</button>
+      </div>
+      <div class="btn-group mr-2" role="group" aria-label="Second group">
+        <button type="button" id='A#' class="btn btn-secondary">A#</button>
+        <button type="button" id='B#' class="btn btn-secondary">B#</button>
+        <button type="button" id='C#' class="btn btn-secondary">C#</button>
+        <button type="button" id='D#' class="btn btn-secondary">D#</button>
+        <button type="button" id='E#' class="btn btn-secondary">E#</button>
+        <button type="button" id='F#' class="btn btn-secondary">F#</button>
+        <button type="button" id='G#' class="btn btn-secondary">G#</button>
+      </div>
+      <div class="btn-group" role="group" aria-label="Third group">
+        <button type="button" id='A♭' class="btn btn-secondary">A♭</button>
+        <button type="button" id='B♭' class="btn btn-secondary">B♭</button>
+        <button type="button" id='C♭' class="btn btn-secondary">C♭</button>
+        <button type="button" id='D♭' class="btn btn-secondary">D♭</button>
+        <button type="button" id='E♭' class="btn btn-secondary">E♭</button>
+        <button type="button" id='F♭' class="btn btn-secondary">F♭</button>
+        <button type="button" id='G♭' class="btn btn-secondary">G♭</button>
+      </div>
+  </div>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type='text/javascript'>
     function update_da(valid_note){
@@ -59,13 +90,11 @@ function is_correct(button_var){
 // this create the buttons and gives them eacha an onclick that calls the
 // is_correct function to check if this is the correct button for the note.
 for (n in notes){
-    var btn = document.createElement("BUTTON");
+    var btn = document.getElementById(notes[n])
     btn.innerHTML = notes[n];
     btn.setAttribute('onclick', 'is_correct("'+notes[n]+'")')
-    document.body.appendChild(btn);
+    // btn.setAttribute('class', 'btn btn-light')
+    // document.body.appendChild(btn);
 }
-
 </script>
-
-
 {% endblock %}
