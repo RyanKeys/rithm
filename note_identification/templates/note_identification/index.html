@@ -1,10 +1,13 @@
 {% extends 'base.html'%}
 {% block content %}
 {% load static %}
-<img id="to_guess" src="{% static 'note_identification/A.png' %}" alt="">
-<p id="current">Current score 0/0</p>
+<div class="container ">
+    <div class="d-flex justify-content-center">
+<img class="d-flex justify-content-center" id="to_guess" src="{% static 'note_identification/A.png' %}" alt="">
+</div>
+<p class="d-flex justify-content-center" id="current">Current score 0/0</p>
 
-<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+<div class="d-flex justify-content-center btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
 
     <div class="btn-group mr-2" role="group" aria-label="First group">
         <button type="button" id='A' class="btn btn-secondary">A</button>
@@ -35,6 +38,7 @@
       </div>
 
   </div>
+</div>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
 <script type='text/javascript'>
