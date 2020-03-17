@@ -6,6 +6,7 @@
         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
         <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
         <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
     </ol>
     <div class="carousel-inner">
         <div class="carousel-item active">
@@ -23,7 +24,14 @@
             </div>
         </div>
         <div class="carousel-item">
-            <img class="d-block w-100" height="900px" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80" alt="Third slide">
+            <img class="d-block w-100" height="900px" src="https://images.unsplash.com/photo-1507838153414-b4b713384a76?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" alt="Third slide">
+            <div class="carousel-caption d-none d-md-block">
+                <h5>...</h5>
+                <p>...</p>
+            </div>
+        </div>
+        <div class="carousel-item">
+            <img class="d-block w-100" height="900px" src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2250&q=80" alt="Fourth slide">
             <div class="carousel-caption d-none d-md-block">
                 <h5>...</h5>
                 <p>...</p>
@@ -39,14 +47,4 @@
     <span class="sr-only">Next</span>
     </a>
 </div>
-{% for game in games %}
-<div class="card" style="width: 18rem;">
-    <img src="..." class="card-img-top" alt="...">
-    <div class="card-body">
-        <h5 class="card-title">Card title</h5>
-        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        <a href="#" class="btn btn-primary">Go somewhere</a>
-    </div>
-</div>
-{% endfor %}
 {% endblock %}
