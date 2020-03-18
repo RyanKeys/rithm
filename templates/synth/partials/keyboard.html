@@ -1,10 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-  </head>
   <style>
     #key_container {
       position: absolute;
@@ -35,42 +30,49 @@
   <div id="key_container"></div>
   <!--Keyboard Script-->
   <script>
-    //Init new Ployphonic synth
+    //Init new Polyphonic synth
     var synth = new Tone.PolySynth().toMaster();
+    //Keyboard note array
     var notes = ["C", "D", "E", "F", "G", "A", "B"];
+    //QWERTY keyboard keys to play piano
     var keys = ["A", "W", "S", "E", "D", "F", "T", "G", "Y", "H", "U", "J"];
+    //empty html string
     var html = "";
-
+    //Creates 2 octaves(2 containers of all piano key divs in notes array)
     for (var octave = 0; octave < 2; octave++) {
+      //Creates a piano key for each note in note array
       for (var i = 0; i < notes.length; i++) {
         var note = notes[i];
         var key = keys[i];
         var has_sharp = true;
 
+        //Notes 'E' and 'B' don't have sharps. changes their "has_sharp" bool to false.
         if (note == "E" || note == "B") has_sharp = false;
-
+        //Creates white piano keys
         html += `<div class='white_note' onmousedown='note_down(this,false)' onmouseup='note_up(this,false)' onmouseleave='note_up(this,false)' data-note='${note +
           (octave + 4)}'>`;
-
+        //For notes except 'E' and 'B', adds black piano key after a white key
         if (has_sharp) {
           html += `<div class='black_note' onmousedown='note_down(this,true)' onmouseup='note_up(this,true)' onmouseleave='note_up(this,true)' data-note='${note +
             "#" +
             (octave + 4)}'></div>`;
         }
+        //Add div to end of the note container to start next one
         html += `</div>`;
       }
     }
-
+    //Assign all functions to 'key_container' divs
     document.getElementById("key_container").innerHTML = html;
-
+    //Changes black notes back to #333, and turn #ddd into white
     function note_up(elem, is_sharp) {
       elem.style.background = is_sharp ? "#333" : "white";
     }
-
+    //Trigger press animation and sound.
     function note_down(elem, is_sharp) {
       var note = elem.dataset.note;
       elem.style.background = is_sharp ? "black" : "#ddd";
       synth.triggerAttackRelease(note, "16n");
+      //Prevents overlapping buttons from both pressing. ie: if your press C#, C or D won't also play.
       event.stopPropagation();
     }
   </script>
