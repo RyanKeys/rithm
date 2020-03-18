@@ -35,7 +35,7 @@
     //Keyboard note array
     var notes = ["C", "D", "E", "F", "G", "A", "B"];
     //QWERTY keyboard keys to play piano
-    var keys = ["A", "W", "S", "E", "D", "F", "T", "G", "Y", "H", "U", "J"];
+    //var keys = ["A", "W", "S", "E", "D", "F", "T", "G", "Y", "H", "U", "J"];
     //empty html string
     var html = "";
     //Creates 2 octaves(2 containers of all piano key divs in notes array)
@@ -43,7 +43,6 @@
       //Creates a piano key for each note in note array
       for (var i = 0; i < notes.length; i++) {
         var note = notes[i];
-        var key = keys[i];
         var has_sharp = true;
 
         //Notes 'E' and 'B' don't have sharps. changes their "has_sharp" bool to false.
@@ -61,17 +60,95 @@
         html += `</div>`;
       }
     }
-    //Assign all functions to 'key_container' divs
+    window.addEventListener("keydown", check_key_press, false);
+    window.addEventListener("keyup", check_key_release, false);
+
+    function check_key_press(key, qwerty) {
+      var qwerty = [
+        "65",
+        "87",
+        "83",
+        "69",
+        "68",
+        "70",
+        "84",
+        "71",
+        "89",
+        "72",
+        "85",
+        "74"
+      ];
+      var piano_notes = [
+        "C4",
+        "C#4",
+        "D4",
+        "D#4",
+        "E4",
+        "F4",
+        "F#4",
+        "G4",
+        "G#4",
+        "A4",
+        "A#4",
+        "B4"
+      ];
+      for (var x = 0; x < qwerty.length; x++) {
+        var qwerty_index = qwerty[x];
+        if (key.keyCode == qwerty_index) {
+          synth.triggerAttack(piano_notes[x], "16n");
+        } else {
+        }
+      }
+    }
+    function check_key_release(key) {
+      var qwerty = [
+        "65",
+        "87",
+        "83",
+        "69",
+        "68",
+        "70",
+        "84",
+        "71",
+        "89",
+        "72",
+        "85",
+        "74"
+      ];
+      var piano_notes = [
+        "C4",
+        "C#4",
+        "D4",
+        "D#4",
+        "E4",
+        "F4",
+        "F#4",
+        "G4",
+        "G#4",
+        "A4",
+        "A#4",
+        "B4"
+      ];
+      for (var x = 0; x < qwerty.length; x++) {
+        var qwerty_index = qwerty[x];
+        if (key.keyCode == qwerty_index);
+        synth.triggerRelease(piano_notes[x], "16n");
+        synth.stopPropagation();
+      }
+    }
+    //Assign all lower functions to 'key_container' divs
     document.getElementById("key_container").innerHTML = html;
     //Changes black notes back to #333, and turn #ddd into white
     function note_up(elem, is_sharp) {
+      var note = elem.dataset.note;
       elem.style.background = is_sharp ? "#333" : "white";
+      synth.triggerRelease(note, "16n");
     }
     //Trigger press animation and sound.
     function note_down(elem, is_sharp) {
       var note = elem.dataset.note;
       elem.style.background = is_sharp ? "black" : "#ddd";
-      synth.triggerAttackRelease(note, "16n");
+      synth.triggerAttack(note, "16n");
       //Prevents overlapping buttons from both pressing. ie: if your press C#, C or D won't also play.
       event.stopPropagation();
     }
