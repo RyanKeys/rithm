@@ -25,23 +25,23 @@ like this.
 
 Dates 3/16-3/25
 
-**My Name:**
-Ryan Keys
-**Project Name:**
-Rithm
-**Is your project New or Old?**
-Old
-**Is your project Solo or Team?**
-Solo
+**My Name:**<br>
+Ryan Keys<br>
+**Project Name:**<br>
+Rithm<br>
+**Is your project New or Old?**<br>
+Old<br>
+**Is your project Solo or Team?**<br>
+Solo<br>
 
 ## Description
 
-**Write a paragraph summary of the current status of your project, what you hope to achieve during the intensive, how and why**
+**Write a paragraph summary of the current status of your project, what you hope to achieve during the intensive, how and why**<br>
 My project is a platform designed for people to learn music theory. I hope to add a synthesizer module to the website, as well as design a frontend for the entire application
 
 ## Challenges I Anticipate
 
-**List out the challenges you anticipate for completing this project**
+**List out the challenges you anticipate for completing this project**<br>
 Client side JS is something ive never done before.
 Making sure there is minimal latency on press.
 Modifying the parameters of each synth using input forms.
@@ -50,17 +50,17 @@ Modifying the parameters of each synth using input forms.
 
 **ONE SINGLE aspect of product. Consider: build backend for SPD 1.2 front end, CRUD one resource, use API or library, authentication etc.**
 
-**Start coding and finish “Skateboard” feature before beginning “Bike”.**
+**Start coding and finish “Skateboard” feature before beginning “Bike”.**<br>
 Working Midi keyboard and better landing page UI/UX
 
 ## Bike
 
-**ONE additional features that get you closer to your idealized product. Examples: CRUD 2nd resource, add comments, API use, authentication, library use**
+**ONE additional features that get you closer to your idealized product. Examples: CRUD 2nd resource, add comments, API use, authentication, library use**<br>
 Turn Midi keyboard into programmable synth (buttons, knobs, faders(linear encoders) etc)
 
 ## Car
 
-**ONE additional feature**
+**ONE additional feature**<br>
 Create custom UI for synth to look more like a traditional synth emulation
 
 ## Personal Achievement Goals:
