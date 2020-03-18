@@ -31,8 +31,11 @@
     }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.5.41/Tone.js"></script>
+  <!--Container for keyboard-->
   <div id="key_container"></div>
+  <!--Keyboard Script-->
   <script>
+    //Init new Ployphonic synth
     var synth = new Tone.PolySynth().toMaster();
     var notes = ["C", "D", "E", "F", "G", "A", "B"];
     var keys = ["A", "W", "S", "E", "D", "F", "T", "G", "Y", "H", "U", "J"];
