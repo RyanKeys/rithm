@@ -34,6 +34,7 @@ DEBUG = True
 # Application definition
 
 INSTALLED_APPS = [
+    'synth',
     'pitch_identification',
     'landing_page',
     'note_identification.apps.NoteIdentificationConfig',
@@ -61,7 +62,7 @@ ROOT_URLCONF = 'rithm.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

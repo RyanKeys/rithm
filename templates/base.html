@@ -11,6 +11,7 @@
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
+
     <link
       rel="stylesheet"
       type="text/css"
@@ -20,7 +21,7 @@
   </head>
   <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="{% url 'index'  %}">R.I.T.H.M</a>
+      <a class="navbar-brand" href="#">R.I.T.H.M</a>
       <button
         class="navbar-toggler"
         type="button"
@@ -35,20 +36,27 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav">
           <li class="nav-item active">
-            <a class="nav-link" href="{% url 'index'  %}"
+            <a class="nav-link" href="/"
               >Home <span class="sr-only">(current)</span></a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'note_identification' %}"
+            <a class="nav-link" href="/synth/"></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/note_identification/"
               >Note Identification</a
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'pitch_identification' %}"
+            <a class="nav-link" href="/pitch_identification/"
               >Pitch Identification</a
             >
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/synth/">Synth</a>
+          </li>
+
           <!--
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,10 +76,11 @@
     <footer class="page-footer font-small">
       <div class="footer-copyright text-center py-3">
         Made By:
-        <p>Dom, Ryan, louis, John</p>
+        <p>Dom, Ryan, Louis, John</p>
       </div>
     </footer>
   </body>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.5.41/Tone.js"></script>
   <script
     src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
     integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
