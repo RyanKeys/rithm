@@ -31,11 +31,9 @@
   <!--Keyboard Script-->
   <script>
     //Init new Polyphonic synth
-    var synth = new Tone.PolySynth().toMaster();
+    var synth = new Tone.PolySynth(Tone.Synth, 8).toMaster();
     //Keyboard note array
     var notes = ["C", "D", "E", "F", "G", "A", "B"];
-    //QWERTY keyboard keys to play piano
-    //var keys = ["A", "W", "S", "E", "D", "F", "T", "G", "Y", "H", "U", "J"];
     //empty html string
     var html = "";
     //Creates 2 octaves(2 containers of all piano key divs in notes array)
@@ -48,11 +46,16 @@
         //Notes 'E' and 'B' don't have sharps. changes their "has_sharp" bool to false.
         if (note == "E" || note == "B") has_sharp = false;
         //Creates white piano keys
-        html += `<div class='white_note' onmousedown='note_down(this,false)' onmouseup='note_up(this,false)' onmouseleave='note_up(this,false)' data-note='${note +
+        html += `<div class='white_note' id='${note +
+          (octave +
+            4)}'onmousedown='note_down(this,false)' onmouseup='note_up(this,false)' onmouseleave='note_up(this,false)' data-note='${note +
           (octave + 4)}'>`;
         //For notes except 'E' and 'B', adds black piano key after a white key
         if (has_sharp) {
-          html += `<div class='black_note' onmousedown='note_down(this,true)' onmouseup='note_up(this,true)' onmouseleave='note_up(this,true)' data-note='${note +
+          html += `<div class='black_note' id='${note +
+            "#" +
+            (octave +
+              4)}' onmousedown='note_down(this,true)' onmouseup='note_up(this,true)' onmouseleave='note_up(this,true)' data-note='${note +
             "#" +
             (octave + 4)}'></div>`;
         }
@@ -60,65 +63,287 @@
         html += `</div>`;
       }
     }
-    window.addEventListener("keydown", check_key_press, false);
-    window.addEventListener("keyup", check_key_release, false);
+    window.addEventListener("keydown", check_press_a, false);
+    window.addEventListener("keyup", check_release_a, false);
 
-    function check_key_press(key) {
-      if (key.keyCode == "65") {
-        synth.triggerAttack("C4", "16n");
-      } else if (key.keyCode == "87") {
-        synth.triggerAttack("C#4", "16n");
-      } else if (key.keyCode == "83") {
-        synth.triggerAttack("D4", "16n");
-      } else if (key.keyCode == "69") {
-        synth.triggerAttack("D#4", "16n");
-      } else if (key.keyCode == "68") {
-        synth.triggerAttack("E4", "16n");
-      } else if (key.keyCode == "70") {
-        synth.triggerAttack("F4", "16n");
-      } else if (key.keyCode == "84") {
-        synth.triggerAttack("F#4", "16n");
-      } else if (key.keyCode == "71") {
-        synth.triggerAttack("G4", "16n");
-      } else if (key.keyCode == "89") {
-        synth.triggerAttack("G#4", "16n");
-      } else if (key.keyCode == "72") {
-        synth.triggerAttack("A4", "16n");
-      } else if (key.keyCode == "85") {
-        synth.triggerAttack("A#4", "16n");
-      } else if (key.keyCode == "74") {
-        synth.triggerAttack("B4", "16n");
+    window.addEventListener("keydown", check_press_w, true);
+    window.addEventListener("keyup", check_release_w, true);
+
+    window.addEventListener("keydown", check_press_s, false);
+    window.addEventListener("keyup", check_release_s, false);
+
+    window.addEventListener("keydown", check_press_e, true);
+    window.addEventListener("keyup", check_release_e, true);
+
+    window.addEventListener("keydown", check_press_d, false);
+    window.addEventListener("keyup", check_release_d, false);
+
+    window.addEventListener("keydown", check_press_f, false);
+    window.addEventListener("keyup", check_release_f, false);
+
+    window.addEventListener("keydown", check_press_t, true);
+    window.addEventListener("keyup", check_release_t, true);
+
+    window.addEventListener("keydown", check_press_g, false);
+    window.addEventListener("keyup", check_release_g, false);
+
+    window.addEventListener("keydown", check_press_y, true);
+    window.addEventListener("keyup", check_release_y, true);
+
+    window.addEventListener("keydown", check_press_h, false);
+    window.addEventListener("keyup", check_release_h, false);
+
+    window.addEventListener("keydown", check_press_u, true);
+    window.addEventListener("keyup", check_release_u, true);
+    window.addEventListener("keydown", check_press_j, false);
+    window.addEventListener("keyup", check_release_j, false);
+
+    var qwerty = [
+      "65",
+      "87",
+      "83",
+      "69",
+      "68",
+      "70",
+      "84",
+      "71",
+      "89",
+      "72",
+      "85",
+      "74"
+    ];
+    var piano_notes = [
+      "C4",
+      "C#4",
+      "D4",
+      "D#4",
+      "E4",
+      "F4",
+      "F#4",
+      "G4",
+      "G#4",
+      "A4",
+      "A#4",
+      "B4"
+    ];
+
+    var a_press = false;
+    function check_press_a(key) {
+      if (key.keyCode == "65" && a_press == false) {
+        var keyboard_elem = document.getElementById("C4");
+        note_down(keyboard_elem);
+        a_press = true;
+      }
+    }
+    function check_release_a(key) {
+      if (key.keyCode == "65" && a_press == true) {
+        var keyboard_elem = document.getElementById("C4");
+        note_up(keyboard_elem);
+        a_press = false;
+      }
+    }
+
+    w_press = false;
+    function check_press_w(key) {
+      if (key.keyCode == "87" && w_press == false) {
+        var keyboard_elem = document.getElementById("C#4");
+        note_down(keyboard_elem, true);
+        w_press = true;
+      }
+    }
+    function check_release_w(key) {
+      if (key.keyCode == "87" && w_press == true) {
+        var keyboard_elem = document.getElementById("C#4");
+        note_up(keyboard_elem, true);
+        w_press = false;
+      }
+    }
+
+    var s_press = false;
+    function check_press_s(key) {
+      if (key.keyCode == "83" && s_press == false) {
+        var keyboard_elem = document.getElementById("D4");
+        note_down(keyboard_elem);
+        s_press = true;
+      }
+    }
+    function check_release_s(key) {
+      if (key.keyCode == "83" && s_press == true) {
+        var keyboard_elem = document.getElementById("D4");
+        note_up(keyboard_elem);
+        s_press = false;
+      }
+    }
+
+    e_press = false;
+    function check_press_e(key) {
+      if (key.keyCode == "69" && e_press == false) {
+        var keyboard_elem = document.getElementById("D#4");
+        note_down(keyboard_elem, true);
+        e_press = true;
+      }
+    }
+    function check_release_e(key) {
+      if (key.keyCode == "69" && e_press == true) {
+        var keyboard_elem = document.getElementById("D#4");
+        note_up(keyboard_elem, true);
+        e_press = false;
+      }
+    }
+
+    var d_press = false;
+    function check_press_d(key) {
+      if (key.keyCode == "68" && d_press == false) {
+        var keyboard_elem = document.getElementById("E4");
+        note_down(keyboard_elem);
+        d_press = true;
+      }
+    }
+    function check_release_d(key) {
+      if (key.keyCode == "68" && d_press == true) {
+        var keyboard_elem = document.getElementById("E4");
+        note_up(keyboard_elem);
+        d_press = false;
+      }
+    }
+
+    var f_press = false;
+    function check_press_f(key) {
+      if (key.keyCode == "70" && f_press == false) {
+        var keyboard_elem = document.getElementById("F4");
+        note_down(keyboard_elem);
+        f_press = true;
+      }
+    }
+    function check_release_f(key) {
+      if (key.keyCode == "70" && f_press == true) {
+        var keyboard_elem = document.getElementById("F4");
+        note_up(keyboard_elem);
+        f_press = false;
+      }
+    }
+
+    t_press = false;
+    function check_press_t(key) {
+      if (key.keyCode == "84" && t_press == false) {
+        var keyboard_elem = document.getElementById("F#4");
+        note_down(keyboard_elem, true);
+        t_press = true;
+      }
+    }
+    function check_release_t(key) {
+      if (key.keyCode == "84" && t_press == true) {
+        var keyboard_elem = document.getElementById("F#4");
+        note_up(keyboard_elem, true);
+        t_press = false;
+      }
+    }
+
+    g_press = false;
+    function check_press_g(key) {
+      if (key.keyCode == "71" && g_press == false) {
+        var keyboard_elem = document.getElementById("G4");
+        note_down(keyboard_elem);
+        g_press = true;
+      }
+    }
+    function check_release_g(key) {
+      if (key.keyCode == "71" && g_press == true) {
+        var keyboard_elem = document.getElementById("G4");
+        note_up(keyboard_elem);
+        g_press = false;
+      }
+    }
+
+    y_press = false;
+    function check_press_y(key) {
+      if (key.keyCode == "89" && y_press == false) {
+        var keyboard_elem = document.getElementById("G#4");
+        note_down(keyboard_elem, true);
+        y_press = true;
+      }
+    }
+    function check_release_y(key) {
+      if (key.keyCode == "89" && y_press == true) {
+        var keyboard_elem = document.getElementById("G#4");
+        note_up(keyboard_elem, true);
+        y_press = false;
+      }
+    }
+
+    h_press = false;
+    function check_press_h(key) {
+      if (key.keyCode == "72" && h_press == false) {
+        var keyboard_elem = document.getElementById("A4");
+        note_down(keyboard_elem);
+        h_press = true;
+      }
+    }
+    function check_release_h(key) {
+      if (key.keyCode == "72" && h_press == true) {
+        var keyboard_elem = document.getElementById("A4");
+        note_up(keyboard_elem);
+        h_press = false;
+      }
+    }
+
+    u_press = false;
+    function check_press_u(key) {
+      if (key.keyCode == "85" && u_press == false) {
+        var keyboard_elem = document.getElementById("A#4");
+        note_down(keyboard_elem, true);
+        u_press = true;
+      }
+    }
+    function check_release_u(key) {
+      if (key.keyCode == "85" && u_press == true) {
+        var keyboard_elem = document.getElementById("A#4");
+        note_up(keyboard_elem, true);
+        u_press = false;
+      }
+    }
+
+    j_press = false;
+    function check_press_j(key) {
+      if (key.keyCode == "74" && j_press == false) {
+        var keyboard_elem = document.getElementById("B4");
+        note_down(keyboard_elem);
+        j_press = true;
+      }
+    }
+    function check_release_j(key) {
+      if (key.keyCode == "74" && j_press == true) {
+        var keyboard_elem = document.getElementById("B4");
+        note_up(keyboard_elem);
+        j_press = false;
+      }
+    }
+    /*function check_key_press(key) {
+      for (var x = 0; x < qwerty.length; x++) {
+        var qwerty_index = qwerty[x];
+        var keyboard_elem = document.getElementById(piano_notes[x]);
+        if (key.keyCode == qwerty_index) {
+          if (piano_notes[x].includes("#")) {
+            note_down(keyboard_elem, true);
+          } else {
+            note_down(keyboard_elem, false);
+          }
+        }
       }
     }
     function check_key_release(key) {
-      synth.releaseAll();
-      if (key.keyCode == "65") {
-        synth.triggerRelease("C4", "16n");
-      } else if (key.keyCode == "87") {
-        synth.triggerRelease("C#4", "16n");
-      } else if (key.keyCode == "83") {
-        synth.triggerRelease("D4", "16n");
-      } else if (key.keyCode == "69") {
-        synth.triggerRelease("D#4", "16n");
-      } else if (key.keyCode == "68") {
-        synth.triggerRelease("E4", "16n");
-      } else if (key.keyCode == "70") {
-        synth.triggerRelease("F4", "16n");
-      } else if (key.keyCode == "84") {
-        synth.triggerRelease("F#4", "16n");
-      } else if (key.keyCode == "71") {
-        synth.triggerRelease("G4", "16n");
-      } else if (key.keyCode == "89") {
-        synth.triggerRelease("G#4", "16n");
-      } else if (key.keyCode == "72") {
-        synth.triggerRelease("A4", "16n");
-      } else if (key.keyCode == "85") {
-        synth.triggerRelease("A#4", "16n");
-      } else if (key.keyCode == "74") {
-        synth.triggerRelease("B4", "16n");
+      for (var x = 0; x < qwerty.length; x++) {
+        var keyboard_elem = document.getElementById(piano_notes[x]);
+        console.log(keyboard_elem);
+        if (piano_notes[x].includes("#")) {
+          note_up(keyboard_elem, true);
+        } else {
+          note_up(keyboard_elem, false);
+        }
       }
-    }
-    //Assign all lower functions to 'key_container' divs
+    } */
+
+    //Assign all lower functions to 'key_container' divs and applies for loops above
     document.getElementById("key_container").innerHTML = html;
     //Changes black notes back to #333, and turn #ddd into white
     function note_up(elem, is_sharp) {
@@ -126,6 +351,7 @@
       elem.style.background = is_sharp ? "#333" : "white";
       synth.triggerRelease(note, "16n");
     }
+
     //Trigger press animation and sound.
     function note_down(elem, is_sharp) {
       var note = elem.dataset.note;
