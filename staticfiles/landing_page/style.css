@@ -1,4 +1,10 @@
+{% load static %}
+
 body {
+  background: url("{% static 'landing_page/background.jpg'%}");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 html {
