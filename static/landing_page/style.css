@@ -1,0 +1,16 @@
+body {
+  background: url("/static//landing_page/background.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+html {
+  background-color: white;
+  padding: 0;
+}
+
+footer {
+  color: white;
+  text-shadow: 1px 1px black;
+}
