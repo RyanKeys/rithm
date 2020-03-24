@@ -24,14 +24,32 @@
 
       background: #333;
     }
+
+    #synth_selector_button {
+      padding-top: 250px;
+    }
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.5.41/Tone.js"></script>
   <!--Container for keyboard-->
   <div id="key_container"></div>
+  <div id="synth_selector_button"></div>
   <!--Keyboard Script-->
   <script>
     //Init new Polyphonic synth
-    var synth = new Tone.PolySynth(Tone.Synth, 8).toMaster();
+    var poly_synth = new Tone.PolySynth(Tone.Synth, 8).toMaster();
+    var poly_synth_active = true;
+    var fm_synth_active = false;
+    var fm_synth = new Tone.PolySynth(Tone.FMSynth).toMaster();
+    var synth_list = ["poly_synth", "FM_synth"];
+    var synth_button_html = "";
+
+    for (var i = 0; i < synth_list.length; i++) {
+      synth_button_html += `<button class='synth_buttons' id='${synth_list[i]}' onmousedown='select_synth(this)' data-synth ='${synth_list[i]}'>${synth_list[i]}</button>`;
+    }
+    document.getElementById(
+      "synth_selector_button"
+    ).innerHTML = synth_button_html;
+
     //Keyboard note array
     var notes = ["C", "D", "E", "F", "G", "A", "B"];
     //empty html string
@@ -345,20 +363,46 @@
 
     //Assign all lower functions to 'key_container' divs and applies for loops above
     document.getElementById("key_container").innerHTML = html;
+
     //Changes black notes back to #333, and turn #ddd into white
     function note_up(elem, is_sharp) {
       var note = elem.dataset.note;
+
       elem.style.background = is_sharp ? "#333" : "white";
-      synth.triggerRelease(note, "16n");
+      if (poly_synth_active == true) {
+        poly_synth.triggerRelease(note, "16n");
+      } else if (fm_synth_active == true) {
+        fm_synth.triggerRelease(note, "16n");
+      }
     }
 
     //Trigger press animation and sound.
     function note_down(elem, is_sharp) {
       var note = elem.dataset.note;
+      console.log(poly_synth.voices);
+      console.log(note);
+      console.log(poly_synth_active);
       elem.style.background = is_sharp ? "black" : "#ddd";
-      synth.triggerAttack(note, "16n");
+      if (poly_synth_active == true) {
+        poly_synth.triggerAttack(note, "16n");
+      } else if (fm_synth_active == true) {
+        fm_synth.triggerAttack(note, "16n");
+      }
       //Prevents overlapping buttons from both pressing. ie: if your press C#, C or D won't also play.
       event.stopPropagation();
+    }
+
+    function select_synth(elem) {
+      if (elem.id.includes("poly_synth")) {
+        fm_synth_active = false;
+        poly_synth_active = true;
+      } else if (elem.id.includes("FM_synth")) {
+        fm_synth_active = true;
+        poly_synth_active = false;
+      } else {
+        fm_synth_active = false;
+        poly_synth_active = true;
+      }
     }
   </script>
 </html>
