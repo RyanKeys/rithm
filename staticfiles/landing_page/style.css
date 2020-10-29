@@ -1,18 +1,18 @@
-{% load static %}
-
 body {
-  background: url("{% static 'landing_page/background.jpg'%}");
+  background-image: linear-gradient(to bottom left, #e66465, #9198e5);
+  height: 100vh;
   background-size: cover;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
 }
 
-html {
-  background-color: white;
-  padding: 0;
+.titleCard {
+  position: relative;
+  margin-left: 0;
+  text-align: left;
+  background-color: rgba(0, 0, 0, 0);
 }
 
 footer {
+  position: relative;
   color: white;
   text-shadow: 1px 1px black;
 }
