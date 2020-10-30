@@ -1,13 +1,14 @@
 {% extends 'base.html'%} {% block content %}
 <div class="container">
-  <p id="current" class="d-flex justify-content-center">Current score 0/0</p>
+  <p id="current" class="d-flex justify-content-center">Guess the Note!</p>
 
-  <div class=" d-flex justify-content-center">
+  <div class="d-flex justify-content-center">
     <button
       type="button"
       id="play_it"
-      class=" d-flex justify-content-center js_play_sound"
+      class="d-flex justify-content-center js_play_sound"
       data-source='play_pitch(261.6, "sine")'
+      style="margin: 2em"
     >
       Play the tone!
     </button>
@@ -36,13 +37,13 @@
   // prevents butttons that play sounds from performing defult function.
   document.addEventListener(
     "DOMContentLoaded",
-    function() {
-      $(".js_play_sound").on("click", function(e) {
+    function () {
+      $(".js_play_sound").on("click", function (e) {
         e.preventDefault();
         var $target = $(e.target);
         eval($target.data("source"));
       });
-      $(".js_stop_sound").on("click", function(e) {
+      $(".js_stop_sound").on("click", function (e) {
         e.preventDefault();
         o.stop();
       });
@@ -55,10 +56,7 @@
     o = context.createOscillator();
     frequency =
       notes_frequencies[
-        document
-          .getElementById("play_it")
-          .getAttribute("da")
-          .toString()
+        document.getElementById("play_it").getAttribute("da").toString()
       ];
     console.log(frequency);
     g = context.createGain();
@@ -85,7 +83,7 @@
     "G# / A♭",
     "A",
     "A# / B♭",
-    "B"
+    "B",
   ];
   var octive = [0, 1, 2, 3, 4, 5, 6, 7, 8];
   var notes = [];
@@ -143,10 +141,7 @@
     // logging to console for debuging purpose
     console.log(
       button_var ==
-        document
-          .getElementById("play_it")
-          .getAttribute("da")
-          .toString()
+        document.getElementById("play_it").getAttribute("da").toString()
     );
     // logging to console for debuging purpose
     console.log(
@@ -157,10 +152,8 @@
     );
     // this part checks if the button is the same as the note that we are looking for
     if (
-      document
-        .getElementById("play_it")
-        .getAttribute("da")
-        .toString() == button_var
+      document.getElementById("play_it").getAttribute("da").toString() ==
+      button_var
     ) {
       // if it is, we add to both the total var and the correct var
       correct += 1;
@@ -181,7 +174,7 @@
     }
     // Updates the score display
     document.getElementById("current").innerHTML =
-      "Current score " + correct.toString() + "/" + total.toString();
+      correct.toString() + "/" + total.toString();
   }
   // this update the buttons and gives them each a an onclick that calls the
   // is_correct function to check if this is the correct button for the note.
