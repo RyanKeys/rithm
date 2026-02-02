@@ -5,22 +5,227 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{% block meta_description %}Learn music theory through interactive games. Master note reading, ear training, and play with our web synthesizer. Free online music education.{% endblock %}">
+    <meta name="keywords" content="music theory, learn music, note reading, ear training, web synthesizer, music education, sheet music, piano lessons, music games">
+    <meta name="author" content="R.I.T.H.M">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="{% block canonical_url %}https://rithm.app{% endblock %}">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{% block og_url %}https://rithm.app{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}R.I.T.H.M - Learn Music Theory{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Master music theory through interactive games and tools. Free online music education platform.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}https://rithm.app/static/landing_page/og-image.png{% endblock %}">
+    <meta property="og:site_name" content="R.I.T.H.M">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:url" content="{% block twitter_url %}https://rithm.app{% endblock %}">
+    <meta name="twitter:title" content="{% block twitter_title %}R.I.T.H.M - Learn Music Theory{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Master music theory through interactive games and tools. Free online music education platform.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}https://rithm.app/static/landing_page/og-image.png{% endblock %}">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{% block favicon %}/static/landing_page/favicon.png{% endblock %}">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap -->
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
       integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
       crossorigin="anonymous"
     />
-
+    
+    <!-- Font Awesome -->
     <link
       rel="stylesheet"
-      type="text/css"
-      href="{% static 'landing_page/style.css' %}"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
-    <title>R-I-T-H-M</title>
+
+    <title>{% block title %}R.I.T.H.M - Learn Music Theory Online | Free Interactive Music Education{% endblock %}</title>
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "R.I.T.H.M",
+      "description": "Interactive music theory education platform",
+      "url": "https://rithm.app",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://rithm.app/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    {% block structured_data %}{% endblock %}
+    
+    <style>
+      :root {
+        --primary: #6366f1;
+        --primary-dark: #4f46e5;
+        --secondary: #ec4899;
+        --accent: #06b6d4;
+        --dark: #0f172a;
+        --dark-lighter: #1e293b;
+        --light: #f8fafc;
+        --gray: #64748b;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+      }
+      
+      * {
+        box-sizing: border-box;
+      }
+      
+      body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, var(--dark) 0%, var(--dark-lighter) 100%);
+        min-height: 100vh;
+        color: var(--light);
+      }
+      
+      h1, h2, h3, h4, h5, h6 {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 600;
+      }
+      
+      /* Modern Navbar */
+      .navbar {
+        background: rgba(15, 23, 42, 0.8) !important;
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 1rem 2rem;
+      }
+      
+      .navbar-brand {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      .nav-link {
+        color: rgba(255, 255, 255, 0.7) !important;
+        font-weight: 500;
+        padding: 0.5rem 1rem !important;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+        margin: 0 0.25rem;
+      }
+      
+      .nav-link:hover {
+        color: white !important;
+        background: rgba(255, 255, 255, 0.1);
+      }
+      
+      .nav-link i {
+        margin-right: 0.5rem;
+      }
+      
+      /* Modern Buttons */
+      .btn {
+        font-weight: 500;
+        padding: 0.75rem 1.5rem;
+        border-radius: 12px;
+        transition: all 0.2s ease;
+        border: none;
+      }
+      
+      .btn-primary {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      }
+      
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+      }
+      
+      .btn-success {
+        background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+        box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+      }
+      
+      .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+      }
+      
+      .btn-warning {
+        background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
+        color: white;
+      }
+      
+      .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+        color: white;
+      }
+      
+      .btn-outline-light {
+        border: 2px solid rgba(255, 255, 255, 0.2);
+        color: white;
+      }
+      
+      .btn-outline-light:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border-color: rgba(255, 255, 255, 0.3);
+      }
+      
+      /* Cards */
+      .card {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+      }
+      
+      /* Utility Classes */
+      .glass {
+        background: rgba(30, 41, 59, 0.5);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 16px;
+      }
+      
+      .gradient-text {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      
+      /* Smooth scrolling */
+      html {
+        scroll-behavior: smooth;
+      }
+      
+      /* Selection color */
+      ::selection {
+        background: var(--primary);
+        color: white;
+      }
+    </style>
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
       <a class="navbar-brand" href="/">R.I.T.H.M</a>
       <button
         class="navbar-toggler"
@@ -34,41 +239,185 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="/synth/"></a>
+            <a class="nav-link" href="/note_identification/"><i class="fas fa-book-open"></i> Note Reading</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/note_identification/"
-              >Note Identification</a
-            >
+            <a class="nav-link" href="/synth/"><i class="fas fa-keyboard"></i> Synthesizer</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/pitch_identification/"
-              >Pitch Identification</a
-            >
+            <a class="nav-link" href="/pitch_identification/"><i class="fas fa-headphones"></i> Pitch Training</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/synth/">Synth</a>
+          <li class="nav-item ml-3" style="border-left: 1px solid rgba(255,255,255,0.2); padding-left: 1rem;">
+            {% if user.is_authenticated %}
+            <a class="nav-link" href="{% url 'profile' %}"><i class="fas fa-user"></i> {{ user.username }}</a>
+            {% else %}
+            <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+            {% endif %}
           </li>
-
-          <!--
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Dropdown link
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                    </li>
-                    -->
         </ul>
       </div>
     </nav>
-    {% block content %} {% endblock %}
+    
+    <main style="padding-top: 80px;">
+      {% block content %} {% endblock %}
+    </main>
+    
+    <!-- Footer -->
+    <footer class="site-footer">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-4 mb-4">
+            <h5 class="footer-brand">R.I.T.H.M</h5>
+            <p class="footer-tagline">Making music theory accessible to everyone through interactive learning.</p>
+          </div>
+          <div class="col-md-2 mb-4">
+            <h6 class="footer-heading">Learn</h6>
+            <ul class="footer-links">
+              <li><a href="/note_identification/">Note Reading</a></li>
+              <li><a href="/pitch_identification/">Pitch Training</a></li>
+              <li><a href="/synth/">Synthesizer</a></li>
+            </ul>
+          </div>
+          <div class="col-md-2 mb-4">
+            <h6 class="footer-heading">Resources</h6>
+            <ul class="footer-links">
+              <li><a href="#">Music Theory Guide</a></li>
+              <li><a href="#">Practice Tips</a></li>
+              <li><a href="#">FAQ</a></li>
+            </ul>
+          </div>
+          <div class="col-md-4 mb-4">
+            <h6 class="footer-heading">Stay Updated</h6>
+            <p class="footer-text">Get notified about new features and lessons.</p>
+            <form class="footer-newsletter">
+              <div class="input-group">
+                <input type="email" class="form-control" placeholder="Enter your email">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">Subscribe</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+        <hr class="footer-divider">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <p class="footer-copyright">&copy; 2024 R.I.T.H.M. All rights reserved.</p>
+          </div>
+          <div class="col-md-6 text-md-right">
+            <div class="footer-social">
+              <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+              <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </footer>
+    
+    <style>
+      .site-footer {
+        background: rgba(15, 23, 42, 0.95);
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding: 4rem 0 2rem;
+        margin-top: 4rem;
+      }
+      
+      .footer-brand {
+        font-family: 'Space Grotesk', sans-serif;
+        font-weight: 700;
+        font-size: 1.5rem;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin-bottom: 1rem;
+      }
+      
+      .footer-tagline {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+      
+      .footer-heading {
+        color: white;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      
+      .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      
+      .footer-links li {
+        margin-bottom: 0.5rem;
+      }
+      
+      .footer-links a {
+        color: rgba(255, 255, 255, 0.6);
+        text-decoration: none;
+        transition: color 0.2s ease;
+        font-size: 0.9rem;
+      }
+      
+      .footer-links a:hover {
+        color: var(--primary);
+      }
+      
+      .footer-text {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.9rem;
+        margin-bottom: 1rem;
+      }
+      
+      .footer-newsletter .form-control {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 8px 0 0 8px;
+      }
+      
+      .footer-newsletter .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.4);
+      }
+      
+      .footer-newsletter .btn {
+        border-radius: 0 8px 8px 0;
+      }
+      
+      .footer-divider {
+        border-color: rgba(255, 255, 255, 0.1);
+        margin: 2rem 0;
+      }
+      
+      .footer-copyright {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 0.85rem;
+        margin: 0;
+      }
+      
+      .footer-social a {
+        color: rgba(255, 255, 255, 0.4);
+        font-size: 1.25rem;
+        margin-left: 1rem;
+        transition: color 0.2s ease;
+      }
+      
+      .footer-social a:hover {
+        color: var(--primary);
+      }
+    </style>
   </body>
+  
+  <!-- Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.5.41/Tone.js"></script>
   <script
     src="https://code.jquery.com/jquery-3.4.1.slim.min.js"

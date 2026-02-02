@@ -17,23 +17,41 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-ALLOWED_HOSTS = []
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*2i3sl6)j6i$d(&lew@n2x5@7r+q$gc&i+8eh432))fkip*9&z'
+# In production (DEBUG=False), SECRET_KEY must be set via environment variable
+_debug_mode = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
+_secret_key = os.environ.get('SECRET_KEY')
+
+if not _secret_key:
+    if _debug_mode:
+        # Dev-only fallback - NEVER use in production
+        _secret_key = 'dev-only-insecure-key-do-not-use-in-production'
+    else:
+        raise ValueError("SECRET_KEY environment variable is required in production!")
+
+SECRET_KEY = _secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = ['*']
-DEBUG = True
+DEBUG = _debug_mode
+
+# Allowed hosts - set via environment in production
+_allowed_hosts = os.environ.get('ALLOWED_HOSTS', '')
+if _allowed_hosts:
+    ALLOWED_HOSTS = [h.strip() for h in _allowed_hosts.split(',') if h.strip()]
+elif DEBUG:
+    ALLOWED_HOSTS = ['*']  # Dev only
+else:
+    raise ValueError("ALLOWED_HOSTS environment variable is required in production!")
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
     'synth',
     'pitch_identification',
     'landing_page',
@@ -45,6 +63,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+# Auth settings
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -80,13 +103,24 @@ WSGI_APPLICATION = 'rithm.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+# Uses PostgreSQL in production (DATABASE_URL), SQLite in development
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    # Production: PostgreSQL
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
     }
-}
+else:
+    # Development: SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation

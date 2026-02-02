@@ -7,3 +7,13 @@ env/
 __pycache__
 db.sqlite3
 media
+
+# Environment variables (NEVER commit)
+.env
+.env.local
+.env.production
+
+# Secrets
+*.pem
+*.key
+secrets.json

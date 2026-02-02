@@ -1,0 +1,215 @@
+{% extends 'base.html' %}
+
+{% block title %}My Profile | R.I.T.H.M{% endblock %}
+
+{% block content %}
+<style>
+  .profile-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .profile-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    margin: 0 auto 1rem;
+  }
+  
+  .profile-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .profile-header p {
+    color: rgba(255, 255, 255, 0.6);
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .stats-card {
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 1.5rem;
+  }
+  
+  .stats-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  .stats-card-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  
+  .stats-card.note .stats-card-icon {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  }
+  
+  .stats-card.pitch .stats-card-icon {
+    background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+  }
+  
+  .stats-card-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
+  .stat-item {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+  }
+  
+  .stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+  }
+  
+  .stat-value.highlight {
+    color: var(--primary);
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+  
+  .action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .action-buttons .btn {
+    padding: 0.875rem 1.5rem;
+  }
+</style>
+
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="profile-avatar">
+      <i class="fas fa-user"></i>
+    </div>
+    <h1>{{ user.username }}</h1>
+    <p>Member since {{ profile.created_at|date:"F Y" }}</p>
+  </div>
+  
+  <div class="stats-grid">
+    <!-- Note Reading Stats -->
+    <div class="stats-card note">
+      <div class="stats-card-header">
+        <div class="stats-card-icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <div>
+          <div class="stats-card-title">Note Reading</div>
+        </div>
+      </div>
+      
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.note_total_correct }}</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.note_accuracy }}%</div>
+          <div class="stat-label">Accuracy</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value highlight">{{ profile.note_best_streak }}</div>
+          <div class="stat-label">Best Streak</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.note_total_attempts }}</div>
+          <div class="stat-label">Total Plays</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Pitch Training Stats -->
+    <div class="stats-card pitch">
+      <div class="stats-card-header">
+        <div class="stats-card-icon">
+          <i class="fas fa-headphones"></i>
+        </div>
+        <div>
+          <div class="stats-card-title">Pitch Training</div>
+        </div>
+      </div>
+      
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.pitch_total_correct }}</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.pitch_accuracy }}%</div>
+          <div class="stat-label">Accuracy</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value highlight">{{ profile.pitch_best_streak }}</div>
+          <div class="stat-label">Best Streak</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.pitch_total_attempts }}</div>
+          <div class="stat-label">Total Plays</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="action-buttons">
+    <a href="/note_identification/" class="btn btn-primary">
+      <i class="fas fa-play"></i> Practice Notes
+    </a>
+    <a href="/pitch_identification/" class="btn btn-warning">
+      <i class="fas fa-headphones"></i> Train Ear
+    </a>
+    <a href="{% url 'logout' %}" class="btn btn-outline-light">
+      <i class="fas fa-sign-out-alt"></i> Logout
+    </a>
+  </div>
+</div>
+{% endblock %}

@@ -21,5 +21,7 @@ urlpatterns = [
     path("note_identification/", include('note_identification.urls'),
          name="note_identification"),
     path("pitch_identification/", include("pitch_identification.urls")),
+    path("synth/", include("synth.urls"), name="synth"),
+    path("accounts/", include("accounts.urls")),
     path('admin/', admin.site.urls),
 ]
