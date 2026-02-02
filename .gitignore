@@ -17,3 +17,4 @@ media
 *.pem
 *.key
 secrets.json
+staticfiles/
