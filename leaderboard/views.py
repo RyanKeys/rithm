@@ -23,6 +23,7 @@ def leaderboard_view(request):
     games = [
         {'id': 'note', 'name': 'Note Reading', 'icon': 'fa-book-open'},
         {'id': 'interval', 'name': 'Interval Training', 'icon': 'fa-music'},
+        {'id': 'chord', 'name': 'Chord Identification', 'icon': 'fa-layer-group'},
         {'id': 'pitch', 'name': 'Pitch Identification', 'icon': 'fa-headphones'},
     ]
     
@@ -93,7 +94,7 @@ def submit_score(request):
         total = data.get('total', 0)
         best_streak = data.get('bestStreak', 0)
         
-        if game not in ['note', 'interval', 'pitch']:
+        if game not in ['note', 'interval', 'chord', 'pitch']:
             return JsonResponse({'success': False, 'error': 'Invalid game'}, status=400)
         
         if total < 10:
