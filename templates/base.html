@@ -83,14 +83,14 @@
         /* Dark theme colors */
         --bg-primary: #0f172a;
         --bg-secondary: #1e293b;
-        --bg-card: rgba(30, 41, 59, 0.5);
+        --bg-card: var(--bg-card);
         --bg-navbar: rgba(15, 23, 42, 0.8);
         --text-primary: #f8fafc;
-        --text-secondary: rgba(255, 255, 255, 0.7);
-        --text-muted: rgba(255, 255, 255, 0.5);
-        --border-color: rgba(255, 255, 255, 0.1);
-        --input-bg: rgba(255, 255, 255, 0.1);
-        --input-border: rgba(255, 255, 255, 0.2);
+        --text-secondary: var(--text-secondary);
+        --text-muted: var(--text-muted);
+        --border-color: var(--input-bg);
+        --input-bg: var(--input-bg);
+        --input-border: var(--border-color);
         
         /* Legacy variables for compatibility */
         --dark: #0f172a;
@@ -103,11 +103,11 @@
       [data-theme="light"] {
         --bg-primary: #f8fafc;
         --bg-secondary: #e2e8f0;
-        --bg-card: rgba(255, 255, 255, 0.8);
-        --bg-navbar: rgba(255, 255, 255, 0.9);
+        --bg-card: var(--text-secondary);
+        --bg-navbar: var(--text-primary);
         --text-primary: #1e293b;
         --text-secondary: rgba(30, 41, 59, 0.8);
-        --text-muted: rgba(30, 41, 59, 0.5);
+        --text-muted: var(--bg-card);
         --border-color: rgba(0, 0, 0, 0.1);
         --input-bg: rgba(0, 0, 0, 0.05);
         --input-border: rgba(0, 0, 0, 0.15);
@@ -242,23 +242,23 @@
       .btn-warning {
         background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
         box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-        color: white;
+        color: var(--text-primary);
       }
       
       .btn-warning:hover {
         transform: translateY(-2px);
         box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
-        color: white;
+        color: var(--text-primary);
       }
       
       .btn-outline-light {
-        border: 2px solid rgba(255, 255, 255, 0.2);
-        color: white;
+        border: 2px solid var(--border-color);
+        color: var(--text-primary);
       }
       
       .btn-outline-light:hover {
-        background: rgba(255, 255, 255, 0.1);
-        border-color: rgba(255, 255, 255, 0.3);
+        background: var(--input-bg);
+        border-color: var(--text-muted);
       }
       
       /* Cards */
@@ -295,7 +295,7 @@
       /* Selection color */
       ::selection {
         background: var(--primary);
-        color: white;
+        color: var(--text-primary);
       }
     </style>
   </head>

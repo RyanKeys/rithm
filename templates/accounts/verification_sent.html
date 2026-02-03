@@ -12,9 +12,9 @@
   }
   
   .verification-card {
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--input-bg);
     border-radius: 20px;
     padding: 3rem;
     text-align: center;
@@ -30,7 +30,7 @@
     justify-content: center;
     margin: 0 auto 1.5rem;
     font-size: 2rem;
-    color: white;
+    color: var(--text-primary);
   }
   
   .verification-card h1 {
@@ -39,7 +39,7 @@
   }
   
   .verification-card p {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     margin-bottom: 1.5rem;
     line-height: 1.6;
   }
@@ -52,7 +52,7 @@
   .resend-section {
     margin-top: 2rem;
     padding-top: 2rem;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 1px solid var(--input-bg);
   }
   
   .resend-section p {
@@ -79,7 +79,7 @@
     </p>
     
     <div class="resend-section">
-      <p style="color: rgba(255, 255, 255, 0.5);">
+      <p style="color: var(--text-muted);">
         Didn't receive the email? Check your spam folder or
       </p>
       <form action="{% url 'resend-verification' %}" method="post">

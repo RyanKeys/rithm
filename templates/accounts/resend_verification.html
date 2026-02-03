@@ -12,9 +12,9 @@
   }
   
   .resend-card {
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--input-bg);
     border-radius: 20px;
     padding: 2.5rem;
   }
@@ -26,7 +26,7 @@
   }
   
   .resend-card .subtitle {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
     text-align: center;
     margin-bottom: 2rem;
   }
@@ -38,28 +38,28 @@
   .form-group label {
     display: block;
     margin-bottom: 0.5rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary);
     font-weight: 500;
   }
   
   .form-control {
     width: 100%;
     padding: 0.875rem 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-    color: white;
+    color: var(--text-primary);
     font-size: 1rem;
   }
   
   .form-control:focus {
     outline: none;
     border-color: var(--primary);
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--input-bg);
   }
   
   .form-control::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--text-muted);
   }
   
   .btn-block {
@@ -74,7 +74,7 @@
   }
   
   .back-link a {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
     text-decoration: none;
   }
   

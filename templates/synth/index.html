@@ -43,14 +43,14 @@
   }
   
   .synth-header p {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
   }
   
   /* Keyboard Container */
   .keyboard-wrapper {
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--input-bg);
     border-radius: 24px;
     padding: 2rem;
     margin-bottom: 2rem;
@@ -121,22 +121,22 @@
     padding: 0.75rem 1.5rem;
     border-radius: 12px;
     font-weight: 500;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid var(--border-color);
     background: transparent;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     cursor: pointer;
     transition: all 0.2s ease;
   }
   
   .synth-btn:hover {
-    border-color: rgba(255, 255, 255, 0.4);
-    color: white;
+    border-color: var(--text-muted);
+    color: var(--text-primary);
   }
   
   .synth-btn.active {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     border-color: transparent;
-    color: white;
+    color: var(--text-primary);
     box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
   }
   
@@ -158,13 +158,13 @@
   }
   
   .instructions p {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     margin: 0;
     font-size: 0.9rem;
   }
   
   .instructions kbd {
-    background: rgba(255, 255, 255, 0.1);
+    background: var(--input-bg);
     padding: 0.2rem 0.5rem;
     border-radius: 4px;
     font-family: 'Space Grotesk', monospace;

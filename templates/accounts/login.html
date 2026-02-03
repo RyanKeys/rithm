@@ -13,9 +13,9 @@
   }
   
   .auth-card {
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--input-bg);
     border-radius: 24px;
     padding: 3rem;
     width: 100%;
@@ -33,7 +33,7 @@
   }
   
   .auth-header p {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
   }
   
   .form-group {
@@ -44,16 +44,16 @@
     display: block;
     margin-bottom: 0.5rem;
     font-weight: 500;
-    color: rgba(255, 255, 255, 0.9);
+    color: var(--text-primary);
   }
   
   .form-control {
     width: 100%;
     padding: 0.875rem 1rem;
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
     border-radius: 12px;
-    color: white;
+    color: var(--text-primary);
     font-size: 1rem;
     transition: all 0.2s ease;
   }
@@ -65,7 +65,7 @@
   }
   
   .form-control::placeholder {
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--text-muted);
   }
   
   .btn-submit {
@@ -79,7 +79,7 @@
   .auth-footer {
     text-align: center;
     margin-top: 1.5rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
   }
   
   .auth-footer a {

@@ -13,9 +13,9 @@
   }
   
   .stats-card {
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--input-bg);
     border-radius: 20px;
     padding: 1.5rem;
     margin-bottom: 2rem;
@@ -29,20 +29,20 @@
     font-family: 'Space Grotesk', sans-serif;
     font-size: 1.75rem;
     font-weight: 700;
-    color: white;
+    color: var(--text-primary);
   }
   
   .stat-label {
     font-size: 0.8rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
   
   .audio-section {
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--input-bg);
     border-radius: 20px;
     padding: 2rem;
     margin-bottom: 2rem;
@@ -52,7 +52,7 @@
   .play-btn {
     background: var(--warning);
     border: none;
-    color: white;
+    color: var(--text-primary);
     padding: 1rem 2rem;
     border-radius: 50px;
     font-size: 1.1rem;
@@ -77,8 +77,8 @@
     font-weight: 500;
     padding: 1rem 2rem;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.1);
-    color: rgba(255, 255, 255, 0.8);
+    background: var(--input-bg);
+    color: var(--text-secondary);
     display: inline-block;
   }
   
@@ -103,9 +103,9 @@
   }
   
   .note-btn {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: white;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
     padding: 1rem 1.5rem;
     border-radius: 12px;
     font-weight: 600;
@@ -116,7 +116,7 @@
   }
   
   .note-btn:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--border-color);
     border-color: var(--warning);
     transform: translateY(-2px);
   }
@@ -165,7 +165,7 @@
 
   <!-- Audio Controls -->
   <div class="audio-section">
-    <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 1.5rem;">
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
       Listen to the pitch and identify the note
     </p>
     <button id="play-btn" class="play-btn">
