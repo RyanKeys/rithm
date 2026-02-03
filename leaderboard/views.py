@@ -18,6 +18,7 @@ def get_week_start(date=None):
 def leaderboard_view(request):
     """Main leaderboard page."""
     game = request.GET.get('game', 'note')
+    difficulty = request.GET.get('difficulty', 'beginner')
     period = request.GET.get('period', 'alltime')
     
     games = [
@@ -27,10 +28,17 @@ def leaderboard_view(request):
         {'id': 'pitch', 'name': 'Pitch Identification', 'icon': 'fa-headphones'},
     ]
     
+    difficulties = [
+        {'id': 'beginner', 'name': 'Beginner', 'icon': 'fa-seedling'},
+        {'id': 'intermediate', 'name': 'Intermediate', 'icon': 'fa-leaf'},
+        {'id': 'advanced', 'name': 'Advanced', 'icon': 'fa-tree'},
+    ]
+    
     if period == 'weekly':
         week_start = get_week_start()
         leaders = WeeklyScore.objects.filter(
             game=game,
+            difficulty=difficulty,
             week_start=week_start
         ).select_related('user').order_by('-total_correct', '-accuracy')[:50]
         
@@ -46,7 +54,7 @@ def leaderboard_view(request):
         # All-time: aggregate all scores per user
         from django.contrib.auth.models import User
         
-        leaders = Score.objects.filter(game=game).values('user__username').annotate(
+        leaders = Score.objects.filter(game=game, difficulty=difficulty).values('user__username').annotate(
             total_correct=Sum('correct'),
             total_attempts=Sum('total'),
             max_streak=Max('best_streak'),
@@ -72,7 +80,9 @@ def leaderboard_view(request):
     
     context = {
         'games': games,
+        'difficulties': difficulties,
         'current_game': game,
+        'current_difficulty': difficulty,
         'period': period,
         'leaderboard': leaderboard_data,
         'user_rank': user_rank,
@@ -90,12 +100,16 @@ def submit_score(request):
     try:
         data = json.loads(request.body)
         game = data.get('game')
+        difficulty = data.get('difficulty', 'beginner')
         correct = data.get('correct', 0)
         total = data.get('total', 0)
         best_streak = data.get('bestStreak', 0)
         
         if game not in ['note', 'interval', 'chord', 'pitch']:
             return JsonResponse({'success': False, 'error': 'Invalid game'}, status=400)
+        
+        if difficulty not in ['beginner', 'intermediate', 'advanced']:
+            return JsonResponse({'success': False, 'error': 'Invalid difficulty'}, status=400)
         
         if total < 10:
             return JsonResponse({'success': False, 'error': 'Minimum 10 attempts required'}, status=400)
@@ -104,6 +118,7 @@ def submit_score(request):
         score = Score.objects.create(
             user=request.user,
             game=game,
+            difficulty=difficulty,
             correct=correct,
             total=total,
             best_streak=best_streak
@@ -114,6 +129,7 @@ def submit_score(request):
         weekly, created = WeeklyScore.objects.get_or_create(
             user=request.user,
             game=game,
+            difficulty=difficulty,
             week_start=week_start,
             defaults={
                 'total_correct': 0,
@@ -130,15 +146,16 @@ def submit_score(request):
             weekly.best_streak = best_streak
         weekly.save()
         
-        # Get user's current rank
-        rank = Score.objects.filter(game=game).values('user').annotate(
+        # Get user's current rank for this game + difficulty
+        rank = Score.objects.filter(game=game, difficulty=difficulty).values('user').annotate(
             total=Sum('correct')
-        ).filter(total__gt=Score.objects.filter(game=game, user=request.user).aggregate(Sum('correct'))['correct__sum'] or 0).count() + 1
+        ).filter(total__gt=Score.objects.filter(game=game, difficulty=difficulty, user=request.user).aggregate(Sum('correct'))['correct__sum'] or 0).count() + 1
         
         return JsonResponse({
             'success': True,
             'score_id': score.id,
-            'rank': rank
+            'rank': rank,
+            'difficulty': difficulty
         })
         
     except Exception as e:

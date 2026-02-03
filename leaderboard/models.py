@@ -13,8 +13,15 @@ class Score(models.Model):
         ('pitch', 'Pitch Identification'),
     ]
     
+    DIFFICULTY_CHOICES = [
+        ('beginner', 'Beginner'),
+        ('intermediate', 'Intermediate'),
+        ('advanced', 'Advanced'),
+    ]
+    
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='scores')
     game = models.CharField(max_length=20, choices=GAME_CHOICES)
+    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_CHOICES, default='beginner')
     
     # Score metrics
     correct = models.IntegerField(default=0)
@@ -30,8 +37,8 @@ class Score(models.Model):
     class Meta:
         ordering = ['-correct', '-accuracy', '-best_streak']
         indexes = [
-            models.Index(fields=['game', '-correct']),
-            models.Index(fields=['game', 'created_at']),
+            models.Index(fields=['game', 'difficulty', '-correct']),
+            models.Index(fields=['game', 'difficulty', 'created_at']),
         ]
     
     def save(self, *args, **kwargs):
@@ -48,9 +55,11 @@ class WeeklyScore(models.Model):
     """Aggregated weekly scores for weekly leaderboards."""
     
     GAME_CHOICES = Score.GAME_CHOICES
+    DIFFICULTY_CHOICES = Score.DIFFICULTY_CHOICES
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='weekly_scores')
     game = models.CharField(max_length=20, choices=GAME_CHOICES)
+    difficulty = models.CharField(max_length=20, choices=DIFFICULTY_CHOICES, default='beginner')
     
     # Week identifier (Monday of the week)
     week_start = models.DateField()
@@ -65,10 +74,10 @@ class WeeklyScore(models.Model):
     accuracy = models.FloatField(default=0)
     
     class Meta:
-        unique_together = ['user', 'game', 'week_start']
+        unique_together = ['user', 'game', 'difficulty', 'week_start']
         ordering = ['-total_correct', '-accuracy']
         indexes = [
-            models.Index(fields=['game', 'week_start', '-total_correct']),
+            models.Index(fields=['game', 'difficulty', 'week_start', '-total_correct']),
         ]
     
     def save(self, *args, **kwargs):

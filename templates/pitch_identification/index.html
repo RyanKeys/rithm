@@ -334,6 +334,7 @@ async function submitToLeaderboard() {
       },
       body: JSON.stringify({
         game: 'pitch',
+        difficulty: 'beginner',
         correct: state.correct,
         total: state.total,
         bestStreak: state.bestStreak

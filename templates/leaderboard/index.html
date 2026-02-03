@@ -55,6 +55,50 @@
     color: white;
   }
   
+  /* Difficulty Toggle */
+  .difficulty-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .difficulty-btn {
+    padding: 0.6rem 1.25rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: transparent;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    margin: 0;
+  }
+  
+  .difficulty-btn:first-child {
+    border-radius: 8px 0 0 8px;
+  }
+  
+  .difficulty-btn:last-child {
+    border-radius: 0 8px 8px 0;
+  }
+  
+  .difficulty-btn:not(:last-child) {
+    border-right: none;
+  }
+  
+  .difficulty-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    text-decoration: none;
+  }
+  
+  .difficulty-btn.active {
+    background: var(--secondary);
+    border-color: var(--secondary);
+    color: white;
+  }
+  
   /* Period Toggle */
   .period-toggle {
     display: flex;
@@ -232,20 +276,30 @@
   <!-- Game Tabs -->
   <div class="game-tabs">
     {% for game in games %}
-    <a href="?game={{ game.id }}&period={{ period }}" 
+    <a href="?game={{ game.id }}&difficulty={{ current_difficulty }}&period={{ period }}" 
        class="game-tab {% if current_game == game.id %}active{% endif %}">
       <i class="fas {{ game.icon }}"></i> {{ game.name }}
     </a>
     {% endfor %}
   </div>
   
+  <!-- Difficulty Toggle -->
+  <div class="difficulty-toggle">
+    {% for diff in difficulties %}
+    <a href="?game={{ current_game }}&difficulty={{ diff.id }}&period={{ period }}" 
+       class="difficulty-btn {% if current_difficulty == diff.id %}active{% endif %}">
+      <i class="fas {{ diff.icon }}"></i> {{ diff.name }}
+    </a>
+    {% endfor %}
+  </div>
+  
   <!-- Period Toggle -->
   <div class="period-toggle">
-    <a href="?game={{ current_game }}&period=alltime" 
+    <a href="?game={{ current_game }}&difficulty={{ current_difficulty }}&period=alltime" 
        class="period-btn {% if period == 'alltime' %}active{% endif %}">
       All Time
     </a>
-    <a href="?game={{ current_game }}&period=weekly" 
+    <a href="?game={{ current_game }}&difficulty={{ current_difficulty }}&period=weekly" 
        class="period-btn {% if period == 'weekly' %}active{% endif %}">
       This Week
     </a>

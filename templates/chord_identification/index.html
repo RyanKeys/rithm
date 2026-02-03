@@ -787,6 +787,7 @@ async function submitToLeaderboard() {
       },
       body: JSON.stringify({
         game: 'chord',
+        difficulty: state.difficulty,
         correct: state.correct,
         total: state.total,
         bestStreak: state.bestStreak
