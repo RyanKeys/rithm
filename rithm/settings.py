@@ -47,6 +47,22 @@ elif DEBUG:
 else:
     raise ValueError("ALLOWED_HOSTS environment variable is required in production!")
 
+# CSRF settings for production
+_csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+if _csrf_origins:
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
+elif not DEBUG:
+    # Default Railway domains
+    CSRF_TRUSTED_ORIGINS = [
+        'https://*.railway.app',
+        'https://*.up.railway.app',
+    ]
+
+# Secure cookies in production
+if not DEBUG:
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+
 
 # Application definition
 
