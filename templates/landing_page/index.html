@@ -68,20 +68,29 @@
     font-weight: 700;
     margin-bottom: 1.5rem;
     letter-spacing: -0.02em;
+    color: var(--text-primary);
   }
   
   .hero .subtitle {
     font-size: 1.4rem;
-    color: var(--text-secondary);
+    color: #64748b;
     margin-bottom: 1rem;
     font-weight: 400;
   }
   
+  [data-theme="light"] .hero .subtitle {
+    color: #475569;
+  }
+  
   .hero .subtext {
     font-size: 1.1rem;
-    color: var(--text-muted);
+    color: #94a3b8;
     margin-bottom: 2.5rem;
     max-width: 600px;
+  }
+  
+  [data-theme="light"] .hero .subtext {
+    color: #64748b;
     margin-left: auto;
     margin-right: auto;
   }
@@ -133,9 +142,13 @@
   
   .stat-label {
     font-size: 0.9rem;
-    color: var(--text-muted);
+    color: #94a3b8;
     text-transform: uppercase;
     letter-spacing: 0.05em;
+  }
+  
+  [data-theme="light"] .stat-label {
+    color: #64748b;
   }
   
   /* Feature Cards */
@@ -203,18 +216,30 @@
     margin-bottom: 0.75rem;
   }
   
+  .feature-card h3 {
+    color: var(--text-primary);
+  }
+  
   .feature-card p {
-    color: var(--text-secondary);
+    color: #94a3b8;
     font-size: 0.95rem;
     margin: 0;
     line-height: 1.6;
   }
   
+  [data-theme="light"] .feature-card p {
+    color: #64748b;
+  }
+  
   .feature-card .arrow {
     margin-top: 1.5rem;
-    color: var(--text-muted);
+    color: #64748b;
     transition: all 0.2s ease;
     font-weight: 500;
+  }
+  
+  [data-theme="light"] .feature-card .arrow {
+    color: #475569;
   }
   
   .feature-card:hover .arrow {
@@ -258,10 +283,18 @@
     font-size: 1.1rem;
   }
   
+  .benefit-content h4 {
+    color: var(--text-primary);
+  }
+  
   .benefit-content p {
-    color: var(--text-secondary);
+    color: #94a3b8;
     margin: 0;
     font-size: 0.95rem;
+  }
+  
+  [data-theme="light"] .benefit-content p {
+    color: #64748b;
   }
   
   /* CTA Section */
@@ -274,15 +307,20 @@
   .cta-section h2 {
     font-size: 2.5rem;
     margin-bottom: 1rem;
+    color: var(--text-primary);
   }
   
   .cta-section p {
-    color: var(--text-secondary);
+    color: #94a3b8;
     font-size: 1.1rem;
     margin-bottom: 2rem;
     max-width: 500px;
     margin-left: auto;
     margin-right: auto;
+  }
+  
+  [data-theme="light"] .cta-section p {
+    color: #64748b;
   }
   
   @media (max-width: 768px) {
