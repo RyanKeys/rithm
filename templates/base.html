@@ -70,18 +70,47 @@
     {% block structured_data %}{% endblock %}
     
     <style>
+      /* Theme Variables - Dark Mode (Default) */
       :root {
         --primary: #6366f1;
         --primary-dark: #4f46e5;
         --secondary: #ec4899;
         --accent: #06b6d4;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        
+        /* Dark theme colors */
+        --bg-primary: #0f172a;
+        --bg-secondary: #1e293b;
+        --bg-card: rgba(30, 41, 59, 0.5);
+        --bg-navbar: rgba(15, 23, 42, 0.8);
+        --text-primary: #f8fafc;
+        --text-secondary: rgba(255, 255, 255, 0.7);
+        --text-muted: rgba(255, 255, 255, 0.5);
+        --border-color: rgba(255, 255, 255, 0.1);
+        --input-bg: rgba(255, 255, 255, 0.1);
+        --input-border: rgba(255, 255, 255, 0.2);
+        
+        /* Legacy variables for compatibility */
         --dark: #0f172a;
         --dark-lighter: #1e293b;
         --light: #f8fafc;
         --gray: #64748b;
-        --success: #10b981;
-        --warning: #f59e0b;
-        --danger: #ef4444;
+      }
+      
+      /* Light Mode */
+      [data-theme="light"] {
+        --bg-primary: #f8fafc;
+        --bg-secondary: #e2e8f0;
+        --bg-card: rgba(255, 255, 255, 0.8);
+        --bg-navbar: rgba(255, 255, 255, 0.9);
+        --text-primary: #1e293b;
+        --text-secondary: rgba(30, 41, 59, 0.8);
+        --text-muted: rgba(30, 41, 59, 0.5);
+        --border-color: rgba(0, 0, 0, 0.1);
+        --input-bg: rgba(0, 0, 0, 0.05);
+        --input-border: rgba(0, 0, 0, 0.15);
       }
       
       * {
@@ -90,9 +119,10 @@
       
       body {
         font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-        background: linear-gradient(135deg, var(--dark) 0%, var(--dark-lighter) 100%);
+        background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
         min-height: 100vh;
-        color: var(--light);
+        color: var(--text-primary);
+        transition: background 0.3s ease, color 0.3s ease;
       }
       
       h1, h2, h3, h4, h5, h6 {
@@ -102,11 +132,12 @@
       
       /* Modern Navbar */
       .navbar {
-        background: rgba(15, 23, 42, 0.8) !important;
+        background: var(--bg-navbar) !important;
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid var(--border-color);
         padding: 1rem 2rem;
+        transition: background 0.3s ease, border-color 0.3s ease;
       }
       
       .navbar-brand {
@@ -120,7 +151,7 @@
       }
       
       .nav-link {
-        color: rgba(255, 255, 255, 0.7) !important;
+        color: var(--text-secondary) !important;
         font-weight: 500;
         padding: 0.5rem 1rem !important;
         border-radius: 8px;
@@ -129,13 +160,42 @@
       }
       
       .nav-link:hover {
-        color: white !important;
-        background: rgba(255, 255, 255, 0.1);
+        color: var(--text-primary) !important;
+        background: var(--input-bg);
       }
       
       .nav-link i {
         margin-right: 0.5rem;
       }
+      
+      /* Theme Toggle Button */
+      .theme-toggle {
+        background: transparent;
+        border: 1px solid var(--border-color);
+        color: var(--text-secondary);
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        transition: all 0.2s ease;
+        margin-left: 0.5rem;
+      }
+      
+      .theme-toggle:hover {
+        background: var(--input-bg);
+        color: var(--text-primary);
+        border-color: var(--primary);
+      }
+      
+      .theme-toggle .fa-sun { display: none; }
+      .theme-toggle .fa-moon { display: inline; }
+      
+      [data-theme="light"] .theme-toggle .fa-sun { display: inline; }
+      [data-theme="light"] .theme-toggle .fa-moon { display: none; }
       
       /* Modern Buttons */
       .btn {
@@ -190,19 +250,21 @@
       
       /* Cards */
       .card {
-        background: rgba(30, 41, 59, 0.5);
+        background: var(--bg-card);
         backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         border-radius: 16px;
+        transition: background 0.3s ease, border-color 0.3s ease;
       }
       
       /* Utility Classes */
       .glass {
-        background: rgba(30, 41, 59, 0.5);
+        background: var(--bg-card);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--border-color);
         border-radius: 16px;
+        transition: background 0.3s ease, border-color 0.3s ease;
       }
       
       .gradient-text {
@@ -258,12 +320,18 @@
           <li class="nav-item">
             <a class="nav-link" href="/leaderboard/"><i class="fas fa-trophy"></i> Leaderboard</a>
           </li>
-          <li class="nav-item ml-3" style="border-left: 1px solid rgba(255,255,255,0.2); padding-left: 1rem;">
+          <li class="nav-item ml-3" style="border-left: 1px solid var(--border-color); padding-left: 1rem;">
             {% if user.is_authenticated %}
             <a class="nav-link" href="{% url 'profile' %}"><i class="fas fa-user"></i> {{ user.username }}</a>
             {% else %}
             <a class="nav-link" href="{% url 'login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
             {% endif %}
+          </li>
+          <li class="nav-item d-flex align-items-center">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+              <i class="fas fa-moon"></i>
+              <i class="fas fa-sun"></i>
+            </button>
           </li>
         </ul>
       </div>
@@ -331,10 +399,11 @@
     
     <style>
       .site-footer {
-        background: rgba(15, 23, 42, 0.95);
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        background: var(--bg-navbar);
+        border-top: 1px solid var(--border-color);
         padding: 4rem 0 2rem;
         margin-top: 4rem;
+        transition: background 0.3s ease, border-color 0.3s ease;
       }
       
       .footer-brand {
@@ -349,13 +418,13 @@
       }
       
       .footer-tagline {
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-secondary);
         font-size: 0.95rem;
         line-height: 1.6;
       }
       
       .footer-heading {
-        color: white;
+        color: var(--text-primary);
         font-weight: 600;
         margin-bottom: 1rem;
         font-size: 0.9rem;
@@ -374,7 +443,7 @@
       }
       
       .footer-links a {
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-secondary);
         text-decoration: none;
         transition: color 0.2s ease;
         font-size: 0.9rem;
@@ -385,15 +454,15 @@
       }
       
       .footer-text {
-        color: rgba(255, 255, 255, 0.6);
+        color: var(--text-secondary);
         font-size: 0.9rem;
         margin-bottom: 1rem;
       }
       
       .footer-newsletter .form-control {
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
+        background: var(--input-bg);
+        border: 1px solid var(--input-border);
+        color: var(--text-primary);
         border-radius: 8px 0 0 8px;
         padding: 0.75rem 1rem;
         font-size: 0.9rem;
@@ -402,14 +471,14 @@
       }
       
       .footer-newsletter .form-control:focus {
-        background: rgba(255, 255, 255, 0.15);
+        background: var(--input-bg);
         border-color: var(--primary);
         box-shadow: none;
-        color: white;
+        color: var(--text-primary);
       }
       
       .footer-newsletter .form-control::placeholder {
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-muted);
       }
       
       .footer-newsletter .btn {
@@ -427,18 +496,18 @@
       }
       
       .footer-divider {
-        border-color: rgba(255, 255, 255, 0.1);
+        border-color: var(--border-color);
         margin: 2rem 0;
       }
       
       .footer-copyright {
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-muted);
         font-size: 0.85rem;
         margin: 0;
       }
       
       .footer-social a {
-        color: rgba(255, 255, 255, 0.4);
+        color: var(--text-muted);
         font-size: 1.25rem;
         margin-left: 1rem;
         transition: color 0.2s ease;
@@ -468,31 +537,85 @@
     crossorigin="anonymous"
   ></script>
   <script>
-    // Newsletter form handling
-    document.getElementById('newsletter-form').addEventListener('submit', function(e) {
-      e.preventDefault();
-      const messageDiv = this.querySelector('.newsletter-message');
-      const emailInput = this.querySelector('input[type="email"]');
-      const submitBtn = this.querySelector('button[type="submit"]');
+    // Theme Toggle - Detect system preference and allow manual override
+    (function() {
+      const themeToggle = document.getElementById('theme-toggle');
+      const html = document.documentElement;
       
-      // Simple validation
-      if (emailInput.value && emailInput.checkValidity()) {
-        // Simulate subscription (replace with actual API call later)
-        submitBtn.textContent = 'Subscribing...';
-        submitBtn.disabled = true;
+      // Get stored theme or detect system preference
+      function getPreferredTheme() {
+        const stored = localStorage.getItem('theme');
+        if (stored) return stored;
         
-        setTimeout(() => {
-          messageDiv.textContent = 'Thanks for subscribing! We\'ll keep you updated.';
-          messageDiv.style.display = 'block';
-          emailInput.value = '';
-          submitBtn.textContent = 'Subscribe';
-          submitBtn.disabled = false;
+        // Check system preference
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+          return 'light';
+        }
+        return 'dark';
+      }
+      
+      // Apply theme
+      function setTheme(theme) {
+        if (theme === 'light') {
+          html.setAttribute('data-theme', 'light');
+        } else {
+          html.removeAttribute('data-theme');
+        }
+      }
+      
+      // Initialize theme
+      setTheme(getPreferredTheme());
+      
+      // Toggle button click handler
+      if (themeToggle) {
+        themeToggle.addEventListener('click', function() {
+          const currentTheme = html.getAttribute('data-theme');
+          const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+          
+          setTheme(newTheme);
+          localStorage.setItem('theme', newTheme);
+        });
+      }
+      
+      // Listen for system preference changes
+      if (window.matchMedia) {
+        window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', function(e) {
+          // Only auto-switch if user hasn't manually set a preference
+          if (!localStorage.getItem('theme')) {
+            setTheme(e.matches ? 'light' : 'dark');
+          }
+        });
+      }
+    })();
+    
+    // Newsletter form handling
+    const newsletterForm = document.getElementById('newsletter-form');
+    if (newsletterForm) {
+      newsletterForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        const messageDiv = this.querySelector('.newsletter-message');
+        const emailInput = this.querySelector('input[type="email"]');
+        const submitBtn = this.querySelector('button[type="submit"]');
+        
+        // Simple validation
+        if (emailInput.value && emailInput.checkValidity()) {
+          // Simulate subscription (replace with actual API call later)
+          submitBtn.textContent = 'Subscribing...';
+          submitBtn.disabled = true;
           
           setTimeout(() => {
-            messageDiv.style.display = 'none';
-          }, 4000);
-        }, 1000);
-      }
-    });
+            messageDiv.textContent = 'Thanks for subscribing! We\'ll keep you updated.';
+            messageDiv.style.display = 'block';
+            emailInput.value = '';
+            submitBtn.textContent = 'Subscribe';
+            submitBtn.disabled = false;
+            
+            setTimeout(() => {
+              messageDiv.style.display = 'none';
+            }, 4000);
+          }, 1000);
+        }
+      });
+    }
   </script>
 </html>
