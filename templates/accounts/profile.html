@@ -74,6 +74,10 @@
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
   }
   
+  .stats-card.interval .stats-card-icon {
+    background: linear-gradient(135deg, var(--secondary) 0%, #be185d 100%);
+  }
+  
   .stats-card.pitch .stats-card-icon {
     background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
   }
@@ -168,6 +172,37 @@
       </div>
     </div>
     
+    <!-- Interval Training Stats -->
+    <div class="stats-card interval">
+      <div class="stats-card-header">
+        <div class="stats-card-icon">
+          <i class="fas fa-music"></i>
+        </div>
+        <div>
+          <div class="stats-card-title">Interval Training</div>
+        </div>
+      </div>
+      
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.interval_total_correct }}</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.interval_accuracy }}%</div>
+          <div class="stat-label">Accuracy</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value highlight">{{ profile.interval_best_streak }}</div>
+          <div class="stat-label">Best Streak</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.interval_total_attempts }}</div>
+          <div class="stat-label">Total Plays</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Pitch Training Stats -->
     <div class="stats-card pitch">
       <div class="stats-card-header">
@@ -203,6 +238,9 @@
   <div class="action-buttons">
     <a href="/note_identification/" class="btn btn-primary">
       <i class="fas fa-play"></i> Practice Notes
+    </a>
+    <a href="/interval_training/" class="btn btn-secondary">
+      <i class="fas fa-music"></i> Train Intervals
     </a>
     <a href="/pitch_identification/" class="btn btn-warning">
       <i class="fas fa-headphones"></i> Train Ear

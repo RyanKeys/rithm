@@ -1,15 +1,63 @@
+<!-- Audio Start Overlay (for mobile) -->
+<div id="audio-start-overlay" style="
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  border-radius: 12px;
+  cursor: pointer;
+">
+  <div style="text-align: center;">
+    <i class="fas fa-volume-up" style="font-size: 3rem; color: var(--primary); margin-bottom: 1rem;"></i>
+    <p style="color: white; font-size: 1.2rem; margin: 0;">Tap to Enable Audio</p>
+  </div>
+</div>
+
 <!-- Keyboard Container -->
 <div id="key_container"></div>
 
 <!-- Synth Selector -->
 <div class="synth-controls" id="synth_selector_button"></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 <script>
-  // Init synths
-  var poly_synth = new Tone.PolySynth(Tone.Synth, 8).toDestination();
-  var fm_synth = new Tone.PolySynth(Tone.FMSynth).toDestination();
+  // Audio state
+  var audioStarted = false;
+  var poly_synth = null;
+  var fm_synth = null;
   var poly_synth_active = true;
   var fm_synth_active = false;
+  
+  // Initialize audio on user interaction
+  async function initAudio() {
+    if (audioStarted) return;
+    
+    try {
+      await Tone.start();
+      
+      poly_synth = new Tone.PolySynth(Tone.Synth, 8).toDestination();
+      fm_synth = new Tone.PolySynth(Tone.FMSynth).toDestination();
+      
+      audioStarted = true;
+      
+      // Hide the overlay
+      document.getElementById('audio-start-overlay').style.display = 'none';
+      
+      console.log('Audio initialized');
+    } catch (error) {
+      console.error('Failed to init audio:', error);
+    }
+  }
+  
+  // Click handler for the overlay
+  document.getElementById('audio-start-overlay').addEventListener('click', initAudio);
+  document.getElementById('audio-start-overlay').addEventListener('touchstart', initAudio);
   
   // Create synth selector buttons
   var synth_list = [
@@ -37,16 +85,10 @@
       var has_sharp = note != "E" && note != "B";
       
       html += `<div class='white_note' id='${note + (octave + 4)}' 
-               onmousedown='note_down(this,false)' 
-               onmouseup='note_up(this,false)' 
-               onmouseleave='note_up(this,false)' 
                data-note='${note + (octave + 4)}'>`;
       
       if (has_sharp) {
         html += `<div class='black_note' id='${note + "#" + (octave + 4)}' 
-                 onmousedown='note_down(this,true)' 
-                 onmouseup='note_up(this,true)' 
-                 onmouseleave='note_up(this,true)' 
                  data-note='${note + "#" + (octave + 4)}'></div>`;
       }
       html += `</div>`;
@@ -54,6 +96,35 @@
   }
   
   document.getElementById("key_container").innerHTML = html;
+  
+  // Add touch/mouse handlers to all keys
+  document.querySelectorAll('.white_note, .black_note').forEach(function(key) {
+    var isSharp = key.classList.contains('black_note');
+    
+    // Mouse events
+    key.addEventListener('mousedown', function(e) {
+      e.preventDefault();
+      note_down(this, isSharp);
+    });
+    key.addEventListener('mouseup', function(e) {
+      note_up(this, isSharp);
+    });
+    key.addEventListener('mouseleave', function(e) {
+      note_up(this, isSharp);
+    });
+    
+    // Touch events for mobile
+    key.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      initAudio().then(function() {
+        note_down(key, isSharp);
+      });
+    });
+    key.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      note_up(key, isSharp);
+    });
+  });
 
   // Keyboard mappings
   var keyMap = {
@@ -64,8 +135,9 @@
   
   var pressedKeys = {};
   
-  document.addEventListener("keydown", function(e) {
+  document.addEventListener("keydown", async function(e) {
     if (keyMap[e.keyCode] && !pressedKeys[e.keyCode]) {
+      await initAudio();
       pressedKeys[e.keyCode] = true;
       var note = keyMap[e.keyCode];
       var elem = document.getElementById(note);
@@ -89,27 +161,29 @@
   });
 
   function note_up(elem, is_sharp) {
+    if (!audioStarted) return;
+    
     var note = elem.dataset.note;
     elem.classList.remove('active');
     
-    if (poly_synth_active) {
+    if (poly_synth_active && poly_synth) {
       poly_synth.triggerRelease(note);
-    } else if (fm_synth_active) {
+    } else if (fm_synth_active && fm_synth) {
       fm_synth.triggerRelease(note);
     }
   }
 
   function note_down(elem, is_sharp) {
+    if (!audioStarted) return;
+    
     var note = elem.dataset.note;
     elem.classList.add('active');
     
-    if (poly_synth_active) {
+    if (poly_synth_active && poly_synth) {
       poly_synth.triggerAttack(note);
-    } else if (fm_synth_active) {
+    } else if (fm_synth_active && fm_synth) {
       fm_synth.triggerAttack(note);
     }
-    
-    if (event) event.stopPropagation();
   }
 
   function select_synth(elem) {

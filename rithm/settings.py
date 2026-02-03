@@ -52,6 +52,7 @@ else:
 
 INSTALLED_APPS = [
     'accounts',
+    'interval_training',
     'synth',
     'pitch_identification',
     'landing_page',

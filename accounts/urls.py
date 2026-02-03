@@ -10,4 +10,6 @@ urlpatterns = [
     # API endpoints for game stats
     path('api/note-stats/', views.get_note_stats, name='get-note-stats'),
     path('api/note-stats/update/', views.update_note_stats, name='update-note-stats'),
+    path('api/interval-stats/', views.get_interval_stats, name='get-interval-stats'),
+    path('api/interval-stats/update/', views.update_interval_stats, name='update-interval-stats'),
 ]

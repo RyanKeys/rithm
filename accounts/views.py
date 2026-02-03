@@ -127,3 +127,62 @@ def get_note_stats(request):
             'difficulty': profile.note_difficulty
         }
     })
+
+
+@require_POST
+def update_interval_stats(request):
+    """API endpoint to update interval training stats."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'error': 'Not authenticated'}, status=401)
+    
+    try:
+        data = json.loads(request.body)
+        profile = request.user.profile
+        
+        # Update stats
+        if 'correct' in data:
+            profile.interval_total_correct = data['correct']
+        if 'total' in data:
+            profile.interval_total_attempts = data['total']
+        if 'streak' in data:
+            profile.interval_current_streak = data['streak']
+        if 'bestStreak' in data:
+            if data['bestStreak'] > profile.interval_best_streak:
+                profile.interval_best_streak = data['bestStreak']
+        if 'difficulty' in data:
+            profile.interval_difficulty = data['difficulty']
+        
+        profile.save()
+        
+        return JsonResponse({
+            'success': True,
+            'stats': {
+                'correct': profile.interval_total_correct,
+                'total': profile.interval_total_attempts,
+                'streak': profile.interval_current_streak,
+                'bestStreak': profile.interval_best_streak,
+                'accuracy': profile.interval_accuracy,
+                'difficulty': profile.interval_difficulty
+            }
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+
+def get_interval_stats(request):
+    """API endpoint to get interval training stats."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'authenticated': False})
+    
+    profile = request.user.profile
+    return JsonResponse({
+        'authenticated': True,
+        'stats': {
+            'correct': profile.interval_total_correct,
+            'total': profile.interval_total_attempts,
+            'streak': profile.interval_current_streak,
+            'bestStreak': profile.interval_best_streak,
+            'accuracy': profile.interval_accuracy,
+            'difficulty': profile.interval_difficulty
+        }
+    })
