@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'accounts',
     'leaderboard',
     'interval_training',
+    'chord_identification',
     'synth',
     'pitch_identification',
     'landing_page',

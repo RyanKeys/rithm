@@ -9,6 +9,7 @@ class Score(models.Model):
     GAME_CHOICES = [
         ('note', 'Note Reading'),
         ('interval', 'Interval Training'),
+        ('chord', 'Chord Identification'),
         ('pitch', 'Pitch Identification'),
     ]
     

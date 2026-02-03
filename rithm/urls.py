@@ -22,6 +22,8 @@ urlpatterns = [
          name="note_identification"),
     path("interval_training/", include("interval_training.urls"),
          name="interval_training"),
+    path("chord_identification/", include("chord_identification.urls"),
+         name="chord_identification"),
     path("pitch_identification/", include("pitch_identification.urls")),
     path("synth/", include("synth.urls"), name="synth"),
     path("leaderboard/", include("leaderboard.urls")),
