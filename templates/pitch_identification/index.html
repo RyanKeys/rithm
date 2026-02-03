@@ -1,184 +1,307 @@
-{% extends 'base.html'%} {% block content %}
-<div class="container">
-  <p id="current" class="d-flex justify-content-center">Guess the Note!</p>
+{% extends 'base.html' %}
 
-  <div class="d-flex justify-content-center">
-    <button
-      type="button"
-      id="play_it"
-      class="d-flex justify-content-center js_play_sound"
-      data-source='play_pitch(261.6, "sine")'
-      style="margin: 2em"
-    >
-      Play the tone!
+{% block title %}Pitch Identification - Ear Training | R.I.T.H.M{% endblock %}
+{% block meta_description %}Train your ear to identify musical pitches. Learn to recognize notes by ear with our free interactive game.{% endblock %}
+
+{% block content %}
+
+<style>
+  .game-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .stats-card {
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: white;
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .audio-section {
+    background: rgba(30, 41, 59, 0.5);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .play-btn {
+    background: var(--warning);
+    border: none;
+    color: white;
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .play-btn:hover {
+    background: #d97706;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+  }
+  
+  .play-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
+  .feedback-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.8);
+    display: inline-block;
+  }
+  
+  .feedback-correct {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+  }
+  
+  .feedback-incorrect {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+  }
+  
+  .note-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .note-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1rem;
+    min-width: 80px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .note-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--warning);
+    transform: translateY(-2px);
+  }
+  
+  .note-btn.correct {
+    background: var(--success);
+    border-color: var(--success);
+  }
+  
+  .note-btn.incorrect {
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+  
+  .octave-indicator {
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+</style>
+
+<div class="game-container">
+  
+  <!-- Stats Card -->
+  <div class="stats-card">
+    <div class="row">
+      <div class="col-4 stat-item">
+        <div class="stat-value" id="score">0</div>
+        <div class="stat-label">Score</div>
+      </div>
+      <div class="col-4 stat-item">
+        <div class="stat-value" id="total">0</div>
+        <div class="stat-label">Total</div>
+      </div>
+      <div class="col-4 stat-item">
+        <div class="stat-value" id="accuracy">0%</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Controls -->
+  <div class="audio-section">
+    <p style="color: rgba(255, 255, 255, 0.6); margin-bottom: 1.5rem;">
+      Listen to the pitch and identify the note
+    </p>
+    <button id="play-btn" class="play-btn">
+      <i class="fas fa-play"></i> Play Pitch
     </button>
   </div>
 
-  <div class="d-flex justify-content-center">
-    <button id="0" class="m-2"></button>
-    <button id="1" class="m-2"></button>
-    <button id="2" class="m-2"></button>
-    <button id="3" class="m-2"></button>
-    <button id="4" class="m-2"></button>
-    <button id="5" class="m-2"></button>
-    <button id="6" class="m-2"></button>
-    <button id="7" class="m-2"></button>
-    <button id="8" class="m-2"></button>
+  <!-- Feedback -->
+  <div class="d-flex justify-content-center mb-4">
+    <span id="feedback" class="feedback-text">What note do you hear?</span>
   </div>
+
+  <!-- Answer Buttons -->
+  <div class="note-buttons" id="answer-buttons"></div>
+
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript">
-  // Begin's audio context and sets som variables we'll use in it.
-  var context = new AudioContext();
-  var o = null;
-  var g = null;
-  var tone = 261.6;
-  // prevents butttons that play sounds from performing defult function.
-  document.addEventListener(
-    "DOMContentLoaded",
-    function () {
-      $(".js_play_sound").on("click", function (e) {
-        e.preventDefault();
-        var $target = $(e.target);
-        eval($target.data("source"));
-      });
-      $(".js_stop_sound").on("click", function (e) {
-        e.preventDefault();
-        o.stop();
-      });
-    },
-    false
-  );
+<script>
+// Game state
+let state = {
+  correct: 0,
+  total: 0,
+  currentNote: null,
+  currentFreq: null,
+  isPlaying: false,
+  canAnswer: true
+};
 
-  // A funtion that plays a desired pitch
-  function play_pitch(frequency, type) {
-    o = context.createOscillator();
-    frequency =
-      notes_frequencies[
-        document.getElementById("play_it").getAttribute("da").toString()
-      ];
-    console.log(frequency);
-    g = context.createGain();
-    o.type = type;
-    o.connect(g);
-    o.frequency.value = frequency;
-    g.connect(context.destination);
-    o.start(0);
-    g.gain.exponentialRampToValueAtTime(0.00001, context.currentTime + 1);
-  }
+// Notes and frequencies
+const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+const octaves = [3, 4, 5];
 
-  // begining of the 'Game' part
-  var correct = 0;
-  var total = 0;
-  var letters = [
-    "C",
-    "C# / D♭",
-    "D",
-    "D# / E♭",
-    "E",
-    "F",
-    "F# / G♭",
-    "G",
-    "G# / A♭",
-    "A",
-    "A# / B♭",
-    "B",
-  ];
-  var octive = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-  var notes = [];
-  // lets create the different combinations notes and octives
-  for (x in octive) {
-    for (y in letters) {
-      notes.push(octive[x].toString() + " " + letters[y]);
-    }
+// Audio context
+let audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   }
-  var notes_frequencies = {};
-  for (z in notes) {
-    // The math calculates the frequency of the not based on it's position
-    // in the list compared to middle A
-    console.log(
-      notes[z] + " " + (440 * (2 ** (1 / 12)) ** (z - 57)).toString()
-    );
-    notes_frequencies[notes[z]] = 440 * (2 ** (1 / 12)) ** (z - 57);
+  return audioCtx;
+}
+
+// Calculate frequency for a note
+function noteToFreq(note, octave) {
+  const noteIndex = notes.indexOf(note);
+  const semitonesFromA4 = (octave - 4) * 12 + (noteIndex - 9);
+  return 440 * Math.pow(2, semitonesFromA4 / 12);
+}
+
+// Play a frequency
+function playFrequency(freq) {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') ctx.resume();
+  
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  
+  osc.type = 'sine';
+  osc.frequency.value = freq;
+  
+  gain.gain.setValueAtTime(0.3, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 1);
+  
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  
+  osc.start();
+  osc.stop(ctx.currentTime + 1);
+}
+
+// Generate new question
+function generateQuestion() {
+  // Pick random note and octave
+  const note = notes[Math.floor(Math.random() * notes.length)];
+  const octave = octaves[Math.floor(Math.random() * octaves.length)];
+  
+  state.currentNote = note;
+  state.currentFreq = noteToFreq(note, octave);
+  
+  // Generate answer buttons (correct + 5 wrong)
+  const answers = new Set([note]);
+  while (answers.size < 6) {
+    answers.add(notes[Math.floor(Math.random() * notes.length)]);
   }
-  // function to create list of random buttons that also has the right answer
-  function generate_buttons(correct_note) {
-    var display_notes = null;
-    var display_notes = [];
-    display_notes.push(correct_note);
-    while (display_notes.length <= 8) {
-      var new_note = notes[Math.floor(Math.random() * notes.length)];
-      if (new_note in display_notes === false) {
-        display_notes.push(new_note);
-      }
-    }
-    return display_notes;
+  
+  // Shuffle and render buttons
+  const shuffled = Array.from(answers).sort(() => Math.random() - 0.5);
+  const container = document.getElementById('answer-buttons');
+  container.innerHTML = shuffled.map(n => 
+    `<button class="note-btn" data-note="${n}">${n}</button>`
+  ).join('');
+  
+  // Add click handlers
+  container.querySelectorAll('.note-btn').forEach(btn => {
+    btn.addEventListener('click', () => checkAnswer(btn.dataset.note, btn));
+  });
+  
+  document.getElementById('feedback').textContent = 'What note do you hear?';
+  document.getElementById('feedback').className = 'feedback-text';
+  
+  state.canAnswer = true;
+}
+
+// Check answer
+function checkAnswer(selected, btn) {
+  if (!state.canAnswer) return;
+  state.canAnswer = false;
+  
+  state.total++;
+  const isCorrect = selected === state.currentNote;
+  
+  if (isCorrect) {
+    state.correct++;
+    btn.classList.add('correct');
+    document.getElementById('feedback').innerHTML = '<i class="fas fa-check"></i> Correct!';
+    document.getElementById('feedback').className = 'feedback-text feedback-correct';
+  } else {
+    btn.classList.add('incorrect');
+    document.getElementById('feedback').innerHTML = `<i class="fas fa-times"></i> It was ${state.currentNote}`;
+    document.getElementById('feedback').className = 'feedback-text feedback-incorrect';
   }
-  // function that updates ths buttons with id 0-6 into choises
-  function update_buttons(ls_of_notes) {
-    var ids = 0;
-    while (ls_of_notes.length > 0) {
-      var index = Math.floor(Math.random() * ls_of_notes.length);
-      var this_note = ls_of_notes[index];
-      ls_of_notes.splice(index, 1);
-      var btn = document.getElementById(ids.toString());
-      btn.innerHTML = this_note;
-      btn.setAttribute("onclick", 'is_correct("' + this_note + '")');
-      ids++;
-    }
-  }
-  // set a random pitch to the guess button
-  var current_var = notes[Math.floor(Math.random() * notes.length)];
-  // update display
-  document
-    .getElementById("play_it")
-    .setAttribute("data-source", "play_pitch(0, 'sine')");
-  document.getElementById("play_it").setAttribute("da", current_var);
-  // is correct function is used by each of the auto Generated buttons to see if
-  // the note is correct
-  function is_correct(button_var) {
-    // logging to console for debuging purpose
-    console.log(
-      button_var ==
-        document.getElementById("play_it").getAttribute("da").toString()
-    );
-    // logging to console for debuging purpose
-    console.log(
-      "Button var = " +
-        button_var +
-        ", and the note to guess is = " +
-        document.getElementById("play_it").innerHTML
-    );
-    // this part checks if the button is the same as the note that we are looking for
-    if (
-      document.getElementById("play_it").getAttribute("da").toString() ==
-      button_var
-    ) {
-      // if it is, we add to both the total var and the correct var
-      correct += 1;
-      total += 1;
-      // Then we get a new random note to figure out then update the display
-      current_var = notes[Math.floor(Math.random() * notes.length)];
-      document
-        .getElementById("play_it")
-        .setAttribute(
-          "data-source",
-          "play_pitch('" + notes_frequencies[current_var] + "', 'sine')"
-        );
-      document.getElementById("play_it").setAttribute("da", current_var);
-      update_buttons(generate_buttons(current_var));
-    } else {
-      // if it is not we add to just the total var
-      total += 1;
-    }
-    // Updates the score display
-    document.getElementById("current").innerHTML =
-      correct.toString() + "/" + total.toString();
-  }
-  // this update the buttons and gives them each a an onclick that calls the
-  // is_correct function to check if this is the correct button for the note.
-  update_buttons(generate_buttons(current_var));
+  
+  updateStats();
+  setTimeout(generateQuestion, isCorrect ? 800 : 1500);
+}
+
+// Update stats display
+function updateStats() {
+  document.getElementById('score').textContent = state.correct;
+  document.getElementById('total').textContent = state.total;
+  const accuracy = state.total > 0 ? Math.round((state.correct / state.total) * 100) : 0;
+  document.getElementById('accuracy').textContent = accuracy + '%';
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('play-btn').addEventListener('click', function() {
+    playFrequency(state.currentFreq);
+  });
+  
+  generateQuestion();
+});
 </script>
 
 {% endblock %}

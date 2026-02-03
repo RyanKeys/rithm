@@ -131,52 +131,81 @@
   /* Note Buttons */
   .note-buttons {
     margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  
+  .note-buttons .btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem;
   }
   
   .note-btn {
-    min-width: 55px;
-    height: 55px;
-    margin: 4px;
+    min-width: 60px;
+    height: 60px;
     font-weight: 600;
     font-size: 1.1rem;
     border-radius: 12px;
-    transition: all 0.15s ease;
-    border: none;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    cursor: pointer;
   }
   
   .note-btn:hover {
-    transform: scale(1.08);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   }
   
   .note-btn:active {
-    transform: scale(0.95);
+    transform: translateY(0);
   }
   
   .note-btn.natural-note {
-    background: white;
+    background: linear-gradient(180deg, #ffffff 0%, #f1f5f9 100%);
     color: var(--dark);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  .note-btn.natural-note:hover {
+    background: white;
+    border-color: var(--primary);
   }
   
   .note-btn.sharp-note {
-    background: var(--dark);
+    background: linear-gradient(180deg, #1e293b 0%, #0f172a 100%);
     color: white;
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+  
+  .note-btn.sharp-note:hover {
+    border-color: var(--warning);
   }
   
   .note-btn.flat-note {
-    background: linear-gradient(135deg, var(--accent) 0%, #0891b2 100%);
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
     color: white;
+    border-color: transparent;
+  }
+  
+  .note-btn.flat-note:hover {
+    background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
   }
   
   .note-btn.correct {
     background: var(--success) !important;
     color: white !important;
-    transform: scale(1.1);
+    border-color: var(--success) !important;
+    transform: scale(1.05);
   }
   
   .note-btn.incorrect {
     background: var(--danger) !important;
     color: white !important;
+    border-color: var(--danger) !important;
     animation: shake 0.3s ease;
   }
   
@@ -184,6 +213,14 @@
     0%, 100% { transform: translateX(0); }
     25% { transform: translateX(-5px); }
     75% { transform: translateX(5px); }
+  }
+  
+  @media (max-width: 576px) {
+    .note-btn {
+      min-width: 50px;
+      height: 50px;
+      font-size: 1rem;
+    }
   }
   
   /* Reset Button */
