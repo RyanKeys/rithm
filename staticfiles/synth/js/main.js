@@ -1,7 +1,14 @@
 /*jshint esversion: 6 */
 
 //Init new Polyphonic synth
-var synth = new Tone.PolySynth(Tone.Synth, 8).toMaster();
+var synth = new Tone.PolySynth(Tone.Synth, 8).toDestination();
+
+// Ensure audio context starts on user interaction
+document.addEventListener('click', async () => {
+  if (Tone.context.state !== 'running') {
+    await Tone.start();
+  }
+}, { once: true });
 //Keyboard note array
 var notes = ["C", "D", "E", "F", "G", "A", "B"];
 //empty html string
@@ -85,6 +92,10 @@ function check_key_release(key) {
 //Assign all lower functions to 'key_container' divs
 document.getElementById("key_container").innerHTML = html;
 
+// Debug: Log how many keys were created
+console.log('Created', document.querySelectorAll('.white_note').length, 'white keys');
+console.log('Created', document.querySelectorAll('.black_note').length, 'black keys');
+
 // Safety: Release all notes if mouse leaves keyboard area
 document.getElementById("key_container").addEventListener("mouseleave", function() {
   synth.releaseAll();
@@ -98,15 +109,17 @@ window.addEventListener("blur", function() {
 //Changes black notes back to #333, and turn #ddd into white
 function note_up(elem, is_sharp) {
   event.stopPropagation();
+  console.log('Note up:', elem.dataset.note, 'is_sharp:', is_sharp);
   var note = elem.dataset.note;
   elem.style.background = is_sharp ? "#333" : "white";
-  synth.triggerRelease(note, "16n");
+  synth.triggerRelease(note);
 }
 //Trigger press animation and sound.
 function note_down(elem, is_sharp) {
   //Prevents overlapping buttons from both pressing. ie: if your press C#, C or D won't also play.
   event.stopPropagation();
+  console.log('Note down:', elem.dataset.note, 'is_sharp:', is_sharp);
   var note = elem.dataset.note;
   elem.style.background = is_sharp ? "black" : "#ddd";
-  synth.triggerAttack(note, "16n");
+  synth.triggerAttack(note);
 }
