@@ -297,20 +297,21 @@
           <div class="col-md-4 mb-4">
             <h6 class="footer-heading">Stay Updated</h6>
             <p class="footer-text">Get notified about new features and lessons.</p>
-            <form class="footer-newsletter">
+            <form class="footer-newsletter" id="newsletter-form">
               <div class="input-group">
-                <input type="email" class="form-control" placeholder="Enter your email">
+                <input type="email" class="form-control" placeholder="Enter your email" required>
                 <div class="input-group-append">
                   <button class="btn btn-primary" type="submit">Subscribe</button>
                 </div>
               </div>
+              <div class="newsletter-message mt-2" style="display: none; color: var(--success); font-size: 0.85rem;"></div>
             </form>
           </div>
         </div>
         <hr class="footer-divider">
         <div class="row align-items-center">
           <div class="col-md-6">
-            <p class="footer-copyright">&copy; 2024 R.I.T.H.M. All rights reserved.</p>
+            <p class="footer-copyright">&copy; 2026 R.I.T.H.M. All rights reserved.</p>
           </div>
           <div class="col-md-6 text-md-right">
             <div class="footer-social">
@@ -389,6 +390,16 @@
         border: 1px solid rgba(255, 255, 255, 0.2);
         color: white;
         border-radius: 8px 0 0 8px;
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+        border-right: none;
+      }
+      
+      .footer-newsletter .form-control:focus {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: var(--primary);
+        box-shadow: none;
+        color: white;
       }
       
       .footer-newsletter .form-control::placeholder {
@@ -397,6 +408,13 @@
       
       .footer-newsletter .btn {
         border-radius: 0 8px 8px 0;
+        padding: 0.75rem 1.5rem;
+        font-weight: 500;
+        font-size: 0.9rem;
+      }
+      
+      .footer-newsletter .input-group {
+        max-width: 300px;
       }
       
       .footer-divider {
@@ -440,4 +458,32 @@
     integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
     crossorigin="anonymous"
   ></script>
+  <script>
+    // Newsletter form handling
+    document.getElementById('newsletter-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const messageDiv = this.querySelector('.newsletter-message');
+      const emailInput = this.querySelector('input[type="email"]');
+      const submitBtn = this.querySelector('button[type="submit"]');
+      
+      // Simple validation
+      if (emailInput.value && emailInput.checkValidity()) {
+        // Simulate subscription (replace with actual API call later)
+        submitBtn.textContent = 'Subscribing...';
+        submitBtn.disabled = true;
+        
+        setTimeout(() => {
+          messageDiv.textContent = 'Thanks for subscribing! We\'ll keep you updated.';
+          messageDiv.style.display = 'block';
+          emailInput.value = '';
+          submitBtn.textContent = 'Subscribe';
+          submitBtn.disabled = false;
+          
+          setTimeout(() => {
+            messageDiv.style.display = 'none';
+          }, 4000);
+        }, 1000);
+      }
+    });
+  </script>
 </html>
