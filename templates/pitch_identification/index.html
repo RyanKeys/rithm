@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}Pitch Identification - Ear Training | R.I.T.H.M{% endblock %}
-{% block meta_description %}Train your ear to identify musical pitches. Learn to recognize notes by ear with our free interactive game.{% endblock %}
+{% block meta_description %}Train your ear to identify musical pitches. Learn to recognize notes by ear with our interactive game.{% endblock %}
 
 {% block content %}
 
@@ -155,6 +155,12 @@
         <div class="stat-label">Accuracy</div>
       </div>
     </div>
+    <div class="text-center mt-3" id="submit-section" style="display: none;">
+      <button id="submit-score" class="btn btn-success" onclick="submitToLeaderboard()">
+        <i class="fas fa-trophy"></i> Submit to Leaderboard
+      </button>
+      <p class="mt-2 mb-0" style="font-size: 0.85rem; color: rgba(255,255,255,0.5);">Minimum 10 attempts required</p>
+    </div>
   </div>
 
   <!-- Audio Controls -->
@@ -178,10 +184,16 @@
 </div>
 
 <script>
+// Auth
+const csrfToken = '{{ csrf_token }}';
+let isAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+
 // Game state
 let state = {
   correct: 0,
   total: 0,
+  bestStreak: 0,
+  streak: 0,
   currentNote: null,
   currentFreq: null,
   isPlaying: false,
@@ -273,10 +285,15 @@ function checkAnswer(selected, btn) {
   
   if (isCorrect) {
     state.correct++;
+    state.streak++;
+    if (state.streak > state.bestStreak) {
+      state.bestStreak = state.streak;
+    }
     btn.classList.add('correct');
     document.getElementById('feedback').innerHTML = '<i class="fas fa-check"></i> Correct!';
     document.getElementById('feedback').className = 'feedback-text feedback-correct';
   } else {
+    state.streak = 0;
     btn.classList.add('incorrect');
     document.getElementById('feedback').innerHTML = `<i class="fas fa-times"></i> It was ${state.currentNote}`;
     document.getElementById('feedback').className = 'feedback-text feedback-incorrect';
@@ -292,6 +309,64 @@ function updateStats() {
   document.getElementById('total').textContent = state.total;
   const accuracy = state.total > 0 ? Math.round((state.correct / state.total) * 100) : 0;
   document.getElementById('accuracy').textContent = accuracy + '%';
+  
+  // Show submit button when minimum attempts reached
+  const submitSection = document.getElementById('submit-section');
+  if (state.total >= 10 && isAuthenticated) {
+    submitSection.style.display = 'block';
+  }
+}
+
+// Submit score to leaderboard
+async function submitToLeaderboard() {
+  if (!isAuthenticated || state.total < 10) return;
+  
+  const btn = document.getElementById('submit-score');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  
+  try {
+    const response = await fetch('/leaderboard/api/submit/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
+      body: JSON.stringify({
+        game: 'pitch',
+        correct: state.correct,
+        total: state.total,
+        bestStreak: state.bestStreak
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      btn.innerHTML = '<i class="fas fa-check"></i> Submitted! Rank #' + data.rank;
+      btn.classList.remove('btn-success');
+      btn.classList.add('btn-outline-success');
+      
+      setTimeout(() => {
+        state.correct = 0;
+        state.total = 0;
+        state.streak = 0;
+        state.bestStreak = 0;
+        updateStats();
+        btn.innerHTML = '<i class="fas fa-trophy"></i> Submit to Leaderboard';
+        btn.classList.remove('btn-outline-success');
+        btn.classList.add('btn-success');
+        btn.disabled = false;
+        document.getElementById('submit-section').style.display = 'none';
+      }, 3000);
+    } else {
+      btn.innerHTML = '<i class="fas fa-times"></i> ' + data.error;
+      btn.disabled = false;
+    }
+  } catch (error) {
+    btn.innerHTML = '<i class="fas fa-times"></i> Error submitting';
+    btn.disabled = false;
+  }
 }
 
 // Initialize

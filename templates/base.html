@@ -7,7 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="{% block meta_description %}Learn music theory through interactive games. Master note reading, ear training, and play with our web synthesizer. Free online music education.{% endblock %}">
+    <meta name="description" content="{% block meta_description %}Learn music theory through interactive games. Master note reading, ear training, and play with our web synthesizer. Online music education platform.{% endblock %}">
     <meta name="keywords" content="music theory, learn music, note reading, ear training, web synthesizer, music education, sheet music, piano lessons, music games">
     <meta name="author" content="R.I.T.H.M">
     <meta name="robots" content="index, follow">
@@ -17,7 +17,7 @@
     <meta property="og:type" content="website">
     <meta property="og:url" content="{% block og_url %}https://rithm.app{% endblock %}">
     <meta property="og:title" content="{% block og_title %}R.I.T.H.M - Learn Music Theory{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Master music theory through interactive games and tools. Free online music education platform.{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Master music theory through interactive games and tools. Online music education platform.{% endblock %}">
     <meta property="og:image" content="{% block og_image %}https://rithm.app/static/landing_page/og-image.png{% endblock %}">
     <meta property="og:site_name" content="R.I.T.H.M">
     
@@ -25,7 +25,7 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:url" content="{% block twitter_url %}https://rithm.app{% endblock %}">
     <meta name="twitter:title" content="{% block twitter_title %}R.I.T.H.M - Learn Music Theory{% endblock %}">
-    <meta name="twitter:description" content="{% block twitter_description %}Master music theory through interactive games and tools. Free online music education platform.{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}Master music theory through interactive games and tools. Online music education platform.{% endblock %}">
     <meta name="twitter:image" content="{% block twitter_image %}https://rithm.app/static/landing_page/og-image.png{% endblock %}">
     
     <!-- Favicon -->
@@ -50,7 +50,7 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     />
 
-    <title>{% block title %}R.I.T.H.M - Learn Music Theory Online | Free Interactive Music Education{% endblock %}</title>
+    <title>{% block title %}R.I.T.H.M - Learn Music Theory Online | Interactive Music Education{% endblock %}</title>
     
     <!-- Structured Data -->
     <script type="application/ld+json">
@@ -251,6 +251,9 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" href="/pitch_identification/"><i class="fas fa-headphones"></i> Pitch Training</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/leaderboard/"><i class="fas fa-trophy"></i> Leaderboard</a>
           </li>
           <li class="nav-item ml-3" style="border-left: 1px solid rgba(255,255,255,0.2); padding-left: 1rem;">
             {% if user.is_authenticated %}

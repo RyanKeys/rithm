@@ -24,6 +24,7 @@ urlpatterns = [
          name="interval_training"),
     path("pitch_identification/", include("pitch_identification.urls")),
     path("synth/", include("synth.urls"), name="synth"),
+    path("leaderboard/", include("leaderboard.urls")),
     path("accounts/", include("accounts.urls")),
     path('admin/', admin.site.urls),
 ]

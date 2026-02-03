@@ -68,6 +68,7 @@ if not DEBUG:
 
 INSTALLED_APPS = [
     'accounts',
+    'leaderboard',
     'interval_training',
     'synth',
     'pitch_identification',
