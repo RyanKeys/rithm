@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Access Denied - R.I.T.H.M{% endblock %}
+
+{% block content %}
+
+<style>
+  .error-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .error-content {
+    text-align: center;
+    max-width: 500px;
+  }
+  
+  .error-code {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--warning) 0%, var(--danger) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  
+  .error-title {
+    font-size: 1.75rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  
+  .error-message {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  
+  .error-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+  }
+  
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>
+
+<div class="error-container">
+  <div class="error-content">
+    <div class="error-icon">🔒</div>
+    <div class="error-code">403</div>
+    <h1 class="error-title">Access Denied</h1>
+    <p class="error-message">
+      This section is off-limits! You don't have permission to access this page. Try logging in or go back to safety.
+    </p>
+    <div class="error-actions">
+      <a href="{% url 'login' %}" class="btn btn-primary">
+        <i class="fas fa-sign-in-alt"></i> Log In
+      </a>
+      <a href="/" class="btn btn-outline-light">
+        <i class="fas fa-home"></i> Go Home
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
