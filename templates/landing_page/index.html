@@ -72,14 +72,14 @@
   
   .hero .subtitle {
     font-size: 1.4rem;
-    color: rgba(255, 255, 255, 0.8);
+    color: var(--text-secondary);
     margin-bottom: 1rem;
     font-weight: 400;
   }
   
   .hero .subtext {
     font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-muted);
     margin-bottom: 2.5rem;
     max-width: 600px;
     margin-left: auto;
@@ -101,14 +101,14 @@
   
   .btn-secondary-outline {
     background: transparent;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    color: white;
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
   }
   
   .btn-secondary-outline:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.5);
-    color: white;
+    background: var(--input-bg);
+    border-color: var(--primary);
+    color: var(--text-primary);
   }
   
   /* Stats Section */
@@ -133,7 +133,7 @@
   
   .stat-label {
     font-size: 0.9rem;
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-muted);
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
@@ -147,9 +147,9 @@
   }
   
   .feature-card {
-    background: rgba(30, 41, 59, 0.5);
+    background: var(--bg-card);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid var(--border-color);
     border-radius: 20px;
     padding: 2rem;
     text-align: left;
@@ -162,7 +162,7 @@
   .feature-card:hover {
     transform: translateY(-5px);
     border-color: rgba(99, 102, 241, 0.5);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
     text-decoration: none;
     color: inherit;
   }
@@ -204,7 +204,7 @@
   }
   
   .feature-card p {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
     font-size: 0.95rem;
     margin: 0;
     line-height: 1.6;
@@ -212,7 +212,7 @@
   
   .feature-card .arrow {
     margin-top: 1.5rem;
-    color: rgba(255, 255, 255, 0.4);
+    color: var(--text-muted);
     transition: all 0.2s ease;
     font-weight: 500;
   }
@@ -225,7 +225,7 @@
   /* Benefits Section */
   .benefits-section {
     padding: 5rem 2rem;
-    background: rgba(15, 23, 42, 0.5);
+    background: var(--bg-card);
   }
   
   .benefits-section h2 {
@@ -259,7 +259,7 @@
   }
   
   .benefit-content p {
-    color: rgba(255, 255, 255, 0.6);
+    color: var(--text-secondary);
     margin: 0;
     font-size: 0.95rem;
   }
@@ -268,7 +268,7 @@
   .cta-section {
     padding: 5rem 2rem;
     text-align: center;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
   }
   
   .cta-section h2 {
@@ -277,7 +277,7 @@
   }
   
   .cta-section p {
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--text-secondary);
     font-size: 1.1rem;
     margin-bottom: 2rem;
     max-width: 500px;
