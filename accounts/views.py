@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from .forms import RegistrationForm
 import json
 
 
@@ -15,7 +16,7 @@ def register_view(request):
         return redirect('/')
     
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             login(request, user)
@@ -26,7 +27,7 @@ def register_view(request):
                 for error in errors:
                     messages.error(request, f'{error}')
     else:
-        form = UserCreationForm()
+        form = RegistrationForm()
     
     return render(request, 'accounts/register.html', {'form': form})
 

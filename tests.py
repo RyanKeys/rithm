@@ -230,13 +230,16 @@ class AuthenticationTests(TestCase):
         """User should be able to register."""
         response = self.client.post('/accounts/register/', {
             'username': 'testuser',
+            'email': 'test@example.com',
             'password1': 'testpass123!',
             'password2': 'testpass123!'
         })
         self.assertEqual(response.status_code, 302)  # Redirect after success
         
         from django.contrib.auth.models import User
-        self.assertTrue(User.objects.filter(username='testuser').exists())
+        user = User.objects.filter(username='testuser').first()
+        self.assertIsNotNone(user)
+        self.assertEqual(user.email, 'test@example.com')
     
     def test_user_can_login(self):
         """User should be able to login."""
@@ -292,15 +295,30 @@ class AuthenticationTests(TestCase):
     def test_register_duplicate_username(self):
         """Registration should fail if username already exists."""
         from django.contrib.auth.models import User
-        User.objects.create_user('testuser', password='testpass123!')
+        User.objects.create_user('testuser', email='existing@example.com', password='testpass123!')
         
         response = self.client.post('/accounts/register/', {
             'username': 'testuser',
+            'email': 'new@example.com',
             'password1': 'anotherpass123!',
             'password2': 'anotherpass123!'
         })
         self.assertEqual(response.status_code, 200)  # Stays on page
         self.assertEqual(User.objects.filter(username='testuser').count(), 1)
+    
+    def test_register_duplicate_email(self):
+        """Registration should fail if email already exists."""
+        from django.contrib.auth.models import User
+        User.objects.create_user('existinguser', email='test@example.com', password='testpass123!')
+        
+        response = self.client.post('/accounts/register/', {
+            'username': 'newuser',
+            'email': 'test@example.com',
+            'password1': 'anotherpass123!',
+            'password2': 'anotherpass123!'
+        })
+        self.assertEqual(response.status_code, 200)  # Stays on page
+        self.assertFalse(User.objects.filter(username='newuser').exists())
     
     def test_login_wrong_password(self):
         """Login should fail with wrong password."""
