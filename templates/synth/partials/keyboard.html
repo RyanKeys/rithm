@@ -104,9 +104,11 @@
     // Mouse events
     key.addEventListener('mousedown', function(e) {
       e.preventDefault();
+      e.stopPropagation(); // CRITICAL: Prevent black keys from triggering white keys underneath
       note_down(this, isSharp);
     });
     key.addEventListener('mouseup', function(e) {
+      e.stopPropagation();
       note_up(this, isSharp);
     });
     key.addEventListener('mouseleave', function(e) {
@@ -116,12 +118,14 @@
     // Touch events for mobile
     key.addEventListener('touchstart', function(e) {
       e.preventDefault();
+      e.stopPropagation(); // CRITICAL: Prevent black keys from triggering white keys underneath
       initAudio().then(function() {
         note_down(key, isSharp);
       });
     });
     key.addEventListener('touchend', function(e) {
       e.preventDefault();
+      e.stopPropagation();
       note_up(key, isSharp);
     });
   });
@@ -199,4 +203,26 @@
       poly_synth_active = false;
     }
   }
+  
+  // Safety: Release all notes when mouse leaves keyboard area
+  document.getElementById("key_container").addEventListener("mouseleave", function() {
+    if (!audioStarted) return;
+    // Release all notes and remove active class from all keys
+    document.querySelectorAll('.white_note, .black_note').forEach(function(key) {
+      key.classList.remove('active');
+    });
+    if (poly_synth) poly_synth.releaseAll();
+    if (fm_synth) fm_synth.releaseAll();
+  });
+  
+  // Safety: Release all notes when window loses focus
+  window.addEventListener("blur", function() {
+    if (!audioStarted) return;
+    document.querySelectorAll('.white_note, .black_note').forEach(function(key) {
+      key.classList.remove('active');
+    });
+    if (poly_synth) poly_synth.releaseAll();
+    if (fm_synth) fm_synth.releaseAll();
+    pressedKeys = {}; // Reset keyboard state
+  });
 </script>
