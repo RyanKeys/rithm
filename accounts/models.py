@@ -2,6 +2,32 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils import timezone
+import uuid
+
+
+class EmailVerification(models.Model):
+    """Store email verification tokens for new users."""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='email_verification')
+    token = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    verified_at = models.DateTimeField(null=True, blank=True)
+    
+    def is_expired(self):
+        """Token expires after 24 hours."""
+        expiry = self.created_at + timezone.timedelta(hours=24)
+        return timezone.now() > expiry
+    
+    def verify(self):
+        """Mark email as verified."""
+        self.verified_at = timezone.now()
+        self.save()
+        # Activate the user
+        self.user.is_active = True
+        self.user.save()
+    
+    def __str__(self):
+        return f"Verification for {self.user.email}"
 
 
 class UserProfile(models.Model):

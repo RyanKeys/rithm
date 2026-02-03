@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verify Your R.I.T.H.M Account</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a;">
+  <table role="presentation" style="width: 100%; border-collapse: collapse;">
+    <tr>
+      <td align="center" style="padding: 40px 20px;">
+        <table role="presentation" style="width: 100%; max-width: 600px; border-collapse: collapse; background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border-radius: 16px; overflow: hidden;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="padding: 40px 40px 20px; text-align: center;">
+              <h1 style="color: #f8fafc; font-size: 28px; margin: 0;">
+                <span style="background: linear-gradient(135deg, #6366f1, #ec4899); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">R.I.T.H.M</span>
+              </h1>
+              <p style="color: #94a3b8; font-size: 14px; margin-top: 8px;">Learn Music Theory Through Play</p>
+            </td>
+          </tr>
+          
+          <!-- Content -->
+          <tr>
+            <td style="padding: 20px 40px 40px;">
+              <h2 style="color: #f8fafc; font-size: 22px; margin: 0 0 16px;">Welcome, {{ user.username }}!</h2>
+              
+              <p style="color: #cbd5e1; font-size: 16px; line-height: 1.6; margin: 0 0 24px;">
+                Thanks for signing up for R.I.T.H.M! Please verify your email address to activate your account and start learning music theory.
+              </p>
+              
+              <!-- Button -->
+              <table role="presentation" style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td align="center" style="padding: 20px 0;">
+                    <a href="{{ verification_url }}" style="display: inline-block; padding: 16px 32px; background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); color: #ffffff; text-decoration: none; font-weight: 600; font-size: 16px; border-radius: 12px;">
+                      Verify Email Address
+                    </a>
+                  </td>
+                </tr>
+              </table>
+              
+              <p style="color: #94a3b8; font-size: 14px; line-height: 1.6; margin: 24px 0 0;">
+                If the button doesn't work, copy and paste this link into your browser:
+              </p>
+              <p style="color: #6366f1; font-size: 14px; word-break: break-all; margin: 8px 0 0;">
+                {{ verification_url }}
+              </p>
+              
+              <p style="color: #64748b; font-size: 13px; margin: 32px 0 0;">
+                This link will expire in 24 hours. If you didn't create an account with R.I.T.H.M, you can safely ignore this email.
+              </p>
+            </td>
+          </tr>
+          
+          <!-- Footer -->
+          <tr>
+            <td style="padding: 20px 40px; background: rgba(0,0,0,0.2); text-align: center;">
+              <p style="color: #64748b; font-size: 12px; margin: 0;">
+                &copy; 2026 R.I.T.H.M. All rights reserved.
+              </p>
+            </td>
+          </tr>
+          
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

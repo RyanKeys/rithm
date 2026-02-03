@@ -7,6 +7,10 @@ urlpatterns = [
     path('logout/', views.logout_view, name='logout'),
     path('profile/', views.profile_view, name='profile'),
     
+    # Email verification
+    path('verify/<uuid:token>/', views.verify_email, name='verify-email'),
+    path('resend-verification/', views.resend_verification, name='resend-verification'),
+    
     # API endpoints for game stats
     path('api/note-stats/', views.get_note_stats, name='get-note-stats'),
     path('api/note-stats/update/', views.update_note_stats, name='update-note-stats'),
