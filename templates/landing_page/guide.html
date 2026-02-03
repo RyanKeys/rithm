@@ -1,0 +1,338 @@
+{% extends 'base.html' %}
+
+{% block title %}Music Theory Guide - R.I.T.H.M{% endblock %}
+{% block meta_description %}Learn the fundamentals of music theory with our comprehensive guide. Understand notes, scales, intervals, chords, and more.{% endblock %}
+
+{% block content %}
+
+<style>
+  .guide-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .guide-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .guide-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .guide-header p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  [data-theme="light"] .guide-header p {
+    color: #64748b;
+  }
+  
+  .guide-section {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+  }
+  
+  .guide-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  
+  .guide-section h3 {
+    font-size: 1.15rem;
+    margin: 1.5rem 0 0.75rem;
+    color: var(--text-primary);
+  }
+  
+  .guide-section p {
+    color: #94a3b8;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+  
+  [data-theme="light"] .guide-section p {
+    color: #64748b;
+  }
+  
+  .guide-section ul {
+    color: #94a3b8;
+    padding-left: 1.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  [data-theme="light"] .guide-section ul {
+    color: #64748b;
+  }
+  
+  .guide-section li {
+    margin-bottom: 0.5rem;
+    line-height: 1.6;
+  }
+  
+  .note-example {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+    margin: 0 0.25rem;
+  }
+  
+  .interval-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1rem 0;
+  }
+  
+  .interval-table th,
+  .interval-table td {
+    padding: 0.75rem 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .interval-table th {
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+  
+  .interval-table td {
+    color: #94a3b8;
+  }
+  
+  [data-theme="light"] .interval-table td {
+    color: #64748b;
+  }
+  
+  .chord-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+  }
+  
+  .chord-card {
+    background: var(--input-bg);
+    border-radius: 12px;
+    padding: 1.25rem;
+    text-align: center;
+  }
+  
+  .chord-card h4 {
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+  
+  .chord-card p {
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  
+  .try-it-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+</style>
+
+<div class="guide-container">
+  <div class="guide-header">
+    <h1 class="gradient-text"><i class="fas fa-book-open"></i> Music Theory Guide</h1>
+    <p>Master the fundamentals of music theory to become a better musician. This guide covers everything from basic notes to complex chord progressions.</p>
+  </div>
+  
+  <!-- Notes Section -->
+  <section class="guide-section">
+    <h2><i class="fas fa-music"></i> Notes & The Musical Alphabet</h2>
+    <p>Music uses just 7 letter names: <strong>A, B, C, D, E, F, G</strong>. After G, the pattern repeats starting from A again. These are called <em>natural notes</em>.</p>
+    
+    <h3>Sharps & Flats</h3>
+    <p>Between most natural notes, there are additional notes:</p>
+    <ul>
+      <li><strong>Sharp (#)</strong> raises a note by one half step (e.g., C# is between C and D)</li>
+      <li><strong>Flat (♭)</strong> lowers a note by one half step (e.g., D♭ is between C and D)</li>
+      <li>C# and D♭ are the same pitch — they're called <em>enharmonic equivalents</em></li>
+    </ul>
+    <p>Note: There's no sharp/flat between B-C and E-F (they're already a half step apart).</p>
+    
+    <a href="/note_identification/" class="btn btn-primary try-it-btn">
+      <i class="fas fa-play"></i> Practice Note Reading
+    </a>
+  </section>
+  
+  <!-- Intervals Section -->
+  <section class="guide-section">
+    <h2><i class="fas fa-arrows-alt-h"></i> Intervals</h2>
+    <p>An <strong>interval</strong> is the distance between two notes. Understanding intervals is key to understanding melody and harmony.</p>
+    
+    <table class="interval-table">
+      <thead>
+        <tr>
+          <th>Interval</th>
+          <th>Half Steps</th>
+          <th>Sound</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Unison</td>
+          <td>0</td>
+          <td>Same note</td>
+          <td>C to C</td>
+        </tr>
+        <tr>
+          <td>Minor 2nd</td>
+          <td>1</td>
+          <td>Tense, close</td>
+          <td>C to D♭</td>
+        </tr>
+        <tr>
+          <td>Major 2nd</td>
+          <td>2</td>
+          <td>Whole step</td>
+          <td>C to D</td>
+        </tr>
+        <tr>
+          <td>Minor 3rd</td>
+          <td>3</td>
+          <td>Sad, dark</td>
+          <td>C to E♭</td>
+        </tr>
+        <tr>
+          <td>Major 3rd</td>
+          <td>4</td>
+          <td>Happy, bright</td>
+          <td>C to E</td>
+        </tr>
+        <tr>
+          <td>Perfect 4th</td>
+          <td>5</td>
+          <td>Strong, open</td>
+          <td>C to F</td>
+        </tr>
+        <tr>
+          <td>Tritone</td>
+          <td>6</td>
+          <td>Unstable, tense</td>
+          <td>C to F#</td>
+        </tr>
+        <tr>
+          <td>Perfect 5th</td>
+          <td>7</td>
+          <td>Powerful, stable</td>
+          <td>C to G</td>
+        </tr>
+        <tr>
+          <td>Octave</td>
+          <td>12</td>
+          <td>Same note, higher</td>
+          <td>C to C</td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <a href="/interval_training/" class="btn btn-primary try-it-btn">
+      <i class="fas fa-play"></i> Practice Intervals
+    </a>
+  </section>
+  
+  <!-- Chords Section -->
+  <section class="guide-section">
+    <h2><i class="fas fa-layer-group"></i> Chords</h2>
+    <p>A <strong>chord</strong> is three or more notes played together. The most basic chords are <em>triads</em>, built by stacking two intervals of a third.</p>
+    
+    <h3>The Four Basic Triads</h3>
+    <div class="chord-grid">
+      <div class="chord-card">
+        <h4>Major</h4>
+        <p>Root + Major 3rd + Perfect 5th</p>
+        <p><em>Happy, bright</em></p>
+      </div>
+      <div class="chord-card">
+        <h4>Minor</h4>
+        <p>Root + Minor 3rd + Perfect 5th</p>
+        <p><em>Sad, dark</em></p>
+      </div>
+      <div class="chord-card">
+        <h4>Diminished</h4>
+        <p>Root + Minor 3rd + Diminished 5th</p>
+        <p><em>Tense, unstable</em></p>
+      </div>
+      <div class="chord-card">
+        <h4>Augmented</h4>
+        <p>Root + Major 3rd + Augmented 5th</p>
+        <p><em>Dreamy, suspended</em></p>
+      </div>
+    </div>
+    
+    <h3>Seventh Chords</h3>
+    <p>Adding a 4th note (a 7th above the root) creates richer harmonies used in jazz, pop, and classical music:</p>
+    <ul>
+      <li><strong>Major 7th (maj7)</strong> — Dreamy, sophisticated</li>
+      <li><strong>Minor 7th (m7)</strong> — Mellow, jazzy</li>
+      <li><strong>Dominant 7th (7)</strong> — Bluesy, wants to resolve</li>
+      <li><strong>Diminished 7th (dim7)</strong> — Very tense, dramatic</li>
+    </ul>
+    
+    <a href="/chord_identification/" class="btn btn-primary try-it-btn">
+      <i class="fas fa-play"></i> Practice Chord Recognition
+    </a>
+  </section>
+  
+  <!-- Scales Section -->
+  <section class="guide-section">
+    <h2><i class="fas fa-stream"></i> Scales</h2>
+    <p>A <strong>scale</strong> is a sequence of notes in ascending or descending order. Scales form the foundation of melodies and harmonies.</p>
+    
+    <h3>Major Scale</h3>
+    <p>The most common scale in Western music. It follows the pattern: <strong>W-W-H-W-W-W-H</strong> (W = whole step, H = half step)</p>
+    <p>Example: C Major = C, D, E, F, G, A, B, C</p>
+    
+    <h3>Minor Scales</h3>
+    <p>Minor scales have a darker, more melancholic sound:</p>
+    <ul>
+      <li><strong>Natural Minor</strong> — W-H-W-W-H-W-W</li>
+      <li><strong>Harmonic Minor</strong> — Raised 7th note for a dramatic sound</li>
+      <li><strong>Melodic Minor</strong> — Different ascending and descending</li>
+    </ul>
+    
+    <h3>Other Important Scales</h3>
+    <ul>
+      <li><strong>Pentatonic</strong> — 5-note scale, very versatile</li>
+      <li><strong>Blues Scale</strong> — Pentatonic + "blue note"</li>
+      <li><strong>Chromatic</strong> — All 12 notes</li>
+    </ul>
+  </section>
+  
+  <!-- Keep Learning -->
+  <section class="guide-section" style="text-align: center;">
+    <h2><i class="fas fa-rocket"></i> Keep Learning!</h2>
+    <p>The best way to learn music theory is through practice. Use our interactive games to reinforce these concepts:</p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1.5rem;">
+      <a href="/note_identification/" class="btn btn-primary">Note Reading</a>
+      <a href="/interval_training/" class="btn btn-primary">Interval Training</a>
+      <a href="/chord_identification/" class="btn btn-primary">Chord Recognition</a>
+      <a href="/pitch_identification/" class="btn btn-primary">Ear Training</a>
+    </div>
+  </section>
+</div>
+
+{% endblock %}

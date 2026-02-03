@@ -12,4 +12,9 @@ urlpatterns = [
     path('pitch_identification/', pitch_views.IndexView.as_view(),
          name="pitch_identification"),
     path('synth/', synth_views.IndexView.as_view(), name="synth"),
+    
+    # Content pages
+    path('guide/', views.music_theory_guide, name="guide"),
+    path('tips/', views.practice_tips, name="tips"),
+    path('faq/', views.faq, name="faq"),
 ]
