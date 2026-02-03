@@ -21,6 +21,10 @@ def leaderboard_view(request):
     difficulty = request.GET.get('difficulty', 'beginner')
     period = request.GET.get('period', 'alltime')
     
+    # Validate difficulty
+    if difficulty not in ['beginner', 'intermediate', 'advanced']:
+        difficulty = 'beginner'
+    
     games = [
         {'id': 'note', 'name': 'Note Reading', 'icon': 'fa-book-open'},
         {'id': 'interval', 'name': 'Interval Training', 'icon': 'fa-music'},
