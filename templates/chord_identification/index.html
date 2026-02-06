@@ -643,22 +643,22 @@ function generateNewChord() {
 }
 
 // Play the current chord
-function playCurrentChord() {
+async function playCurrentChord() {
   if (state.isPlaying) return;
-  
-  // Resume audio context if suspended
+
+  // Resume audio context if suspended (must await before scheduling)
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') {
-    ctx.resume();
+    await ctx.resume();
   }
-  
+
   state.isPlaying = true;
-  
+
   const playBtn = document.getElementById('play-chord');
   const replayBtn = document.getElementById('replay-chord');
   playBtn.disabled = true;
   replayBtn.disabled = true;
-  
+
   const rootMidi = noteToMidi(state.currentRootNote);
   const chordIntervals = chords[state.currentChord];
   const now = ctx.currentTime;

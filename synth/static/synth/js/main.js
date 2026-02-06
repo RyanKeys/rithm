@@ -1,14 +1,20 @@
 /*jshint esversion: 6 */
 
 //Init new Polyphonic synth
-var synth = new Tone.PolySynth(Tone.Synth, 8).toDestination();
+var synth = null;
+var audioReady = false;
 
 // Ensure audio context starts on user interaction
-document.addEventListener('click', async () => {
+async function ensureAudio() {
+  if (audioReady) return;
   if (Tone.context.state !== 'running') {
     await Tone.start();
   }
-}, { once: true });
+  if (!synth) {
+    synth = new Tone.PolySynth(Tone.Synth, 8).toDestination();
+  }
+  audioReady = true;
+}
 //Keyboard note array
 var notes = ["C", "D", "E", "F", "G", "A", "B"];
 //empty html string
@@ -66,14 +72,15 @@ var piano_notes = [
   "B4"
 ];
 var pressed_keys = {};
-function check_key_press(key) {
+async function check_key_press(key) {
   // Prevent default behavior and event bubbling
   key.preventDefault();
-  
+
   for (var x = 0; x < qwerty.length; x++) {
     var qwerty_index = qwerty[x];
     if (key.keyCode == qwerty_index && !pressed_keys[key.keyCode]) {
       pressed_keys[key.keyCode] = true;
+      await ensureAudio();
       synth.triggerAttack(piano_notes[x]);
       break; // Only trigger one note per keypress
     }
@@ -84,7 +91,7 @@ function check_key_release(key) {
     var qwerty_index = qwerty[x];
     if (key.keyCode == qwerty_index && pressed_keys[key.keyCode]) {
       pressed_keys[key.keyCode] = false;
-      synth.triggerRelease(piano_notes[x]);
+      if (synth) synth.triggerRelease(piano_notes[x]);
       break; // Only release the specific note
     }
   }
@@ -98,12 +105,12 @@ console.log('Created', document.querySelectorAll('.black_note').length, 'black k
 
 // Safety: Release all notes if mouse leaves keyboard area
 document.getElementById("key_container").addEventListener("mouseleave", function() {
-  synth.releaseAll();
+  if (synth) synth.releaseAll();
 });
 
 // Safety: Release all notes on window blur (user switches tabs/apps)
 window.addEventListener("blur", function() {
-  synth.releaseAll();
+  if (synth) synth.releaseAll();
   pressed_keys = {}; // Reset keyboard state
 });
 //Changes black notes back to #333, and turn #ddd into white
@@ -112,14 +119,15 @@ function note_up(elem, is_sharp) {
   console.log('Note up:', elem.dataset.note, 'is_sharp:', is_sharp);
   var note = elem.dataset.note;
   elem.style.background = is_sharp ? "#333" : "white";
-  synth.triggerRelease(note);
+  if (synth) synth.triggerRelease(note);
 }
 //Trigger press animation and sound.
-function note_down(elem, is_sharp) {
+async function note_down(elem, is_sharp) {
   //Prevents overlapping buttons from both pressing. ie: if your press C#, C or D won't also play.
   event.stopPropagation();
   console.log('Note down:', elem.dataset.note, 'is_sharp:', is_sharp);
   var note = elem.dataset.note;
   elem.style.background = is_sharp ? "black" : "#ddd";
+  await ensureAudio();
   synth.triggerAttack(note);
 }
