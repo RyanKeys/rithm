@@ -570,26 +570,26 @@ function generateNewInterval() {
 }
 
 // Play the current interval
-function playCurrentInterval() {
+async function playCurrentInterval() {
   if (state.isPlaying) return;
-  
-  // Resume audio context if suspended
+
+  // Resume audio context if suspended (must await before scheduling)
   const ctx = getAudioContext();
   if (ctx.state === 'suspended') {
-    ctx.resume();
+    await ctx.resume();
   }
-  
+
   state.isPlaying = true;
-  
+
   const playBtn = document.getElementById('play-interval');
   const replayBtn = document.getElementById('replay-interval');
   playBtn.disabled = true;
   replayBtn.disabled = true;
-  
+
   const rootFreq = noteToFreq(state.currentRootNote);
   const semitones = intervals[state.currentInterval];
   const secondFreq = rootFreq * Math.pow(2, semitones / 12);
-  
+
   const now = ctx.currentTime;
   const noteDuration = 0.5;
   const gap = 0.6;
