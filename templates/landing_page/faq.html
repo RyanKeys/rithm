@@ -1,0 +1,378 @@
+{% extends 'base.html' %}
+
+{% block title %}FAQ - R.I.T.H.M{% endblock %}
+{% block meta_description %}Frequently asked questions about R.I.T.H.M music theory learning platform. Get answers about our games, accounts, and features.{% endblock %}
+
+{% block content %}
+
+<style>
+  .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .faq-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .faq-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .faq-header p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+  }
+  
+  [data-theme="light"] .faq-header p {
+    color: #64748b;
+  }
+  
+  .faq-category {
+    margin-bottom: 2.5rem;
+  }
+  
+  .faq-category h2 {
+    font-size: 1.25rem;
+    color: var(--primary);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .faq-item {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    margin-bottom: 1rem;
+    overflow: hidden;
+  }
+  
+  .faq-question {
+    padding: 1.25rem 1.5rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: 600;
+    color: var(--text-primary);
+    transition: background 0.2s ease;
+  }
+  
+  .faq-question:hover {
+    background: var(--input-bg);
+  }
+  
+  .faq-question i {
+    transition: transform 0.3s ease;
+    color: var(--primary);
+  }
+  
+  .faq-item.active .faq-question i {
+    transform: rotate(180deg);
+  }
+  
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease;
+  }
+  
+  .faq-item.active .faq-answer {
+    max-height: 500px;
+  }
+  
+  .faq-answer-content {
+    padding: 0 1.5rem 1.5rem;
+    color: #94a3b8;
+    line-height: 1.7;
+  }
+  
+  [data-theme="light"] .faq-answer-content {
+    color: #64748b;
+  }
+  
+  .faq-answer-content a {
+    color: var(--primary);
+  }
+  
+  .faq-answer-content ul {
+    margin: 0.5rem 0;
+    padding-left: 1.25rem;
+  }
+  
+  .faq-answer-content li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .contact-section {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 2rem;
+  }
+  
+  .contact-section h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+  }
+  
+  .contact-section p {
+    color: #94a3b8;
+    margin-bottom: 1rem;
+  }
+  
+  [data-theme="light"] .contact-section p {
+    color: #64748b;
+  }
+</style>
+
+<div class="faq-container">
+  <div class="faq-header">
+    <h1 class="gradient-text"><i class="fas fa-question-circle"></i> FAQ</h1>
+    <p>Got questions? We've got answers. Find everything you need to know about R.I.T.H.M.</p>
+  </div>
+  
+  <!-- Getting Started -->
+  <div class="faq-category">
+    <h2><i class="fas fa-play-circle"></i> Getting Started</h2>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        What is R.I.T.H.M?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          R.I.T.H.M is an interactive music theory learning platform. We use gamification to make learning music theory fun and effective. Our games help you learn to read notes, recognize intervals and chords, and train your ear — all essential skills for any musician.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        Is R.I.T.H.M free to use?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          Yes! All of our games and features are completely free. Create an account to save your progress and appear on the leaderboards.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        Do I need any musical background?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          Not at all! R.I.T.H.M is designed for complete beginners. Each game has a Beginner difficulty level that starts with the basics. As you improve, you can move up to Intermediate and Advanced levels.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        What devices can I use?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          R.I.T.H.M works on any device with a web browser — computers, tablets, and phones. For the best experience with our synthesizer and audio games, we recommend using headphones.
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Games & Learning -->
+  <div class="faq-category">
+    <h2><i class="fas fa-gamepad"></i> Games & Learning</h2>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        What games are available?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          We currently offer five learning modules:
+          <ul>
+            <li><strong>Note Reading</strong> — Learn to read notes on the staff</li>
+            <li><strong>Interval Training</strong> — Recognize the distance between notes</li>
+            <li><strong>Chord Identification</strong> — Identify major, minor, diminished, and augmented chords</li>
+            <li><strong>Pitch Training</strong> — Develop your ear for pitch</li>
+            <li><strong>Web Synthesizer</strong> — Experiment with sound and practice concepts</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        What do the difficulty levels mean?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <ul>
+            <li><strong>Beginner</strong> — Starts with the basics. Fewer options, more time to think.</li>
+            <li><strong>Intermediate</strong> — More concepts introduced, good for building skills.</li>
+            <li><strong>Advanced</strong> — Full range of concepts. The real challenge!</li>
+          </ul>
+          We recommend starting on Beginner even if you have some experience, to warm up and ensure you have a solid foundation.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        How does the synthesizer work?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          Our web synthesizer lets you play notes using your mouse or keyboard. You can choose between different synth types (Poly Synth or FM Synth) for different sounds. It's a great tool for experimenting with intervals, chords, and melodies you've learned.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        Why is there no sound?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          Modern browsers require user interaction before playing audio. Look for a "Tap to Enable Audio" button and click/tap it. Also make sure your device volume is up and not muted. If you're still having trouble, try refreshing the page.
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Account & Progress -->
+  <div class="faq-category">
+    <h2><i class="fas fa-user"></i> Account & Progress</h2>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        Do I need an account?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          You can play all games without an account, but your progress won't be saved. Creating a free account lets you:
+          <ul>
+            <li>Save your progress across sessions</li>
+            <li>Track your stats and accuracy over time</li>
+            <li>Appear on the leaderboards</li>
+            <li>Sync progress across devices</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        How do I submit my score to the leaderboard?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          After completing at least 10 attempts in a game, a "Submit to Leaderboard" button will appear. Click it to record your score. Your score is tracked per game and per difficulty level, so you can compete separately at each level.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        What's the difference between All-Time and Weekly leaderboards?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          <ul>
+            <li><strong>All-Time</strong> — Cumulative scores from all your submitted sessions. Shows total dedication over time.</li>
+            <li><strong>Weekly</strong> — Only counts scores from the current week (resets every Monday). Great for friendly competition!</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        I didn't receive my verification email. What do I do?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          First, check your spam/junk folder — verification emails sometimes end up there. If you still can't find it, visit the <a href="{% url 'resend-verification' %}">resend verification page</a> to request a new email. Make sure to use the same email address you registered with.
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Technical -->
+  <div class="faq-category">
+    <h2><i class="fas fa-cog"></i> Technical</h2>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        What is dark mode?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          R.I.T.H.M supports both dark and light modes. Click the moon/sun icon in the top navigation bar to toggle between them. By default, we'll use your system preference if available.
+        </div>
+      </div>
+    </div>
+    
+    <div class="faq-item">
+      <div class="faq-question">
+        Can I use keyboard shortcuts?
+        <i class="fas fa-chevron-down"></i>
+      </div>
+      <div class="faq-answer">
+        <div class="faq-answer-content">
+          Yes! The synthesizer supports keyboard input. Use the keys A, W, S, E, D, F, T, G, Y, H, U, J to play notes like a piano (A = C, W = C#, S = D, etc.).
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="contact-section">
+    <h3><i class="fas fa-envelope"></i> Still Have Questions?</h3>
+    <p>Can't find what you're looking for? We'd love to hear from you.</p>
+    <a href="mailto:support@rithm.app" class="btn btn-primary">
+      <i class="fas fa-paper-plane"></i> Contact Us
+    </a>
+  </div>
+</div>
+
+<script>
+// FAQ accordion functionality
+document.querySelectorAll('.faq-question').forEach(question => {
+  question.addEventListener('click', () => {
+    const item = question.parentElement;
+    const wasActive = item.classList.contains('active');
+    
+    // Close all items
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+    
+    // Open clicked item if it wasn't already open
+    if (!wasActive) {
+      item.classList.add('active');
+    }
+  });
+});
+</script>
+
+{% endblock %}

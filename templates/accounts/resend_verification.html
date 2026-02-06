@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block title %}Resend Verification - R.I.T.H.M{% endblock %}
+
+{% block content %}
+
+<style>
+  .resend-container {
+    max-width: 450px;
+    margin: 4rem auto;
+    padding: 2rem;
+  }
+  
+  .resend-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--input-bg);
+    border-radius: 20px;
+    padding: 2.5rem;
+  }
+  
+  .resend-card h1 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  
+  .resend-card .subtitle {
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1rem;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: var(--input-bg);
+  }
+  
+  .form-control::placeholder {
+    color: var(--text-muted);
+  }
+  
+  .btn-block {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+  
+  .back-link {
+    text-align: center;
+    margin-top: 1.5rem;
+  }
+  
+  .back-link a {
+    color: var(--text-secondary);
+    text-decoration: none;
+  }
+  
+  .back-link a:hover {
+    color: var(--primary);
+  }
+</style>
+
+<div class="resend-container">
+  <div class="resend-card">
+    <h1 class="gradient-text">Resend Verification</h1>
+    <p class="subtitle">Enter your email to receive a new verification link</p>
+    
+    {% if messages %}
+    <div class="mb-3">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    
+    <form method="post">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="you@example.com" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary btn-block">
+        <i class="fas fa-paper-plane"></i> Send Verification Email
+      </button>
+    </form>
+    
+    <div class="back-link">
+      <a href="{% url 'login' %}"><i class="fas fa-arrow-left"></i> Back to Login</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

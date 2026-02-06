@@ -1,11 +1,516 @@
-{% extends 'base.html'%} {% block content %} {% load static %}
+{% extends 'base.html'%} 
 
-<div style="padding-top: 15em; padding-left: 2em" class="container-fluid">
-  <div class="jumbotron titleCard">
-    <h1 style="color: white; text-shadow: 1px 1px black">R.I.T.H.M</h1>
-    <h3 style="color: white; text-shadow: 1px 1px black">
-      A music theory education platform.
-    </h3>
+{% block title %}R.I.T.H.M - Learn Music Theory Online | Interactive Games & Tools{% endblock %}
+
+{% block meta_description %}Learn music theory with R.I.T.H.M's interactive games. Master note reading, train your ear, and play with our web synthesizer. Perfect for beginners and musicians.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "EducationalOrganization",
+  "name": "R.I.T.H.M",
+  "description": "Interactive music theory education platform",
+  "url": "https://rithm.app",
+  "sameAs": [
+    "https://twitter.com/rithmapp",
+    "https://github.com/ryankeys/rithm"
+  ],
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD",
+    "description": "Interactive music theory lessons and games"
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %} {% load static %}
+
+<style>
+  .hero {
+    min-height: calc(100vh - 80px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
+    animation: pulse 15s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(5deg); }
+  }
+  
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 900px;
+  }
+  
+  .hero h1 {
+    font-size: 4rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+  
+  .hero .subtitle {
+    font-size: 1.4rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+    font-weight: 400;
+  }
+  
+  [data-theme="light"] .hero .subtitle {
+    color: #475569;
+  }
+  
+  .hero .subtext {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    margin-bottom: 2.5rem;
+    max-width: 600px;
+  }
+  
+  [data-theme="light"] .hero .subtext {
+    color: #64748b;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 4rem;
+  }
+  
+  .cta-buttons .btn {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+  }
+  
+  .btn-secondary-outline {
+    background: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-primary);
+  }
+  
+  .btn-secondary-outline:hover {
+    background: var(--input-bg);
+    border-color: var(--primary);
+    color: var(--text-primary);
+  }
+  
+  /* Stats Section */
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-bottom: 4rem;
+    flex-wrap: wrap;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-number {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary);
+  }
+  
+  .stat-label {
+    font-size: 0.9rem;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  [data-theme="light"] .stat-label {
+    color: #64748b;
+  }
+  
+  /* Feature Cards */
+  .feature-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .feature-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2rem;
+    text-align: left;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    color: inherit;
+    display: block;
+  }
+  
+  .feature-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  .feature-card .icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .feature-card.note .icon {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+  }
+  
+  .feature-card.interval .icon {
+    background: linear-gradient(135deg, var(--secondary) 0%, #be185d 100%);
+  }
+  
+  .feature-card.synth .icon {
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+  }
+  
+  .feature-card.pitch .icon {
+    background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
+  }
+  
+  .feature-card.chord .icon {
+    background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
+  }
+  
+  .feature-card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .feature-card h3 {
+    color: var(--text-primary);
+  }
+  
+  .feature-card p {
+    color: #94a3b8;
+    font-size: 0.95rem;
+    margin: 0;
+    line-height: 1.6;
+  }
+  
+  [data-theme="light"] .feature-card p {
+    color: #64748b;
+  }
+  
+  .feature-card .arrow {
+    margin-top: 1.5rem;
+    color: #64748b;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+  
+  [data-theme="light"] .feature-card .arrow {
+    color: #475569;
+  }
+  
+  .feature-card:hover .arrow {
+    color: var(--primary);
+    transform: translateX(5px);
+  }
+  
+  /* Benefits Section */
+  .benefits-section {
+    padding: 5rem 2rem;
+    background: var(--bg-card);
+  }
+  
+  .benefits-section h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+    font-size: 2.5rem;
+  }
+  
+  .benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .benefit-icon {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+  }
+  
+  .benefit-content h4 {
+    margin-bottom: 0.5rem;
+    font-size: 1.1rem;
+  }
+  
+  .benefit-content h4 {
+    color: var(--text-primary);
+  }
+  
+  .benefit-content p {
+    color: #94a3b8;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+  
+  [data-theme="light"] .benefit-content p {
+    color: #64748b;
+  }
+  
+  /* CTA Section */
+  .cta-section {
+    padding: 5rem 2rem;
+    text-align: center;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(236, 72, 153, 0.15) 100%);
+  }
+  
+  .cta-section h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-primary);
+  }
+  
+  .cta-section p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  [data-theme="light"] .cta-section p {
+    color: #64748b;
+  }
+  
+  @media (max-width: 768px) {
+    .hero h1 {
+      font-size: 2.5rem;
+    }
+    .hero .subtitle {
+      font-size: 1.1rem;
+    }
+    .stats-row {
+      gap: 2rem;
+    }
+    .stat-number {
+      font-size: 2rem;
+    }
+  }
+</style>
+
+<!-- Hero Section -->
+<section class="hero" role="banner">
+  <div class="hero-content">
+    <h1 class="gradient-text">Learn Music Theory</h1>
+    <p class="subtitle">Master the fundamentals through interactive games and tools</p>
+    <p class="subtext">Whether you're a complete beginner or looking to sharpen your skills, R.I.T.H.M makes learning music theory engaging and effective.</p>
+    
+    <div class="cta-buttons">
+      <a href="/note_identification/" class="btn btn-primary btn-lg">
+        <i class="fas fa-play"></i> Start Learning Now
+      </a>
+      <a href="/synth/" class="btn btn-secondary-outline btn-lg">
+        <i class="fas fa-keyboard"></i> Try the Synth
+      </a>
+    </div>
+    
+    <!-- Social Proof Stats -->
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-number">1000+</div>
+        <div class="stat-label">Exercises</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">5</div>
+        <div class="stat-label">Learning Modules</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"><i class="fas fa-infinity"></i></div>
+        <div class="stat-label">Practice Time</div>
+      </div>
+    </div>
+    
+    <!-- Feature Cards -->
+    <div class="feature-cards">
+      <a href="/note_identification/" class="feature-card note" aria-label="Learn note reading">
+        <div class="icon">
+          <i class="fas fa-book-open"></i>
+        </div>
+        <h3>Note Reading</h3>
+        <p>Learn to read sheet music with our adaptive game. Start with basic notes and progress to sharps and flats.</p>
+        <div class="arrow">
+          <i class="fas fa-arrow-right"></i> Start Learning
+        </div>
+      </a>
+      
+      <a href="/interval_training/" class="feature-card interval" aria-label="Learn musical intervals">
+        <div class="icon">
+          <i class="fas fa-music"></i>
+        </div>
+        <h3>Interval Training</h3>
+        <p>Master musical intervals from unison to octave. Train your ear to hear the relationships between notes.</p>
+        <div class="arrow">
+          <i class="fas fa-arrow-right"></i> Train Intervals
+        </div>
+      </a>
+      
+      <a href="/chord_identification/" class="feature-card chord" aria-label="Learn chord types">
+        <div class="icon">
+          <i class="fas fa-layer-group"></i>
+        </div>
+        <h3>Chord Identification</h3>
+        <p>Learn to identify Major, Minor, Diminished, and Augmented chords by ear. Essential for any musician.</p>
+        <div class="arrow">
+          <i class="fas fa-arrow-right"></i> Learn Chords
+        </div>
+      </a>
+      
+      <a href="/synth/" class="feature-card synth" aria-label="Play web synthesizer">
+        <div class="icon">
+          <i class="fas fa-keyboard"></i>
+        </div>
+        <h3>Web Synthesizer</h3>
+        <p>Experiment with sound using our browser-based synthesizer. Multiple synth types with full keyboard support.</p>
+        <div class="arrow">
+          <i class="fas fa-arrow-right"></i> Play Now
+        </div>
+      </a>
+      
+      <a href="/pitch_identification/" class="feature-card pitch" aria-label="Train your ear">
+        <div class="icon">
+          <i class="fas fa-headphones"></i>
+        </div>
+        <h3>Ear Training</h3>
+        <p>Develop your musical ear by learning to identify pitches. Essential skill for every musician.</p>
+        <div class="arrow">
+          <i class="fas fa-arrow-right"></i> Train Ear
+        </div>
+      </a>
+    </div>
   </div>
-</div>
+</section>
+
+<!-- Benefits Section -->
+<section class="benefits-section" aria-labelledby="benefits-heading">
+  <div class="container">
+    <h2 id="benefits-heading" class="gradient-text">Why Learn With R.I.T.H.M?</h2>
+    
+    <div class="row">
+      <div class="col-md-6">
+        <article class="benefit-item">
+          <div class="benefit-icon">
+            <i class="fas fa-gamepad"></i>
+          </div>
+          <div class="benefit-content">
+            <h4>Learn Through Play</h4>
+            <p>Our gamified approach makes learning fun and keeps you motivated to practice more.</p>
+          </div>
+        </article>
+        
+        <article class="benefit-item">
+          <div class="benefit-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <div class="benefit-content">
+            <h4>Track Your Progress</h4>
+            <p>See your accuracy, streaks, and improvement over time with detailed stats.</p>
+          </div>
+        </article>
+        
+        <article class="benefit-item">
+          <div class="benefit-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <div class="benefit-content">
+            <h4>Practice Anywhere</h4>
+            <p>Works on any device with a browser. Practice on your phone, tablet, or computer.</p>
+          </div>
+        </article>
+      </div>
+      
+      <div class="col-md-6">
+        <article class="benefit-item">
+          <div class="benefit-icon">
+            <i class="fas fa-graduation-cap"></i>
+          </div>
+          <div class="benefit-content">
+            <h4>Adaptive Difficulty</h4>
+            <p>Start easy and gradually increase challenge as your skills improve.</p>
+          </div>
+        </article>
+        
+        <article class="benefit-item">
+          <div class="benefit-icon">
+            <i class="fas fa-clock"></i>
+          </div>
+          <div class="benefit-content">
+            <h4>Learn at Your Pace</h4>
+            <p>No time limits or pressure. Practice when you want, for as long as you want.</p>
+          </div>
+        </article>
+        
+        <article class="benefit-item">
+          <div class="benefit-icon">
+            <i class="fas fa-trophy"></i>
+          </div>
+          <div class="benefit-content">
+            <h4>Compete & Improve</h4>
+            <p>Track your progress, climb the leaderboards, and see how you rank against other learners.</p>
+          </div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section" aria-labelledby="cta-heading">
+  <h2 id="cta-heading">Ready to Start Your Musical Journey?</h2>
+  <p>Join thousands of learners mastering music theory the fun way.</p>
+  <a href="/note_identification/" class="btn btn-primary btn-lg">
+    <i class="fas fa-rocket"></i> Get Started Now
+  </a>
+</section>
+
 {% endblock %}

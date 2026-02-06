@@ -1,0 +1,763 @@
+{% extends 'base.html' %}
+
+{% block title %}Interval Training - Learn Musical Intervals | R.I.T.H.M{% endblock %}
+{% block meta_description %}Train your ear to identify musical intervals with our interactive game. Learn to hear perfect 5ths, major 3rds, and more with instant feedback and progress tracking.{% endblock %}
+{% block og_title %}Interval Training | R.I.T.H.M{% endblock %}
+{% block og_description %}Master musical intervals with our interactive ear training game.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "Interval Training Game",
+  "description": "Interactive game to learn musical intervals and develop ear training skills",
+  "provider": {
+    "@type": "Organization",
+    "name": "R.I.T.H.M"
+  },
+  "educationalLevel": "Beginner to Advanced",
+  "learningResourceType": "Interactive Game",
+  "inLanguage": "en"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<style>
+  .game-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .stats-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--input-bg);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .stat-item {
+    text-align: center;
+  }
+  
+  .stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  
+  .stat-label {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 0.25rem;
+  }
+  
+  .streak-fire {
+    color: var(--warning) !important;
+  }
+  
+  .difficulty-section {
+    margin-bottom: 2rem;
+  }
+  
+  .difficulty-btn {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.75rem 1.5rem;
+    margin: 0;
+    border-radius: 0;
+    transition: all 0.3s ease;
+  }
+  
+  .difficulty-btn:first-child {
+    border-top-left-radius: 12px;
+    border-bottom-left-radius: 12px;
+  }
+  
+  .difficulty-btn:last-child {
+    border-top-right-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+  
+  .difficulty-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--text-primary);
+  }
+  
+  .difficulty-btn:hover {
+    background: rgba(99, 102, 241, 0.3);
+    border-color: var(--primary);
+    color: var(--text-primary);
+  }
+  
+  .audio-section {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--input-bg);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .play-btn {
+    background: var(--primary);
+    border: none;
+    color: var(--text-primary);
+    padding: 1rem 2rem;
+    border-radius: 50px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  
+  .play-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+  }
+  
+  .play-btn:active {
+    transform: translateY(0);
+  }
+  
+  .play-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  .interval-buttons {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  
+  .interval-btn {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.875rem 1.5rem;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    font-weight: 500;
+    min-width: 120px;
+  }
+  
+  .interval-btn:hover {
+    background: var(--border-color);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+    color: var(--text-primary);
+  }
+  
+  .interval-btn.correct {
+    background: var(--success);
+    border-color: var(--success);
+    color: var(--text-primary);
+  }
+  
+  .interval-btn.incorrect {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: var(--text-primary);
+  }
+  
+  .feedback-text {
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 1rem 2rem;
+    border-radius: 12px;
+    background: var(--input-bg);
+    color: var(--text-secondary);
+    transition: all 0.3s ease;
+  }
+  
+  .feedback-correct {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+  }
+  
+  .feedback-incorrect {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+  }
+  
+  .settings-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--input-bg);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .setting-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .setting-group:last-child {
+    margin-bottom: 0;
+  }
+  
+  .setting-label {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+  
+  .setting-control {
+    display: flex;
+    gap: 0.5rem;
+  }
+  
+  .setting-btn {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  .setting-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .setting-btn:hover {
+    background: rgba(99, 102, 241, 0.3);
+    border-color: var(--primary);
+  }
+  
+  @media (max-width: 768px) {
+    .interval-buttons {
+      gap: 0.5rem;
+    }
+    
+    .interval-btn {
+      min-width: 100px;
+      padding: 0.75rem 1rem;
+      font-size: 0.9rem;
+    }
+  }
+</style>
+
+<div class="game-container">
+  
+  <!-- Stats Card -->
+  <div class="stats-card">
+    <div class="row">
+      <div class="col-3 stat-item">
+        <div class="stat-value" id="score">0</div>
+        <div class="stat-label">Score</div>
+      </div>
+      <div class="col-3 stat-item">
+        <div class="stat-value" id="streak">0 <i class="fas fa-fire" style="color: #f59e0b;"></i></div>
+        <div class="stat-label">Streak</div>
+      </div>
+      <div class="col-3 stat-item">
+        <div class="stat-value" id="accuracy">0%</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+      <div class="col-3 stat-item">
+        <div class="stat-value" id="best-streak">0</div>
+        <div class="stat-label">Best</div>
+      </div>
+    </div>
+    <div class="text-center mt-3" id="submit-section" style="display: none;">
+      <button id="submit-score" class="btn btn-success" onclick="submitToLeaderboard()">
+        <i class="fas fa-trophy"></i> Submit to Leaderboard
+      </button>
+      <p class="mt-2 mb-0" style="font-size: 0.85rem; color: rgba(255,255,255,0.5);">Minimum 10 attempts required</p>
+    </div>
+  </div>
+
+  <!-- Difficulty Selection -->
+  <div class="difficulty-section d-flex justify-content-center">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn difficulty-btn active" data-level="beginner" onclick="setDifficulty('beginner')">
+        <i class="fas fa-seedling"></i> Beginner
+      </button>
+      <button type="button" class="btn difficulty-btn" data-level="intermediate" onclick="setDifficulty('intermediate')">
+        <i class="fas fa-leaf"></i> Intermediate
+      </button>
+      <button type="button" class="btn difficulty-btn" data-level="advanced" onclick="setDifficulty('advanced')">
+        <i class="fas fa-tree"></i> Advanced
+      </button>
+    </div>
+  </div>
+
+  <!-- Settings Card -->
+  <div class="settings-card">
+    <div class="setting-group">
+      <span class="setting-label">Direction</span>
+      <div class="setting-control">
+        <button class="setting-btn active" data-direction="ascending" onclick="setDirection('ascending')">
+          <i class="fas fa-arrow-up"></i> Up
+        </button>
+        <button class="setting-btn" data-direction="descending" onclick="setDirection('descending')">
+          <i class="fas fa-arrow-down"></i> Down
+        </button>
+        <button class="setting-btn" data-direction="harmonic" onclick="setDirection('harmonic')">
+          <i class="fas fa-equals"></i> Together
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audio Controls -->
+  <div class="audio-section">
+    <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+      Listen to the interval and identify it below
+    </p>
+    
+    <button id="play-interval" class="play-btn">
+      <i class="fas fa-play"></i> Play Interval
+    </button>
+    
+    <button id="replay-interval" class="play-btn" style="margin-left: 1rem;">
+      <i class="fas fa-redo"></i> Replay
+    </button>
+  </div>
+
+  <!-- Feedback Text -->
+  <div class="d-flex justify-content-center mb-4">
+    <span id="feedback" class="feedback-text">What interval do you hear?</span>
+  </div>
+
+  <!-- Answer Buttons - Beginner Intervals -->
+  <div class="interval-buttons" id="beginner-intervals">
+    <button type="button" class="interval-btn" data-interval="unison">Unison</button>
+    <button type="button" class="interval-btn" data-interval="octave">Octave</button>
+    <button type="button" class="interval-btn" data-interval="perfect-fifth">Perfect 5th</button>
+    <button type="button" class="interval-btn" data-interval="perfect-fourth">Perfect 4th</button>
+  </div>
+
+  <!-- Answer Buttons - Intermediate Intervals -->
+  <div class="interval-buttons" id="intermediate-intervals" style="display: none;">
+    <button type="button" class="interval-btn" data-interval="unison">Unison</button>
+    <button type="button" class="interval-btn" data-interval="minor-second">Minor 2nd</button>
+    <button type="button" class="interval-btn" data-interval="major-second">Major 2nd</button>
+    <button type="button" class="interval-btn" data-interval="minor-third">Minor 3rd</button>
+    <button type="button" class="interval-btn" data-interval="major-third">Major 3rd</button>
+    <button type="button" class="interval-btn" data-interval="perfect-fourth">Perfect 4th</button>
+    <button type="button" class="interval-btn" data-interval="tritone">Tritone</button>
+    <button type="button" class="interval-btn" data-interval="perfect-fifth">Perfect 5th</button>
+    <button type="button" class="interval-btn" data-interval="octave">Octave</button>
+  </div>
+
+  <!-- Answer Buttons - Advanced Intervals -->
+  <div class="interval-buttons" id="advanced-intervals" style="display: none;">
+    <button type="button" class="interval-btn" data-interval="unison">Unison</button>
+    <button type="button" class="interval-btn" data-interval="minor-second">Minor 2nd</button>
+    <button type="button" class="interval-btn" data-interval="major-second">Major 2nd</button>
+    <button type="button" class="interval-btn" data-interval="minor-third">Minor 3rd</button>
+    <button type="button" class="interval-btn" data-interval="major-third">Major 3rd</button>
+    <button type="button" class="interval-btn" data-interval="perfect-fourth">Perfect 4th</button>
+    <button type="button" class="interval-btn" data-interval="tritone">Tritone</button>
+    <button type="button" class="interval-btn" data-interval="perfect-fifth">Perfect 5th</button>
+    <button type="button" class="interval-btn" data-interval="minor-sixth">Minor 6th</button>
+    <button type="button" class="interval-btn" data-interval="major-sixth">Major 6th</button>
+    <button type="button" class="interval-btn" data-interval="minor-seventh">Minor 7th</button>
+    <button type="button" class="interval-btn" data-interval="major-seventh">Major 7th</button>
+    <button type="button" class="interval-btn" data-interval="octave">Octave</button>
+  </div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script>
+// CSRF token for API calls
+const csrfToken = '{{ csrf_token }}';
+let isAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+let saveTimeout = null;
+
+// Game State
+let state = {
+  correct: 0,
+  total: 0,
+  streak: 0,
+  bestStreak: 0,
+  difficulty: 'beginner',
+  direction: 'ascending',
+  currentInterval: null,
+  currentRootNote: null,
+  isPlaying: false,
+  canAnswer: true
+};
+
+// Interval definitions (semitones)
+const intervals = {
+  'unison': 0,
+  'minor-second': 1,
+  'major-second': 2,
+  'minor-third': 3,
+  'major-third': 4,
+  'perfect-fourth': 5,
+  'tritone': 6,
+  'perfect-fifth': 7,
+  'minor-sixth': 8,
+  'major-sixth': 9,
+  'minor-seventh': 10,
+  'major-seventh': 11,
+  'octave': 12
+};
+
+// Interval sets by difficulty
+const intervalSets = {
+  beginner: ['unison', 'perfect-fourth', 'perfect-fifth', 'octave'],
+  intermediate: ['unison', 'minor-second', 'major-second', 'minor-third', 'major-third', 'perfect-fourth', 'tritone', 'perfect-fifth', 'octave'],
+  advanced: Object.keys(intervals)
+};
+
+// Audio context
+let audioCtx = null;
+
+function getAudioContext() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return audioCtx;
+}
+
+// Play a single note using Web Audio API (simpler than Tone.js)
+function playNote(frequency, startTime, duration) {
+  const ctx = getAudioContext();
+  
+  const oscillator = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+  
+  oscillator.type = 'sine';
+  oscillator.frequency.value = frequency;
+  
+  gainNode.gain.setValueAtTime(0, startTime);
+  gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+  gainNode.gain.setValueAtTime(0.3, startTime + duration - 0.1);
+  gainNode.gain.linearRampToValueAtTime(0, startTime + duration);
+  
+  oscillator.connect(gainNode);
+  gainNode.connect(ctx.destination);
+  
+  oscillator.start(startTime);
+  oscillator.stop(startTime + duration);
+}
+
+// Convert note name to frequency
+function noteToFreq(note) {
+  const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+  const octave = parseInt(note.slice(-1));
+  const noteName = note.slice(0, -1);
+  const noteIndex = notes.indexOf(noteName);
+  
+  // A4 = 440Hz, A4 is index 9 in octave 4
+  const semitonesFromA4 = (octave - 4) * 12 + (noteIndex - 9);
+  return 440 * Math.pow(2, semitonesFromA4 / 12);
+}
+
+// Load stats from server
+async function loadStats() {
+  if (!isAuthenticated) return;
+  
+  try {
+    const response = await fetch('/accounts/api/interval-stats/');
+    const data = await response.json();
+    
+    if (data.authenticated && data.stats) {
+      state.correct = data.stats.correct || 0;
+      state.total = data.stats.total || 0;
+      state.streak = data.stats.streak || 0;
+      state.bestStreak = data.stats.bestStreak || 0;
+      
+      if (data.stats.difficulty) {
+        state.difficulty = data.stats.difficulty;
+      }
+      
+      updateStatsDisplay();
+    }
+  } catch (error) {
+    console.error('Failed to load stats:', error);
+  }
+}
+
+// Save stats to server (debounced)
+function saveStats() {
+  if (!isAuthenticated) return;
+  
+  if (saveTimeout) clearTimeout(saveTimeout);
+  
+  saveTimeout = setTimeout(async () => {
+    try {
+      await fetch('/accounts/api/interval-stats/update/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+          correct: state.correct,
+          total: state.total,
+          streak: state.streak,
+          bestStreak: state.bestStreak,
+          difficulty: state.difficulty
+        })
+      });
+    } catch (error) {
+      console.error('Failed to save stats:', error);
+    }
+  }, 1000);
+}
+
+// Set difficulty level
+function setDifficulty(level) {
+  state.difficulty = level;
+  
+  document.querySelectorAll('.difficulty-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.level === level);
+  });
+  
+  // Show/hide appropriate interval buttons
+  document.querySelectorAll('.interval-buttons').forEach(group => {
+    group.style.display = 'none';
+  });
+  document.getElementById(level + '-intervals').style.display = 'flex';
+  
+  generateNewInterval();
+}
+
+// Set direction
+function setDirection(direction) {
+  state.direction = direction;
+  
+  document.querySelectorAll('[data-direction]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.direction === direction);
+  });
+}
+
+// Generate a new interval
+function generateNewInterval() {
+  const availableIntervals = intervalSets[state.difficulty];
+  state.currentInterval = availableIntervals[Math.floor(Math.random() * availableIntervals.length)];
+  
+  // Random root note
+  const rootNotes = ['C4', 'D4', 'E4', 'F4', 'G4'];
+  state.currentRootNote = rootNotes[Math.floor(Math.random() * rootNotes.length)];
+  
+  document.getElementById('feedback').textContent = 'What interval do you hear?';
+  document.getElementById('feedback').className = 'feedback-text';
+  
+  state.canAnswer = true;
+}
+
+// Play the current interval
+function playCurrentInterval() {
+  if (state.isPlaying) return;
+  
+  // Resume audio context if suspended
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume();
+  }
+  
+  state.isPlaying = true;
+  
+  const playBtn = document.getElementById('play-interval');
+  const replayBtn = document.getElementById('replay-interval');
+  playBtn.disabled = true;
+  replayBtn.disabled = true;
+  
+  const rootFreq = noteToFreq(state.currentRootNote);
+  const semitones = intervals[state.currentInterval];
+  const secondFreq = rootFreq * Math.pow(2, semitones / 12);
+  
+  const now = ctx.currentTime;
+  const noteDuration = 0.5;
+  const gap = 0.6;
+  
+  if (state.direction === 'ascending') {
+    playNote(rootFreq, now, noteDuration);
+    playNote(secondFreq, now + gap, noteDuration);
+  } else if (state.direction === 'descending') {
+    playNote(secondFreq, now, noteDuration);
+    playNote(rootFreq, now + gap, noteDuration);
+  } else {
+    // Harmonic - play together
+    playNote(rootFreq, now, 0.8);
+    playNote(secondFreq, now, 0.8);
+  }
+  
+  // Re-enable buttons after playing
+  const totalDuration = state.direction === 'harmonic' ? 1000 : 1400;
+  setTimeout(() => {
+    playBtn.disabled = false;
+    replayBtn.disabled = false;
+    state.isPlaying = false;
+  }, totalDuration);
+}
+
+// Check answer
+function checkAnswer(selectedInterval) {
+  if (!state.canAnswer || state.isPlaying) return;
+  
+  state.canAnswer = false;
+  const isCorrect = selectedInterval === state.currentInterval;
+  
+  state.total++;
+  
+  const feedbackEl = document.getElementById('feedback');
+  const selectedBtn = document.querySelector(`#${state.difficulty}-intervals [data-interval="${selectedInterval}"]`);
+  
+  if (isCorrect) {
+    state.correct++;
+    state.streak++;
+    if (state.streak > state.bestStreak) {
+      state.bestStreak = state.streak;
+    }
+    
+    feedbackEl.innerHTML = '<i class="fas fa-check"></i> Correct!';
+    feedbackEl.className = 'feedback-text feedback-correct';
+    
+    if (selectedBtn) {
+      selectedBtn.classList.add('correct');
+      setTimeout(() => selectedBtn.classList.remove('correct'), 500);
+    }
+    
+    setTimeout(generateNewInterval, 800);
+  } else {
+    state.streak = 0;
+    
+    const correctBtn = document.querySelector(`#${state.difficulty}-intervals [data-interval="${state.currentInterval}"]`);
+    const correctName = correctBtn ? correctBtn.textContent : state.currentInterval;
+    
+    feedbackEl.innerHTML = `<i class="fas fa-times"></i> It was ${correctName}`;
+    feedbackEl.className = 'feedback-text feedback-incorrect';
+    
+    if (selectedBtn) {
+      selectedBtn.classList.add('incorrect');
+      setTimeout(() => selectedBtn.classList.remove('incorrect'), 500);
+    }
+    
+    setTimeout(generateNewInterval, 1500);
+  }
+  
+  updateStatsDisplay();
+  saveStats();
+}
+
+// Update stats display
+function updateStatsDisplay() {
+  document.getElementById('score').textContent = state.correct;
+  
+  const streakEl = document.getElementById('streak');
+  streakEl.innerHTML = state.streak + ' <i class="fas fa-fire" style="color: #f59e0b;"></i>';
+  streakEl.classList.toggle('streak-fire', state.streak >= 5);
+  
+  document.getElementById('best-streak').textContent = state.bestStreak;
+  
+  const accuracy = state.total > 0 ? Math.round((state.correct / state.total) * 100) : 0;
+  document.getElementById('accuracy').textContent = accuracy + '%';
+  
+  // Show submit button when minimum attempts reached
+  const submitSection = document.getElementById('submit-section');
+  if (state.total >= 10 && isAuthenticated) {
+    submitSection.style.display = 'block';
+  }
+}
+
+// Submit score to leaderboard
+async function submitToLeaderboard() {
+  if (!isAuthenticated || state.total < 10) return;
+  
+  const btn = document.getElementById('submit-score');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  
+  try {
+    const response = await fetch('/leaderboard/api/submit/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
+      body: JSON.stringify({
+        game: 'interval',
+        difficulty: state.difficulty,
+        correct: state.correct,
+        total: state.total,
+        bestStreak: state.bestStreak
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      btn.innerHTML = '<i class="fas fa-check"></i> Submitted! Rank #' + data.rank;
+      btn.classList.remove('btn-success');
+      btn.classList.add('btn-outline-success');
+      
+      // Reset for new session
+      setTimeout(() => {
+        state.correct = 0;
+        state.total = 0;
+        state.streak = 0;
+        updateStatsDisplay();
+        btn.innerHTML = '<i class="fas fa-trophy"></i> Submit to Leaderboard';
+        btn.classList.remove('btn-outline-success');
+        btn.classList.add('btn-success');
+        btn.disabled = false;
+        document.getElementById('submit-section').style.display = 'none';
+      }, 3000);
+    } else {
+      btn.innerHTML = '<i class="fas fa-times"></i> ' + data.error;
+      btn.disabled = false;
+    }
+  } catch (error) {
+    btn.innerHTML = '<i class="fas fa-times"></i> Error submitting';
+    btn.disabled = false;
+  }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  // Attach click handlers to ALL interval buttons
+  document.querySelectorAll('.interval-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      checkAnswer(this.dataset.interval);
+    });
+  });
+  
+  // Attach click handlers to play buttons
+  document.getElementById('play-interval').addEventListener('click', playCurrentInterval);
+  document.getElementById('replay-interval').addEventListener('click', playCurrentInterval);
+  
+  // Set initial difficulty
+  setDifficulty(state.difficulty);
+  
+  // Load saved stats
+  loadStats();
+  
+  updateStatsDisplay();
+});
+</script>
+
+{% endblock %}

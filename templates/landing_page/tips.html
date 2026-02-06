@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+
+{% block title %}Practice Tips - R.I.T.H.M{% endblock %}
+{% block meta_description %}Effective practice strategies for learning music theory. Maximize your progress with these proven techniques and tips.{% endblock %}
+
+{% block content %}
+
+<style>
+  .tips-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  .tips-header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  
+  .tips-header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .tips-header p {
+    color: #94a3b8;
+    font-size: 1.1rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  
+  [data-theme="light"] .tips-header p {
+    color: #64748b;
+  }
+  
+  .tip-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  
+  .tip-number {
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: white;
+  }
+  
+  .tip-content h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+  
+  .tip-content p {
+    color: #94a3b8;
+    line-height: 1.7;
+    margin-bottom: 0.75rem;
+  }
+  
+  [data-theme="light"] .tip-content p {
+    color: #64748b;
+  }
+  
+  .tip-content ul {
+    color: #94a3b8;
+    padding-left: 1.25rem;
+  }
+  
+  [data-theme="light"] .tip-content ul {
+    color: #64748b;
+  }
+  
+  .tip-content li {
+    margin-bottom: 0.5rem;
+  }
+  
+  .highlight-box {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(236, 72, 153, 0.1) 100%);
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    border-radius: 16px;
+    padding: 2rem;
+    margin: 2rem 0;
+    text-align: center;
+  }
+  
+  .highlight-box h3 {
+    color: var(--text-primary);
+    margin-bottom: 0.75rem;
+  }
+  
+  .highlight-box p {
+    color: #94a3b8;
+    margin-bottom: 1rem;
+  }
+  
+  [data-theme="light"] .highlight-box p {
+    color: #64748b;
+  }
+  
+  .schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  
+  .schedule-card {
+    background: var(--input-bg);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  
+  .schedule-card h4 {
+    color: var(--primary);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .schedule-card p {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  
+  [data-theme="light"] .schedule-card p {
+    color: #64748b;
+  }
+  
+  @media (max-width: 768px) {
+    .tip-card {
+      flex-direction: column;
+    }
+  }
+</style>
+
+<div class="tips-container">
+  <div class="tips-header">
+    <h1 class="gradient-text"><i class="fas fa-lightbulb"></i> Practice Tips</h1>
+    <p>Learn smarter, not harder. These proven strategies will help you make the most of your practice time and accelerate your music theory progress.</p>
+  </div>
+  
+  <div class="tip-card">
+    <div class="tip-number">1</div>
+    <div class="tip-content">
+      <h3>Practice Consistently, Not Intensively</h3>
+      <p>Short, regular practice sessions are more effective than occasional marathon sessions. Your brain needs time to process and consolidate new information.</p>
+      <ul>
+        <li><strong>Aim for 15-20 minutes daily</strong> rather than 2 hours once a week</li>
+        <li>Set a specific time each day to build a habit</li>
+        <li>Even 5 minutes is better than skipping entirely</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="tip-card">
+    <div class="tip-number">2</div>
+    <div class="tip-content">
+      <h3>Use Spaced Repetition</h3>
+      <p>Review material at increasing intervals to move it from short-term to long-term memory. This is scientifically proven to be the most efficient learning method.</p>
+      <ul>
+        <li>Review new concepts the next day</li>
+        <li>Then again after 3 days, then a week</li>
+        <li>Keep practicing concepts you find difficult more frequently</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="tip-card">
+    <div class="tip-number">3</div>
+    <div class="tip-content">
+      <h3>Start Easy, Then Challenge Yourself</h3>
+      <p>Begin each session with something you know well to build confidence, then gradually increase difficulty. This keeps you motivated while still pushing your limits.</p>
+      <ul>
+        <li>Start on Beginner mode to warm up</li>
+        <li>Move to Intermediate when you're hitting 80%+ accuracy</li>
+        <li>Challenge yourself with Advanced mode regularly</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="tip-card">
+    <div class="tip-number">4</div>
+    <div class="tip-content">
+      <h3>Learn From Your Mistakes</h3>
+      <p>Every wrong answer is a learning opportunity. Pay attention to patterns in your mistakes — they reveal where you need more practice.</p>
+      <ul>
+        <li>When you get something wrong, pause and understand why</li>
+        <li>Replay the interval or chord before moving on</li>
+        <li>Notice which specific concepts trip you up most often</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="tip-card">
+    <div class="tip-number">5</div>
+    <div class="tip-content">
+      <h3>Connect Theory to Real Music</h3>
+      <p>Music theory becomes meaningful when you can hear it in songs you love. Try to identify concepts you've learned in your favorite music.</p>
+      <ul>
+        <li>Listen for intervals in melodies</li>
+        <li>Try to identify chord progressions</li>
+        <li>Notice how major vs minor chords affect the mood</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="tip-card">
+    <div class="tip-number">6</div>
+    <div class="tip-content">
+      <h3>Mix Up Your Practice</h3>
+      <p>Interleaving different topics (notes, intervals, chords) in one session leads to better long-term retention than focusing on just one thing.</p>
+      <ul>
+        <li>Rotate between different games in one session</li>
+        <li>This forces your brain to continually recall and apply different concepts</li>
+        <li>It might feel harder at first, but the results are worth it</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="tip-card">
+    <div class="tip-number">7</div>
+    <div class="tip-content">
+      <h3>Use the Synthesizer to Explore</h3>
+      <p>Don't just do drills — spend time playing around on the synthesizer. Experimenting with sounds helps internalize concepts in a creative way.</p>
+      <ul>
+        <li>Play intervals you've learned</li>
+        <li>Build chords from scratch</li>
+        <li>Try creating simple melodies using scales</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="highlight-box">
+    <h3><i class="fas fa-calendar-check"></i> Sample Practice Schedule</h3>
+    <p>Here's a balanced 20-minute daily routine:</p>
+    <div class="schedule-grid">
+      <div class="schedule-card">
+        <h4>5 min — Warm Up</h4>
+        <p>Note Reading on Beginner mode to get focused</p>
+      </div>
+      <div class="schedule-card">
+        <h4>5 min — Main Practice</h4>
+        <p>Interval or Chord training on your current level</p>
+      </div>
+      <div class="schedule-card">
+        <h4>5 min — Challenge</h4>
+        <p>Try Advanced mode or a skill you find difficult</p>
+      </div>
+      <div class="schedule-card">
+        <h4>5 min — Free Play</h4>
+        <p>Explore on the synthesizer or review mistakes</p>
+      </div>
+    </div>
+  </div>
+  
+  <div class="tip-card">
+    <div class="tip-number">8</div>
+    <div class="tip-content">
+      <h3>Track Your Progress</h3>
+      <p>Seeing improvement is incredibly motivating. Use the leaderboard and your profile stats to track how far you've come.</p>
+      <ul>
+        <li>Check your accuracy trends over time</li>
+        <li>Try to beat your personal best streaks</li>
+        <li>Celebrate small wins — every improvement counts!</li>
+      </ul>
+    </div>
+  </div>
+  
+  <div class="highlight-box">
+    <h3><i class="fas fa-rocket"></i> Ready to Practice?</h3>
+    <p>Put these tips into action. Start with one game and build from there!</p>
+    <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin-top: 1rem;">
+      <a href="/note_identification/" class="btn btn-primary">Start Practicing</a>
+      <a href="/leaderboard/" class="btn btn-outline-light">View Leaderboard</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

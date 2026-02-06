@@ -17,23 +17,60 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-ALLOWED_HOSTS = []
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '*2i3sl6)j6i$d(&lew@n2x5@7r+q$gc&i+8eh432))fkip*9&z'
+# In production (DEBUG=False), SECRET_KEY must be set via environment variable
+_debug_mode = os.environ.get('DEBUG', 'True').lower() in ('true', '1', 'yes')
+_secret_key = os.environ.get('SECRET_KEY')
+
+if not _secret_key:
+    if _debug_mode:
+        # Dev-only fallback - NEVER use in production
+        _secret_key = 'dev-only-insecure-key-do-not-use-in-production'
+    else:
+        raise ValueError("SECRET_KEY environment variable is required in production!")
+
+SECRET_KEY = _secret_key
 
 # SECURITY WARNING: don't run with debug turned on in production!
-ALLOWED_HOSTS = ['*']
-DEBUG = True
+DEBUG = _debug_mode
+
+# Allowed hosts - set via environment in production
+_allowed_hosts = os.environ.get('ALLOWED_HOSTS', '')
+if _allowed_hosts:
+    ALLOWED_HOSTS = [h.strip() for h in _allowed_hosts.split(',') if h.strip()]
+elif DEBUG:
+    ALLOWED_HOSTS = ['*']  # Dev only
+else:
+    raise ValueError("ALLOWED_HOSTS environment variable is required in production!")
+
+# CSRF settings for production
+_csrf_origins = os.environ.get('CSRF_TRUSTED_ORIGINS', '')
+if _csrf_origins:
+    CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_origins.split(',') if o.strip()]
+elif not DEBUG:
+    # Default Railway domains
+    CSRF_TRUSTED_ORIGINS = [
+        'https://*.railway.app',
+        'https://*.up.railway.app',
+    ]
+
+# Secure cookies in production
+if not DEBUG:
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'accounts',
+    'leaderboard',
+    'interval_training',
+    'chord_identification',
     'synth',
     'pitch_identification',
     'landing_page',
@@ -45,6 +82,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+# Auth settings
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
@@ -80,13 +122,24 @@ WSGI_APPLICATION = 'rithm.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+# Uses PostgreSQL in production (DATABASE_URL), SQLite in development
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+DATABASE_URL = os.environ.get('DATABASE_URL')
+
+if DATABASE_URL:
+    # Production: PostgreSQL
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default=DATABASE_URL, conn_max_age=600)
     }
-}
+else:
+    # Development: SQLite
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
+    }
 
 
 # Password validation
@@ -135,3 +188,25 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
+
+# WhiteNoise for serving static files in production
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Default primary key field type
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Email Settings
+# For production, set these environment variables:
+# EMAIL_HOST, EMAIL_PORT, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_USE_TLS/EMAIL_USE_SSL
+EMAIL_BACKEND = os.environ.get('EMAIL_BACKEND', 'django.core.mail.backends.console.EmailBackend')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 587))
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'True').lower() in ('true', '1', 'yes')
+EMAIL_USE_SSL = os.environ.get('EMAIL_USE_SSL', 'False').lower() in ('true', '1', 'yes')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'R.I.T.H.M <noreply@rithm.app>')
+
+# Use SMTP backend in production if credentials are provided
+if EMAIL_HOST_USER and EMAIL_HOST_PASSWORD:
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.SMTPBackend'

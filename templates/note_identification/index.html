@@ -1,149 +1,634 @@
-{% extends 'base.html'%} {% block content %} {% load static %}
-<div class="container">
-  <div class="d-flex justify-content-center" style="padding-top: 5em">
-    <img
-      class="d-flex justify-content-center"
-      id="to_guess"
-      src="{% static 'note_identification/A.png' %}"
-      alt=""
-    />
-  </div>
-  <p
-    class="d-flex justify-content-center"
-    id="current"
-    style="padding-top: 2em"
-  >
-    Guess the Note!
-  </p>
-  <div
-    class="d-flex justify-content-center btn-toolbar"
-    role="toolbar"
-    aria-label="Toolbar with button groups"
-    style="padding-top: 2em"
-  >
-    <div class="btn-group mr-2" role="group" aria-label="Third group">
-      <button type="button" id="A♭" class="btn btn-secondary">A♭</button>
-      <button type="button" id="B♭" class="btn btn-secondary">B♭</button>
-      <button type="button" id="C♭" class="btn btn-secondary">C♭</button>
-      <button type="button" id="D♭" class="btn btn-secondary">D♭</button>
-      <button type="button" id="E♭" class="btn btn-secondary">E♭</button>
-      <button type="button" id="F♭" class="btn btn-secondary">F♭</button>
-      <button type="button" id="G♭" class="btn btn-secondary">G♭</button>
-    </div>
-    <div class="btn-group mr-2" role="group" aria-label="First group">
-      <button type="button" id="A" class="btn btn-secondary">A</button>
-      <button type="button" id="B" class="btn btn-secondary">B</button>
-      <button type="button" id="C" class="btn btn-secondary">C</button>
-      <button type="button" id="D" class="btn btn-secondary">D</button>
-      <button type="button" id="E" class="btn btn-secondary">E</button>
-      <button type="button" id="F" class="btn btn-secondary">F</button>
-      <button type="button" id="G" class="btn btn-secondary">G</button>
-    </div>
-    <div class="btn-group mr-2" role="group" aria-label="Second group">
-      <button type="button" id="A#" class="btn btn-secondary">A#</button>
-      <button type="button" id="B#" class="btn btn-secondary">B#</button>
-      <button type="button" id="C#" class="btn btn-secondary">C#</button>
-      <button type="button" id="D#" class="btn btn-secondary">D#</button>
-      <button type="button" id="E#" class="btn btn-secondary">E#</button>
-      <button type="button" id="F#" class="btn btn-secondary">F#</button>
-      <button type="button" id="G#" class="btn btn-secondary">G#</button>
-    </div>
-  </div>
-</div>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-<script type="text/javascript">
-  function update_da(valid_note) {
-    if (valid_note.includes("_sharp")) {
-      var this_note = valid_note.charAt(0) + "#";
-    } else {
-      var this_note = valid_note;
-    }
-    document.getElementById("to_guess").setAttribute("da", this_note);
-  }
-  var correct = 0;
-  var total = 0;
-  var valid_notes = [
-    "C",
-    "C_sharp",
-    "D♭",
-    "D",
-    "D_sharp",
-    "E♭",
-    "E",
-    "F",
-    "F_sharp",
-    "G♭",
-    "G",
-    "G_sharp",
-    "A♭",
-    "A",
-    "A_sharp",
-    "B♭",
-    "B",
-  ];
-  var letters = ["A", "B", "C", "D", "E", "F", "G"];
-  var symboles = ["", "#", "♭"];
-  var notes = [];
-  // lets create the different combinations of sharp, flat and regular here
-  for (x in symboles) {
-    for (y in letters) {
-      notes.push(letters[y] + symboles[x]);
-    }
-  }
-  // set a random one as the one we are trying to guess
-  var current_var = valid_notes[Math.floor(Math.random() * valid_notes.length)];
-  // display it
-  document
-    .getElementById("to_guess")
-    .setAttribute("src", "/static/note_identification/" + current_var + ".png");
-  update_da(current_var);
-  // is correct function is used by each of the note buttons
-  function is_correct(button_var) {
-    // logging to console for debuging purpose
-    console.log(
-      button_var ==
-        document.getElementById("to_guess").getAttribute("da").toString()
-    );
-    // logging to console for debuging purpose
-    console.log(
-      "Button var = " +
-        button_var +
-        ", and the note to guess is = " +
-        document.getElementById("to_guess").getAttribute("da").toString()
-    );
-    // this function checks if the button is the same as the note that we are looking for
-    if (
-      document.getElementById("to_guess").getAttribute("da").toString() ==
-      button_var
-    ) {
-      // if it is, we add to both the total var and the correct var
-      correct += 1;
-      total += 1;
-      // Then we get a new random note to figure out then update the display
-      current_var = valid_notes[Math.floor(Math.random() * valid_notes.length)];
-      document
-        .getElementById("to_guess")
-        .setAttribute(
-          "src",
-          "/static/note_identification/" + current_var + ".png"
-        );
-      update_da(current_var);
-    } else {
-      // if it is not we add to just the total var
-      total += 1;
-    }
-    // Updates the score display
-    document.getElementById("current").innerHTML =
-      correct.toString() + "/" + total.toString();
-  }
-  // this create the buttons and gives them eacha an onclick that calls the
-  // is_correct function to check if this is the correct button for the note.
-  for (n in notes) {
-    var btn = document.getElementById(notes[n]);
-    btn.innerHTML = notes[n];
-    btn.setAttribute("onclick", 'is_correct("' + notes[n] + '")');
-    // btn.setAttribute('class', 'btn btn-light')
-    // document.body.appendChild(btn);
-  }
+{% extends 'base.html'%}
+
+{% block title %}Note Reading Game - Learn to Read Sheet Music | R.I.T.H.M{% endblock %}
+{% block meta_description %}Practice reading sheet music notes with our interactive game. Learn treble clef notes from beginner to advanced with instant feedback and progress tracking.{% endblock %}
+{% block og_title %}Note Reading Game | R.I.T.H.M{% endblock %}
+{% block og_description %}Master reading sheet music with our interactive note identification game.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LearningResource",
+  "name": "Note Reading Game",
+  "description": "Interactive game to learn reading sheet music notes",
+  "provider": {
+    "@type": "Organization",
+    "name": "R.I.T.H.M"
+  },
+  "educationalLevel": "Beginner to Advanced",
+  "learningResourceType": "Interactive Game",
+  "inLanguage": "en"
+}
 </script>
+{% endblock %}
+
+{% block content %} {% load static %}
+
+<style>
+  .game-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  /* Stats Card */
+  .stats-card {
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2) 0%, rgba(236, 72, 153, 0.2) 100%);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--input-bg);
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .stat-item {
+    text-align: center;
+    padding: 0.5rem;
+  }
+  
+  .stat-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  
+  .stat-label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  
+  .streak-fire {
+    animation: pulse 0.5s infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+  }
+  
+  /* Difficulty Buttons */
+  .difficulty-section {
+    margin-bottom: 2rem;
+  }
+  
+  .difficulty-btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 10px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 2px solid var(--border-color);
+    background: transparent;
+    color: var(--text-secondary);
+  }
+  
+  .difficulty-btn:hover {
+    border-color: var(--text-muted);
+    color: var(--text-primary);
+    background: var(--border-color);
+  }
+  
+  .difficulty-btn.active {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    border-color: transparent;
+    color: var(--text-primary);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+  }
+  
+  /* Note Image */
+  .note-display {
+    background: white;
+    border-radius: 20px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    display: inline-block;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  }
+  
+  #note-image {
+    max-height: 250px;
+    display: block;
+  }
+  
+  /* Feedback */
+  .feedback-text {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  
+  .feedback-correct { color: var(--success); }
+  .feedback-incorrect { color: var(--danger); }
+  
+  /* Note Buttons */
+  .note-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+  }
+  
+  .note-btn {
+    min-width: 65px;
+    padding: 1rem 1.25rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    background: var(--input-bg);
+    color: var(--text-primary);
+  }
+  
+  .note-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  }
+  
+  .note-btn:active {
+    transform: translateY(0);
+  }
+  
+  .note-btn.natural-note {
+    background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%);
+    color: #1e293b;
+    border-color: var(--text-muted);
+  }
+  
+  .note-btn.natural-note:hover {
+    background: white;
+    border-color: var(--primary);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+  }
+  
+  .note-btn.sharp-note {
+    background: linear-gradient(180deg, #334155 0%, #1e293b 100%);
+    color: var(--text-primary);
+    border-color: var(--input-bg);
+  }
+  
+  .note-btn.sharp-note:hover {
+    background: linear-gradient(180deg, #475569 0%, #334155 100%);
+    border-color: var(--warning);
+    box-shadow: 0 8px 25px rgba(245, 158, 11, 0.3);
+  }
+  
+  .note-btn.flat-note {
+    background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+    color: var(--text-primary);
+    border-color: rgba(14, 165, 233, 0.3);
+  }
+  
+  .note-btn.flat-note:hover {
+    background: linear-gradient(135deg, #38bdf8 0%, #0ea5e9 100%);
+    border-color: #38bdf8;
+    box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
+  }
+  
+  .note-btn.correct {
+    background: var(--success) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--success) !important;
+    transform: scale(1.05);
+    box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+  }
+  
+  .note-btn.incorrect {
+    background: var(--danger) !important;
+    color: var(--text-primary) !important;
+    border-color: var(--danger) !important;
+    animation: shake 0.3s ease;
+  }
+  
+  @keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+  
+  @media (max-width: 576px) {
+    .note-btn {
+      min-width: 55px;
+      padding: 0.875rem 1rem;
+      font-size: 1rem;
+    }
+    
+    .note-buttons {
+      gap: 0.5rem;
+    }
+  }
+  
+  /* Reset Button */
+  .reset-btn {
+    background: transparent;
+    border: 2px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    transition: all 0.2s ease;
+  }
+  
+  .reset-btn:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+  }
+</style>
+
+<div class="game-container">
+  
+  <!-- Stats Card -->
+  <div class="stats-card">
+    <div class="row">
+      <div class="col-3 stat-item">
+        <div class="stat-value" id="score">0</div>
+        <div class="stat-label">Score</div>
+      </div>
+      <div class="col-3 stat-item">
+        <div class="stat-value" id="streak">0 <i class="fas fa-fire" style="color: #f59e0b;"></i></div>
+        <div class="stat-label">Streak</div>
+      </div>
+      <div class="col-3 stat-item">
+        <div class="stat-value" id="accuracy">0%</div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+      <div class="col-3 stat-item">
+        <div class="stat-value" id="best-streak">0</div>
+        <div class="stat-label">Best</div>
+      </div>
+    </div>
+    <div class="text-center mt-3" id="submit-section" style="display: none;">
+      <button id="submit-score" class="btn btn-success" onclick="submitToLeaderboard()">
+        <i class="fas fa-trophy"></i> Submit to Leaderboard
+      </button>
+      <p class="mt-2 mb-0" style="font-size: 0.85rem; color: rgba(255,255,255,0.5);">Minimum 10 attempts required</p>
+    </div>
+  </div>
+
+  <!-- Difficulty Selection -->
+  <div class="difficulty-section d-flex justify-content-center">
+    <div class="btn-group" role="group">
+      <button type="button" class="btn difficulty-btn active" data-level="beginner" onclick="setDifficulty('beginner')">
+        <i class="fas fa-seedling"></i> Beginner
+      </button>
+      <button type="button" class="btn difficulty-btn" data-level="intermediate" onclick="setDifficulty('intermediate')">
+        <i class="fas fa-leaf"></i> Intermediate
+      </button>
+      <button type="button" class="btn difficulty-btn" data-level="advanced" onclick="setDifficulty('advanced')">
+        <i class="fas fa-tree"></i> Advanced
+      </button>
+    </div>
+  </div>
+
+  <!-- Note Display -->
+  <div class="text-center mb-4">
+    <div class="note-display">
+      <img id="note-image" src="{% static 'note_identification/A.png' %}" alt="Note to identify" />
+    </div>
+  </div>
+
+  <!-- Feedback Text -->
+  <div class="d-flex justify-content-center mb-4">
+    <span id="feedback" class="feedback-text">What note is this?</span>
+  </div>
+
+  <!-- Answer Buttons - Natural Notes -->
+  <div class="note-buttons" id="natural-row">
+    <button type="button" class="note-btn natural-note" data-note="C">C</button>
+    <button type="button" class="note-btn natural-note" data-note="D">D</button>
+    <button type="button" class="note-btn natural-note" data-note="E">E</button>
+    <button type="button" class="note-btn natural-note" data-note="F">F</button>
+    <button type="button" class="note-btn natural-note" data-note="G">G</button>
+    <button type="button" class="note-btn natural-note" data-note="A">A</button>
+    <button type="button" class="note-btn natural-note" data-note="B">B</button>
+  </div>
+
+  <!-- Answer Buttons - Sharps -->
+  <div class="note-buttons" id="sharps-row">
+    <button type="button" class="note-btn sharp-note" data-note="C#">C♯</button>
+    <button type="button" class="note-btn sharp-note" data-note="D#">D♯</button>
+    <button type="button" class="note-btn sharp-note" data-note="F#">F♯</button>
+    <button type="button" class="note-btn sharp-note" data-note="G#">G♯</button>
+    <button type="button" class="note-btn sharp-note" data-note="A#">A♯</button>
+  </div>
+
+  <!-- Answer Buttons - Flats -->
+  <div class="note-buttons mb-4" id="flats-row">
+    <button type="button" class="note-btn flat-note" data-note="D♭">D♭</button>
+    <button type="button" class="note-btn flat-note" data-note="E♭">E♭</button>
+    <button type="button" class="note-btn flat-note" data-note="G♭">G♭</button>
+    <button type="button" class="note-btn flat-note" data-note="A♭">A♭</button>
+    <button type="button" class="note-btn flat-note" data-note="B♭">B♭</button>
+  </div>
+
+  <!-- Reset Button -->
+  <div class="d-flex justify-content-center">
+    <button class="btn reset-btn" onclick="resetGame()"><i class="fas fa-redo"></i> Reset Game</button>
+  </div>
+
+</div>
+
+<script>
+// CSRF token for API calls
+const csrfToken = '{{ csrf_token }}';
+let isAuthenticated = {% if user.is_authenticated %}true{% else %}false{% endif %};
+let saveTimeout = null;
+
+// Game State
+let state = {
+  correct: 0,
+  total: 0,
+  streak: 0,
+  bestStreak: 0,
+  difficulty: 'beginner',
+  currentNote: null
+};
+
+// Load stats from server on page load
+async function loadStats() {
+  if (!isAuthenticated) return;
+  
+  try {
+    const response = await fetch('/accounts/api/note-stats/');
+    const data = await response.json();
+    
+    if (data.authenticated && data.stats) {
+      state.correct = data.stats.correct || 0;
+      state.total = data.stats.total || 0;
+      state.streak = data.stats.streak || 0;
+      state.bestStreak = data.stats.bestStreak || 0;
+      
+      if (data.stats.difficulty) {
+        setDifficulty(data.stats.difficulty);
+      }
+      
+      updateStats();
+      console.log('Stats loaded from server');
+    }
+  } catch (error) {
+    console.error('Failed to load stats:', error);
+  }
+}
+
+// Save stats to server (debounced)
+function saveStats() {
+  if (!isAuthenticated) return;
+  
+  // Debounce saves to avoid too many requests
+  if (saveTimeout) clearTimeout(saveTimeout);
+  
+  saveTimeout = setTimeout(async () => {
+    try {
+      await fetch('/accounts/api/note-stats/update/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify({
+          correct: state.correct,
+          total: state.total,
+          streak: state.streak,
+          bestStreak: state.bestStreak,
+          difficulty: state.difficulty
+        })
+      });
+      console.log('Stats saved');
+    } catch (error) {
+      console.error('Failed to save stats:', error);
+    }
+  }, 1000);
+}
+
+// Note sets by difficulty
+const noteSets = {
+  beginner: ['C', 'D', 'E', 'F', 'G', 'A', 'B'],
+  intermediate: ['C', 'C_sharp', 'D', 'D_sharp', 'E', 'F', 'F_sharp', 'G', 'G_sharp', 'A', 'A_sharp', 'B'],
+  advanced: ['C', 'C_sharp', 'D♭', 'D', 'D_sharp', 'E♭', 'E', 'F', 'F_sharp', 'G♭', 'G', 'G_sharp', 'A♭', 'A', 'A_sharp', 'B♭', 'B']
+};
+
+// Map file names to display names
+function fileToDisplay(fileName) {
+  if (fileName.includes('_sharp')) {
+    return fileName.charAt(0) + '#';
+  }
+  return fileName;
+}
+
+// Set difficulty level
+function setDifficulty(level) {
+  state.difficulty = level;
+  
+  document.querySelectorAll('.difficulty-btn').forEach(btn => {
+    btn.classList.remove('active');
+    if (btn.dataset.level === level) {
+      btn.classList.add('active');
+    }
+  });
+  
+  const sharpsRow = document.getElementById('sharps-row');
+  const flatsRow = document.getElementById('flats-row');
+  
+  if (level === 'beginner') {
+    sharpsRow.style.display = 'none';
+    flatsRow.style.display = 'none';
+  } else if (level === 'intermediate') {
+    sharpsRow.style.display = 'flex';
+    flatsRow.style.display = 'none';
+  } else {
+    sharpsRow.style.display = 'flex';
+    flatsRow.style.display = 'flex';
+  }
+  
+  nextNote();
+}
+
+// Get random note for current difficulty
+function getRandomNote() {
+  const notes = noteSets[state.difficulty];
+  return notes[Math.floor(Math.random() * notes.length)];
+}
+
+// Load next note
+function nextNote() {
+  state.currentNote = getRandomNote();
+  const img = document.getElementById('note-image');
+  img.src = '/static/note_identification/' + state.currentNote + '.png';
+  document.getElementById('feedback').textContent = 'What note is this?';
+  document.getElementById('feedback').className = 'feedback-text';
+}
+
+// Check answer
+function checkAnswer(selectedNote) {
+  const correctNote = fileToDisplay(state.currentNote);
+  const isCorrect = selectedNote === correctNote || 
+                    (selectedNote.includes('♯') && selectedNote.replace('♯', '#') === correctNote) ||
+                    (correctNote.includes('♭') && selectedNote === correctNote);
+  
+  // Handle enharmonic equivalents
+  const enharmonics = {
+    'C#': 'D♭', 'D♭': 'C#',
+    'D#': 'E♭', 'E♭': 'D#',
+    'F#': 'G♭', 'G♭': 'F#',
+    'G#': 'A♭', 'A♭': 'G#',
+    'A#': 'B♭', 'B♭': 'A#'
+  };
+  
+  const isEnharmonic = enharmonics[selectedNote] === correctNote || 
+                       enharmonics[correctNote] === selectedNote;
+  
+  state.total++;
+  
+  if (isCorrect || isEnharmonic) {
+    state.correct++;
+    state.streak++;
+    if (state.streak > state.bestStreak) {
+      state.bestStreak = state.streak;
+    }
+    
+    document.getElementById('feedback').innerHTML = '<i class="fas fa-check"></i> Correct!';
+    document.getElementById('feedback').className = 'feedback-text feedback-correct';
+    
+    const btn = document.querySelector(`[data-note="${selectedNote}"]`);
+    if (btn) {
+      btn.classList.add('correct');
+      setTimeout(() => btn.classList.remove('correct'), 500);
+    }
+    
+    setTimeout(nextNote, 600);
+  } else {
+    state.streak = 0;
+    
+    document.getElementById('feedback').innerHTML = '<i class="fas fa-times"></i> It was ' + correctNote;
+    document.getElementById('feedback').className = 'feedback-text feedback-incorrect';
+    
+    const btn = document.querySelector(`[data-note="${selectedNote}"]`);
+    if (btn) {
+      btn.classList.add('incorrect');
+      setTimeout(() => btn.classList.remove('incorrect'), 500);
+    }
+    
+    setTimeout(nextNote, 1500);
+  }
+  
+  updateStats();
+}
+
+// Update stats display
+function updateStats() {
+  document.getElementById('score').textContent = state.correct;
+  
+  const streakEl = document.getElementById('streak');
+  streakEl.innerHTML = state.streak + ' <i class="fas fa-fire" style="color: #f59e0b;"></i>';
+  if (state.streak >= 5) {
+    streakEl.classList.add('streak-fire');
+  } else {
+    streakEl.classList.remove('streak-fire');
+  }
+  
+  document.getElementById('best-streak').textContent = state.bestStreak;
+  
+  const accuracy = state.total > 0 ? Math.round((state.correct / state.total) * 100) : 0;
+  document.getElementById('accuracy').textContent = accuracy + '%';
+  
+  // Show submit button when minimum attempts reached
+  const submitSection = document.getElementById('submit-section');
+  if (state.total >= 10 && isAuthenticated) {
+    submitSection.style.display = 'block';
+  }
+  
+  // Save stats to server
+  saveStats();
+}
+
+// Submit score to leaderboard
+async function submitToLeaderboard() {
+  if (!isAuthenticated || state.total < 10) return;
+  
+  const btn = document.getElementById('submit-score');
+  btn.disabled = true;
+  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Submitting...';
+  
+  try {
+    const response = await fetch('/leaderboard/api/submit/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': csrfToken
+      },
+      body: JSON.stringify({
+        game: 'note',
+        difficulty: state.difficulty,
+        correct: state.correct,
+        total: state.total,
+        bestStreak: state.bestStreak
+      })
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      btn.innerHTML = '<i class="fas fa-check"></i> Submitted! Rank #' + data.rank;
+      btn.classList.remove('btn-success');
+      btn.classList.add('btn-outline-success');
+      
+      setTimeout(() => {
+        state.correct = 0;
+        state.total = 0;
+        state.streak = 0;
+        updateStats();
+        btn.innerHTML = '<i class="fas fa-trophy"></i> Submit to Leaderboard';
+        btn.classList.remove('btn-outline-success');
+        btn.classList.add('btn-success');
+        btn.disabled = false;
+        document.getElementById('submit-section').style.display = 'none';
+      }, 3000);
+    } else {
+      btn.innerHTML = '<i class="fas fa-times"></i> ' + data.error;
+      btn.disabled = false;
+    }
+  } catch (error) {
+    btn.innerHTML = '<i class="fas fa-times"></i> Error submitting';
+    btn.disabled = false;
+  }
+}
+
+// Reset game
+function resetGame() {
+  state.correct = 0;
+  state.total = 0;
+  state.streak = 0;
+  updateStats();
+  nextNote();
+}
+
+// Attach click handlers to all note buttons
+document.querySelectorAll('.note-btn').forEach(btn => {
+  btn.addEventListener('click', function() {
+    if (this.style.visibility !== 'hidden') {
+      checkAnswer(this.dataset.note);
+    }
+  });
+});
+
+// Initialize
+loadStats().then(() => {
+  // If no saved difficulty, default to beginner
+  if (!state.difficulty) {
+    setDifficulty('beginner');
+  }
+  updateStats();
+});
+</script>
+
 {% endblock %}

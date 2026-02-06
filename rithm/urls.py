@@ -20,6 +20,13 @@ urlpatterns = [
     path("", include("landing_page.urls")),
     path("note_identification/", include('note_identification.urls'),
          name="note_identification"),
+    path("interval_training/", include("interval_training.urls"),
+         name="interval_training"),
+    path("chord_identification/", include("chord_identification.urls"),
+         name="chord_identification"),
     path("pitch_identification/", include("pitch_identification.urls")),
+    path("synth/", include("synth.urls"), name="synth"),
+    path("leaderboard/", include("leaderboard.urls")),
+    path("accounts/", include("accounts.urls")),
     path('admin/', admin.site.urls),
 ]

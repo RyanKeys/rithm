@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block title %}Page Not Found - R.I.T.H.M{% endblock %}
+
+{% block content %}
+
+<style>
+  .error-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .error-content {
+    text-align: center;
+    max-width: 500px;
+  }
+  
+  .error-code {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 8rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    margin-bottom: 1rem;
+  }
+  
+  .error-title {
+    font-size: 1.75rem;
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+  
+  .error-message {
+    color: var(--text-secondary);
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+  }
+  
+  .error-icon {
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    opacity: 0.5;
+  }
+  
+  .error-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+</style>
+
+<div class="error-container">
+  <div class="error-content">
+    <div class="error-icon">🎵</div>
+    <div class="error-code">404</div>
+    <h1 class="error-title">Page Not Found</h1>
+    <p class="error-message">
+      Looks like this note fell off the staff! The page you're looking for doesn't exist or has been moved.
+    </p>
+    <div class="error-actions">
+      <a href="/" class="btn btn-primary">
+        <i class="fas fa-home"></i> Go Home
+      </a>
+      <a href="javascript:history.back()" class="btn btn-outline-light">
+        <i class="fas fa-arrow-left"></i> Go Back
+      </a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

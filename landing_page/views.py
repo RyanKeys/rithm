@@ -21,3 +21,18 @@ class ShowTimeView(View):
         now = datetime.now()
         html = f"<html>It is now {now}. </html>"
         return HttpResponse(html)
+
+
+def music_theory_guide(request):
+    """Music Theory Guide page."""
+    return render(request, 'landing_page/guide.html')
+
+
+def practice_tips(request):
+    """Practice Tips page."""
+    return render(request, 'landing_page/tips.html')
+
+
+def faq(request):
+    """FAQ page."""
+    return render(request, 'landing_page/faq.html')

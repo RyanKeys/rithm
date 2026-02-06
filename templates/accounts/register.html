@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Account | R.I.T.H.M{% endblock %}
+
+{% block content %}
+<style>
+  .auth-container {
+    min-height: calc(100vh - 200px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  
+  .auth-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--input-bg);
+    border-radius: 24px;
+    padding: 3rem;
+    width: 100%;
+    max-width: 420px;
+  }
+  
+  .auth-header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .auth-header h1 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .auth-header p {
+    color: var(--text-secondary);
+  }
+  
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  
+  .form-control {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    color: var(--text-primary);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+  }
+  
+  .form-control:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  }
+  
+  .form-control::placeholder {
+    color: var(--text-muted);
+  }
+  
+  .form-hint {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+  
+  .btn-submit {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+  }
+  
+  .auth-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    color: var(--text-secondary);
+  }
+  
+  .auth-footer a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  
+  .auth-footer a:hover {
+    text-decoration: underline;
+  }
+  
+  .messages {
+    margin-bottom: 1.5rem;
+  }
+  
+  .alert {
+    padding: 1rem;
+    border-radius: 12px;
+    margin-bottom: 0.5rem;
+  }
+  
+  .alert-error {
+    background: rgba(239, 68, 68, 0.2);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #fca5a5;
+  }
+  
+  .alert-success {
+    background: rgba(16, 185, 129, 0.2);
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    color: #6ee7b7;
+  }
+</style>
+
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1 class="gradient-text">Create Account</h1>
+      <p>Start your music theory journey</p>
+    </div>
+    
+    {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    
+    <form method="post">
+      {% csrf_token %}
+      
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" name="username" id="username" class="form-control" placeholder="Choose a username" required autofocus>
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
+        <p class="form-hint">We'll use this to send you updates and reset your password</p>
+      </div>
+      
+      <div class="form-group">
+        <label for="password1">Password</label>
+        <input type="password" name="password1" id="password1" class="form-control" placeholder="Create a password" required>
+        <p class="form-hint">At least 8 characters, can't be too common</p>
+      </div>
+      
+      <div class="form-group">
+        <label for="password2">Confirm Password</label>
+        <input type="password" name="password2" id="password2" class="form-control" placeholder="Confirm your password" required>
+      </div>
+      
+      <button type="submit" class="btn btn-primary btn-submit">
+        <i class="fas fa-user-plus"></i> Create Account
+      </button>
+    </form>
+    
+    <div class="auth-footer">
+      Already have an account? <a href="{% url 'login' %}">Sign in</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
