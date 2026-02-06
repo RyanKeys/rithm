@@ -171,7 +171,11 @@ def api_leaderboard(request):
     game = request.GET.get('game', 'note')
     period = request.GET.get('period', 'alltime')
     try:
-        limit = min(int(request.GET.get('limit', 10)), 50)
+        raw_limit = int(request.GET.get('limit', 10))
+        if raw_limit < 1:
+            limit = 10
+        else:
+            limit = min(raw_limit, 50)
     except (ValueError, TypeError):
         limit = 10
     
