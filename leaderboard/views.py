@@ -170,7 +170,10 @@ def api_leaderboard(request):
     """API endpoint to get leaderboard data."""
     game = request.GET.get('game', 'note')
     period = request.GET.get('period', 'alltime')
-    limit = min(int(request.GET.get('limit', 10)), 50)
+    try:
+        limit = min(int(request.GET.get('limit', 10)), 50)
+    except (ValueError, TypeError):
+        limit = 10
     
     if period == 'weekly':
         week_start = get_week_start()
