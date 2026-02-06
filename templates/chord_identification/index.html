@@ -500,7 +500,7 @@ const chordSets = {
   advanced: ['major', 'minor', 'diminished', 'augmented', 'major7', 'minor7', 'dominant7']
 };
 
-// Audio context
+// Audio context - created and resumed on first user gesture
 let audioCtx = null;
 
 function getAudioContext() {
@@ -509,6 +509,15 @@ function getAudioContext() {
   }
   return audioCtx;
 }
+
+// Warm up AudioContext on first click (capture phase fires before button handlers)
+document.addEventListener('click', function initAudioOnGesture() {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume();
+  }
+  document.removeEventListener('click', initAudioOnGesture, true);
+}, true);
 
 // Play a single note using Web Audio API
 function playNote(frequency, startTime, duration, volume = 0.25) {
