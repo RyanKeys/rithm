@@ -204,7 +204,7 @@ let state = {
 const notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
 const octaves = [3, 4, 5];
 
-// Audio context
+// Audio context - created and resumed on first user gesture
 let audioCtx = null;
 
 function getAudioContext() {
@@ -213,6 +213,15 @@ function getAudioContext() {
   }
   return audioCtx;
 }
+
+// Warm up AudioContext on first click (capture phase fires before button handlers)
+document.addEventListener('click', function initAudioOnGesture() {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume();
+  }
+  document.removeEventListener('click', initAudioOnGesture, true);
+}, true);
 
 // Calculate frequency for a note
 function noteToFreq(note, octave) {
