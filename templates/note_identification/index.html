@@ -228,21 +228,7 @@
     }
   }
   
-  /* Reset Button */
-  .reset-btn {
-    background: transparent;
-    border: 2px solid var(--border-color);
-    color: var(--text-secondary);
-    padding: 0.75rem 1.5rem;
-    border-radius: 12px;
-    transition: all 0.2s ease;
-  }
-  
-  .reset-btn:hover {
-    border-color: var(--danger);
-    color: var(--danger);
-    background: rgba(239, 68, 68, 0.1);
-  }
+
 </style>
 
 <div class="game-container">
@@ -331,10 +317,6 @@
     <button type="button" class="note-btn flat-note" data-note="B♭">B♭</button>
   </div>
 
-  <!-- Reset Button -->
-  <div class="d-flex justify-content-center">
-    <button class="btn reset-btn" onclick="resetGame()"><i class="fas fa-redo"></i> Reset Game</button>
-  </div>
 
 </div>
 
@@ -601,15 +583,6 @@ async function submitToLeaderboard() {
     btn.innerHTML = '<i class="fas fa-times"></i> Error submitting';
     btn.disabled = false;
   }
-}
-
-// Reset game
-function resetGame() {
-  state.correct = 0;
-  state.total = 0;
-  state.streak = 0;
-  updateStats();
-  nextNote();
 }
 
 // Attach click handlers to all note buttons
