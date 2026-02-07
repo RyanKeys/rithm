@@ -71,6 +71,7 @@ INSTALLED_APPS = [
     'leaderboard',
     'interval_training',
     'chord_identification',
+    'metronome',
     'synth',
     'pitch_identification',
     'landing_page',
