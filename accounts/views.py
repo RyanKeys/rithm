@@ -279,7 +279,7 @@ def get_interval_stats(request):
     """API endpoint to get interval training stats."""
     if not request.user.is_authenticated:
         return JsonResponse({'authenticated': False})
-    
+
     profile = request.user.profile
     return JsonResponse({
         'authenticated': True,
@@ -290,5 +290,64 @@ def get_interval_stats(request):
             'bestStreak': profile.interval_best_streak,
             'accuracy': profile.interval_accuracy,
             'difficulty': profile.interval_difficulty
+        }
+    })
+
+
+@require_POST
+def update_chord_stats(request):
+    """API endpoint to update chord identification stats."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'success': False, 'error': 'Not authenticated'}, status=401)
+
+    try:
+        data = json.loads(request.body)
+        profile = request.user.profile
+
+        # Update stats
+        if 'correct' in data:
+            profile.chord_total_correct = data['correct']
+        if 'total' in data:
+            profile.chord_total_attempts = data['total']
+        if 'streak' in data:
+            profile.chord_current_streak = data['streak']
+        if 'bestStreak' in data:
+            if data['bestStreak'] > profile.chord_best_streak:
+                profile.chord_best_streak = data['bestStreak']
+        if 'difficulty' in data:
+            profile.chord_difficulty = data['difficulty']
+
+        profile.save()
+
+        return JsonResponse({
+            'success': True,
+            'stats': {
+                'correct': profile.chord_total_correct,
+                'total': profile.chord_total_attempts,
+                'streak': profile.chord_current_streak,
+                'bestStreak': profile.chord_best_streak,
+                'accuracy': profile.chord_accuracy,
+                'difficulty': profile.chord_difficulty
+            }
+        })
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=400)
+
+
+def get_chord_stats(request):
+    """API endpoint to get chord identification stats."""
+    if not request.user.is_authenticated:
+        return JsonResponse({'authenticated': False})
+
+    profile = request.user.profile
+    return JsonResponse({
+        'authenticated': True,
+        'stats': {
+            'correct': profile.chord_total_correct,
+            'total': profile.chord_total_attempts,
+            'streak': profile.chord_current_streak,
+            'bestStreak': profile.chord_best_streak,
+            'accuracy': profile.chord_accuracy,
+            'difficulty': profile.chord_difficulty
         }
     })

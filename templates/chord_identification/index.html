@@ -623,8 +623,8 @@ function setDifficulty(level) {
     group.style.display = 'none';
   });
   document.getElementById(level + '-chords').style.display = 'flex';
-  
-  generateNewChord();
+
+  startNewRound();
 }
 
 // Set play style
@@ -636,19 +636,28 @@ function setPlayStyle(style) {
   });
 }
 
-// Generate a new chord
+// Generate a new chord (state only, no UI changes)
 function generateNewChord() {
   const availableChords = chordSets[state.difficulty];
   state.currentChord = availableChords[Math.floor(Math.random() * availableChords.length)];
-  
+
   // Random root note (MIDI notes 48-60, C3-C4)
   const rootNotes = ['C3', 'D3', 'E3', 'F3', 'G3', 'A3', 'B3', 'C4'];
   state.currentRootNote = rootNotes[Math.floor(Math.random() * rootNotes.length)];
-  
+}
+
+// Reset UI for the next round
+function resetRound() {
   document.getElementById('feedback').textContent = 'What chord do you hear?';
   document.getElementById('feedback').className = 'feedback-text';
-  
+
   state.canAnswer = true;
+}
+
+// Start a completely new round (generate chord + reset UI immediately)
+function startNewRound() {
+  generateNewChord();
+  resetRound();
 }
 
 // Play the current chord
@@ -730,29 +739,33 @@ function checkAnswer(selectedChord) {
       selectedBtn.classList.add('correct');
       setTimeout(() => selectedBtn.classList.remove('correct'), 500);
     }
-    
-    setTimeout(generateNewChord, 800);
+
+    // Generate next chord immediately so replay always matches expected answer
+    generateNewChord();
+    setTimeout(resetRound, 800);
   } else {
     state.streak = 0;
-    
+
     const correctName = chordNames[state.currentChord];
-    
+
     feedbackEl.innerHTML = `<i class="fas fa-times"></i> It was ${correctName}`;
     feedbackEl.className = 'feedback-text feedback-incorrect';
-    
+
     if (selectedBtn) {
       selectedBtn.classList.add('incorrect');
       setTimeout(() => selectedBtn.classList.remove('incorrect'), 500);
     }
-    
+
     // Highlight the correct answer
     const correctBtn = document.querySelector(`#${state.difficulty}-chords [data-chord="${state.currentChord}"]`);
     if (correctBtn) {
       correctBtn.classList.add('correct');
       setTimeout(() => correctBtn.classList.remove('correct'), 1500);
     }
-    
-    setTimeout(generateNewChord, 1500);
+
+    // Generate next chord immediately so replay always matches expected answer
+    generateNewChord();
+    setTimeout(resetRound, 1500);
   }
   
   updateStatsDisplay();
