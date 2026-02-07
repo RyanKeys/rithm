@@ -25,7 +25,7 @@ urlpatterns = [
     path("chord_identification/", include("chord_identification.urls"),
          name="chord_identification"),
     path("pitch_identification/", include("pitch_identification.urls")),
-    path("metronome/", include("metronome.urls"), name="metronome"),
+    path("metronome/", include("metronome.urls")),
     path("synth/", include("synth.urls"), name="synth"),
     path("leaderboard/", include("leaderboard.urls")),
     path("accounts/", include("accounts.urls")),
