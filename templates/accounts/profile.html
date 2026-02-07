@@ -78,6 +78,10 @@
     background: linear-gradient(135deg, var(--secondary) 0%, #be185d 100%);
   }
   
+  .stats-card.chord .stats-card-icon {
+    background: linear-gradient(135deg, var(--success) 0%, #059669 100%);
+  }
+
   .stats-card.pitch .stats-card-icon {
     background: linear-gradient(135deg, var(--warning) 0%, #d97706 100%);
   }
@@ -203,6 +207,37 @@
       </div>
     </div>
 
+    <!-- Chord Identification Stats -->
+    <div class="stats-card chord">
+      <div class="stats-card-header">
+        <div class="stats-card-icon">
+          <i class="fas fa-guitar"></i>
+        </div>
+        <div>
+          <div class="stats-card-title">Chord Identification</div>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.chord_total_correct }}</div>
+          <div class="stat-label">Correct</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.chord_accuracy }}%</div>
+          <div class="stat-label">Accuracy</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value highlight">{{ profile.chord_best_streak }}</div>
+          <div class="stat-label">Best Streak</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value">{{ profile.chord_total_attempts }}</div>
+          <div class="stat-label">Total Plays</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Pitch Training Stats -->
     <div class="stats-card pitch">
       <div class="stats-card-header">
@@ -241,6 +276,9 @@
     </a>
     <a href="/interval_training/" class="btn btn-secondary">
       <i class="fas fa-music"></i> Train Intervals
+    </a>
+    <a href="/chord_identification/" class="btn btn-success">
+      <i class="fas fa-guitar"></i> Practice Chords
     </a>
     <a href="/pitch_identification/" class="btn btn-warning">
       <i class="fas fa-headphones"></i> Train Ear

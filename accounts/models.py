@@ -52,7 +52,14 @@ class UserProfile(models.Model):
     interval_best_streak = models.IntegerField(default=0)
     interval_current_streak = models.IntegerField(default=0)
     interval_difficulty = models.CharField(max_length=20, default='beginner')
-    
+
+    # Chord Identification Stats
+    chord_total_correct = models.IntegerField(default=0)
+    chord_total_attempts = models.IntegerField(default=0)
+    chord_best_streak = models.IntegerField(default=0)
+    chord_current_streak = models.IntegerField(default=0)
+    chord_difficulty = models.CharField(max_length=20, default='beginner')
+
     # General
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -77,6 +84,12 @@ class UserProfile(models.Model):
         if self.interval_total_attempts == 0:
             return 0
         return round((self.interval_total_correct / self.interval_total_attempts) * 100)
+
+    @property
+    def chord_accuracy(self):
+        if self.chord_total_attempts == 0:
+            return 0
+        return round((self.chord_total_correct / self.chord_total_attempts) * 100)
 
 
 # Auto-create profile when user is created

@@ -16,4 +16,6 @@ urlpatterns = [
     path('api/note-stats/update/', views.update_note_stats, name='update-note-stats'),
     path('api/interval-stats/', views.get_interval_stats, name='get-interval-stats'),
     path('api/interval-stats/update/', views.update_interval_stats, name='update-interval-stats'),
+    path('api/chord-stats/', views.get_chord_stats, name='get-chord-stats'),
+    path('api/chord-stats/update/', views.update_chord_stats, name='update-chord-stats'),
 ]
