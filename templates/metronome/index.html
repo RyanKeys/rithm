@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const slider = document.getElementById('tempoSlider');
 
   slider.addEventListener('input', function() {
-    setBPM(parseInt(this.value));
+    setBPM(parseInt(this.value, 10));
   });
 
   updateBPMDisplay();
