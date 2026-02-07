@@ -1,0 +1,548 @@
+{% extends 'base.html' %}
+
+{% block title %}Metronome - Practice Tool | R.I.T.H.M{% endblock %}
+{% block meta_description %}Free online metronome for musicians. Adjustable tempo (BPM), time signatures, and visual beat indicator. Perfect for practice and keeping time.{% endblock %}
+{% block og_title %}Metronome | R.I.T.H.M{% endblock %}
+{% block og_description %}Practice with our free online metronome. Adjustable tempo and time signatures.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Online Metronome",
+  "description": "Interactive metronome for musicians with adjustable tempo and time signatures",
+  "provider": {
+    "@type": "Organization",
+    "name": "R.I.T.H.M"
+  },
+  "applicationCategory": "MusicApplication",
+  "operatingSystem": "Any",
+  "inLanguage": "en"
+}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<style>
+  .metronome-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+
+  .metronome-card {
+    background: var(--bg-card);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--input-bg);
+    border-radius: 20px;
+    padding: 2.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .beat-display {
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .beat-circle {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: var(--input-bg);
+    border: 4px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4rem;
+    font-weight: 700;
+    color: var(--text-secondary);
+    transition: all 0.05s ease;
+  }
+
+  .beat-circle.beat {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--text-primary);
+    transform: scale(1.1);
+    box-shadow: 0 0 40px rgba(99, 102, 241, 0.5);
+  }
+
+  .beat-circle.accent {
+    background: var(--warning);
+    border-color: var(--warning);
+    color: var(--text-primary);
+    transform: scale(1.15);
+    box-shadow: 0 0 40px rgba(245, 158, 11, 0.6);
+  }
+
+  .bpm-display {
+    text-align: center;
+    margin: 2rem 0;
+  }
+
+  .bpm-value {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .bpm-label {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .tempo-slider {
+    width: 100%;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--input-bg);
+    outline: none;
+    margin: 2rem 0;
+    -webkit-appearance: none;
+  }
+
+  .tempo-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .tempo-slider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+  }
+
+  .tempo-slider::-moz-range-thumb {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--primary);
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s ease;
+  }
+
+  .tempo-slider::-moz-range-thumb:hover {
+    transform: scale(1.2);
+    box-shadow: 0 0 15px rgba(99, 102, 241, 0.5);
+  }
+
+  .control-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 2rem 0;
+  }
+
+  .control-btn {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.75rem 2rem;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 120px;
+  }
+
+  .control-btn:hover {
+    background: var(--border-color);
+    border-color: var(--primary);
+    transform: translateY(-2px);
+  }
+
+  .control-btn.primary {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .control-btn.primary:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+  }
+
+  .control-btn.danger {
+    background: var(--danger);
+    border-color: var(--danger);
+  }
+
+  .control-btn.danger:hover {
+    background: #dc2626;
+    box-shadow: 0 8px 25px rgba(239, 68, 68, 0.3);
+  }
+
+  .settings-section {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin: 2rem 0;
+  }
+
+  .setting-group {
+    text-align: center;
+  }
+
+  .setting-label {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.75rem;
+    display: block;
+  }
+
+  .setting-buttons {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .setting-btn {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+  }
+
+  .setting-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+  }
+
+  .setting-btn:hover {
+    background: rgba(99, 102, 241, 0.3);
+    border-color: var(--primary);
+  }
+
+  .bpm-presets {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0;
+  }
+
+  .preset-btn {
+    background: var(--input-bg);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+  }
+
+  .preset-btn:hover {
+    background: var(--border-color);
+    border-color: var(--primary);
+  }
+
+  @media (max-width: 768px) {
+    .beat-circle {
+      width: 150px;
+      height: 150px;
+      font-size: 3rem;
+    }
+
+    .bpm-value {
+      font-size: 2.5rem;
+    }
+
+    .control-buttons {
+      flex-direction: column;
+    }
+
+    .control-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<div class="metronome-container">
+
+  <!-- Main Metronome Card -->
+  <div class="metronome-card">
+
+    <!-- Beat Display -->
+    <div class="beat-display">
+      <div class="beat-circle" id="beatCircle">
+        <span id="beatNumber">1</span>
+      </div>
+    </div>
+
+    <!-- BPM Display -->
+    <div class="bpm-display">
+      <div class="bpm-value" id="bpmValue">120</div>
+      <div class="bpm-label">Beats Per Minute</div>
+    </div>
+
+    <!-- Tempo Slider -->
+    <input type="range" min="40" max="240" value="120" class="tempo-slider" id="tempoSlider">
+
+    <!-- BPM Presets -->
+    <div class="bpm-presets">
+      <button class="preset-btn" onclick="setBPM(60)">60 BPM</button>
+      <button class="preset-btn" onclick="setBPM(80)">80 BPM</button>
+      <button class="preset-btn" onclick="setBPM(120)">120 BPM</button>
+      <button class="preset-btn" onclick="setBPM(140)">140 BPM</button>
+      <button class="preset-btn" onclick="setBPM(180)">180 BPM</button>
+    </div>
+
+    <!-- Control Buttons -->
+    <div class="control-buttons">
+      <button id="startBtn" class="control-btn primary" onclick="startMetronome()">
+        <i class="fas fa-play"></i> Start
+      </button>
+      <button id="stopBtn" class="control-btn danger" onclick="stopMetronome()" style="display: none;">
+        <i class="fas fa-stop"></i> Stop
+      </button>
+      <button class="control-btn" onclick="tapTempo()">
+        <i class="fas fa-hand-pointer"></i> Tap Tempo
+      </button>
+    </div>
+
+    <!-- Settings -->
+    <div class="settings-section">
+      <div class="setting-group">
+        <span class="setting-label">Time Signature</span>
+        <div class="setting-buttons">
+          <button class="setting-btn" onclick="setTimeSignature(2)">2/4</button>
+          <button class="setting-btn" onclick="setTimeSignature(3)">3/4</button>
+          <button class="setting-btn active" onclick="setTimeSignature(4)">4/4</button>
+          <button class="setting-btn" onclick="setTimeSignature(6)">6/8</button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="text-center" style="color: var(--text-secondary); font-size: 0.9rem;">
+    <p><i class="fas fa-info-circle"></i> Use this metronome to practice keeping time and develop your rhythm skills</p>
+  </div>
+
+</div>
+
+<script>
+// Metronome State
+let state = {
+  bpm: 120,
+  timeSignature: 4,
+  isPlaying: false,
+  currentBeat: 1,
+  intervalId: null,
+  audioCtx: null,
+  tapTimes: []
+};
+
+// Initialize Audio Context
+function getAudioContext() {
+  if (!state.audioCtx) {
+    state.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  return state.audioCtx;
+}
+
+// Resume audio context on first user gesture
+document.addEventListener('click', function initAudioOnGesture() {
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume();
+  }
+  document.removeEventListener('click', initAudioOnGesture, true);
+}, true);
+
+// Play metronome click sound
+function playClick(isAccent = false) {
+  const ctx = getAudioContext();
+  const now = ctx.currentTime;
+
+  const oscillator = ctx.createOscillator();
+  const gainNode = ctx.createGain();
+
+  oscillator.type = 'sine';
+  oscillator.frequency.value = isAccent ? 1200 : 800;
+
+  gainNode.gain.setValueAtTime(0.3, now);
+  gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+
+  oscillator.connect(gainNode);
+  gainNode.connect(ctx.destination);
+
+  oscillator.start(now);
+  oscillator.stop(now + 0.1);
+}
+
+// Update BPM display
+function updateBPMDisplay() {
+  document.getElementById('bpmValue').textContent = state.bpm;
+  document.getElementById('tempoSlider').value = state.bpm;
+}
+
+// Set BPM
+function setBPM(bpm) {
+  state.bpm = Math.max(40, Math.min(240, bpm));
+  updateBPMDisplay();
+
+  if (state.isPlaying) {
+    stopMetronome();
+    startMetronome();
+  }
+}
+
+// Set Time Signature
+function setTimeSignature(beats) {
+  state.timeSignature = beats;
+  state.currentBeat = 1;
+
+  document.querySelectorAll('.setting-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+
+  document.getElementById('beatNumber').textContent = state.currentBeat;
+}
+
+// Metronome tick
+function tick() {
+  const beatCircle = document.getElementById('beatCircle');
+  const beatNumber = document.getElementById('beatNumber');
+
+  const isAccent = state.currentBeat === 1;
+
+  playClick(isAccent);
+
+  beatCircle.classList.remove('beat', 'accent');
+  void beatCircle.offsetWidth;
+  beatCircle.classList.add(isAccent ? 'accent' : 'beat');
+
+  beatNumber.textContent = state.currentBeat;
+
+  state.currentBeat++;
+  if (state.currentBeat > state.timeSignature) {
+    state.currentBeat = 1;
+  }
+
+  setTimeout(() => {
+    beatCircle.classList.remove('beat', 'accent');
+  }, 100);
+}
+
+// Start metronome
+function startMetronome() {
+  if (state.isPlaying) return;
+
+  const ctx = getAudioContext();
+  if (ctx.state === 'suspended') {
+    ctx.resume();
+  }
+
+  state.isPlaying = true;
+  state.currentBeat = 1;
+
+  document.getElementById('startBtn').style.display = 'none';
+  document.getElementById('stopBtn').style.display = 'inline-block';
+
+  tick();
+
+  const interval = (60 / state.bpm) * 1000;
+  state.intervalId = setInterval(tick, interval);
+}
+
+// Stop metronome
+function stopMetronome() {
+  if (!state.isPlaying) return;
+
+  state.isPlaying = false;
+
+  if (state.intervalId) {
+    clearInterval(state.intervalId);
+    state.intervalId = null;
+  }
+
+  document.getElementById('startBtn').style.display = 'inline-block';
+  document.getElementById('stopBtn').style.display = 'none';
+
+  const beatCircle = document.getElementById('beatCircle');
+  beatCircle.classList.remove('beat', 'accent');
+
+  state.currentBeat = 1;
+  document.getElementById('beatNumber').textContent = state.currentBeat;
+}
+
+// Tap tempo
+function tapTempo() {
+  const now = Date.now();
+  state.tapTimes.push(now);
+
+  if (state.tapTimes.length > 4) {
+    state.tapTimes.shift();
+  }
+
+  if (state.tapTimes.length >= 2) {
+    const intervals = [];
+    for (let i = 1; i < state.tapTimes.length; i++) {
+      intervals.push(state.tapTimes[i] - state.tapTimes[i - 1]);
+    }
+
+    const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
+    const calculatedBPM = Math.round(60000 / avgInterval);
+
+    setBPM(calculatedBPM);
+  }
+
+  const tapBtn = event.target.closest('.control-btn');
+  tapBtn.style.transform = 'scale(0.95)';
+  setTimeout(() => {
+    tapBtn.style.transform = '';
+  }, 100);
+
+  setTimeout(() => {
+    if (Date.now() - state.tapTimes[state.tapTimes.length - 1] > 3000) {
+      state.tapTimes = [];
+    }
+  }, 3000);
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  const slider = document.getElementById('tempoSlider');
+
+  slider.addEventListener('input', function() {
+    setBPM(parseInt(this.value));
+  });
+
+  updateBPMDisplay();
+
+  document.addEventListener('keydown', function(e) {
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (state.isPlaying) {
+        stopMetronome();
+      } else {
+        startMetronome();
+      }
+    }
+  });
+});
+</script>
+
+{% endblock %}
